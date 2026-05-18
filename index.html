@@ -34,14 +34,39 @@
     }
 
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-sans); background: var(--slate-100); color: var(--slate-700); min-height: 100vh; }
+
+    /* ── ACHTERGROND: zachte mesh gradient als basis ── */
+    body {
+      font-family: var(--font-sans);
+      color: var(--slate-700);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(180,100,140,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 10%, rgba(100,160,220,0.10) 0%, transparent 45%),
+        radial-gradient(ellipse at 90% 70%, rgba(120,100,200,0.09) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 80%, rgba(80,180,140,0.10) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(220,160,100,0.07) 0%, transparent 60%),
+        #f0f2f7;
+      background-attachment: fixed;
+    }
 
     /* ── NAV ── */
     #topbar {
-      background: var(--white);
-      border-bottom: 1.5px solid var(--slate-200);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(24px) saturate(1.8);
+      -webkit-backdrop-filter: blur(24px) saturate(1.8);
+      border-bottom: 1px solid rgba(255,255,255,0.5);
       position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.6) inset,
+        0 4px 24px rgba(0,0,0,0.06);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    #topbar.scrolled {
+      background: rgba(255,255,255,0.88);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.7) inset,
+        0 8px 32px rgba(0,0,0,0.10);
     }
     /* Subtiele regenboog lijn onderaan de topbar */
     #topbar::after {
@@ -122,8 +147,13 @@
       font-family: var(--font-sans); color: var(--slate-500);
       cursor: pointer; transition: background .15s, color .15s;
     }
-    nav button:hover { background: var(--slate-100); color: var(--slate-900); }
-    nav button.active { background: var(--teal-bg); color: var(--teal-dark); font-weight: 800; }
+    nav button:hover { background: rgba(255,255,255,0.6); color: var(--slate-900); }
+    nav button.active {
+      background: rgba(255,255,255,0.8);
+      color: var(--teal-dark); font-weight: 800;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
 
     /* ── LAYOUT ── */
     main { max-width: 920px; margin: 0 auto; padding: 36px 24px 72px; }
@@ -135,31 +165,52 @@
     h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 800; color: var(--slate-900); margin-bottom: 20px; }
     .page-intro { color: var(--slate-500); font-size: 16px; line-height: 1.65; margin-bottom: 36px; }
 
-    /* ── CARD ── */
+    /* ── CARD — liquid glass ── */
     .card {
-      background: var(--white); border-radius: 16px;
-      border: 1.5px solid var(--slate-200);
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(20px) saturate(1.6);
+      -webkit-backdrop-filter: blur(20px) saturate(1.6);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.55);
       padding: 24px 28px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.045);
-      transition: box-shadow .2s, transform .2s, border-color .2s;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.8) inset,
+        0 4px 24px rgba(0,0,0,0.055),
+        0 1px 4px rgba(0,0,0,0.04);
+      transition: box-shadow .25s, transform .25s, background .25s, border-color .25s;
+      /* scroll-reveal start state */
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.45s ease, transform 0.45s ease, box-shadow .25s, background .25s, border-color .25s;
     }
     .card.clickable { cursor: pointer; }
     .card.clickable:hover {
-      box-shadow: 0 8px 32px rgba(13,123,106,.13);
-      border-color: var(--teal);
-      transform: translateY(-2px);
+      background: rgba(255,255,255,0.82);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 12px 40px rgba(13,123,106,0.12),
+        0 2px 8px rgba(0,0,0,0.06);
+      border-color: rgba(100,200,180,0.4);
+      transform: translateY(-3px);
     }
 
-    /* ── BADGE ── */
+    /* ── BADGE — glass pills ── */
     .badge {
       display: inline-block; font-size: 11px; font-weight: 700;
-      padding: 3px 9px; border-radius: 20px; letter-spacing: .04em; white-space: nowrap;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .04em; white-space: nowrap;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.5);
     }
-    .badge-teal   { background: var(--teal-bg);   color: var(--teal); }
-    .badge-violet { background: var(--violet-bg); color: var(--violet); }
-    .badge-amber  { background: var(--amber-bg);  color: var(--amber); }
-    .badge-rose   { background: var(--rose-bg);   color: var(--rose); }
-    .badge-slate  { background: var(--slate-100); color: var(--slate-500); }
+    .badge-teal   { background: rgba(200,245,238,0.65); color: var(--teal); }
+    .badge-violet { background: rgba(220,210,252,0.65); color: var(--violet); }
+    .badge-amber  { background: rgba(255,237,210,0.65); color: var(--amber); }
+    .badge-rose   { background: rgba(255,220,225,0.65); color: var(--rose); }
+    .badge-slate  { background: rgba(230,235,242,0.65); color: var(--slate-500); }
 
     /* ── LINK ── */
     .ext-link {
@@ -237,27 +288,44 @@
     .quicknav-title { font-weight: 800; font-size: 16px; color: var(--slate-900); margin-bottom: 6px; }
     .quicknav-desc  { font-size: 14px; color: var(--slate-500); line-height: 1.55; }
 
-    /* ── CTA BLOCK ── */
+    /* ── CTA BLOCK — glass ── */
     .cta-block {
-      background: var(--slate-50); border-radius: 16px;
-      padding: 28px 32px; border: 1.5px solid var(--slate-200);
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 28px 32px; border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.04);
     }
     .cta-block strong { display: block; font-weight: 800; font-size: 17px; color: var(--slate-900); margin-bottom: 8px; }
     .cta-block p { color: var(--slate-500); font-size: 14px; line-height: 1.6; }
 
-    /* ── FILTERS ── */
+    /* ── FILTERS — glass ── */
     .filter-bar {
-      background: var(--slate-50); border-radius: 14px;
-      padding: 18px 24px; margin-bottom: 24px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(16px) saturate(1.5);
+      -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px;
       display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-      border: 1.5px solid var(--slate-200);
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.04);
     }
     .filter-label { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; }
     .filter-bar input, .filter-bar select {
-      border: 1.5px solid var(--slate-200); border-radius: 8px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 10px;
       padding: 8px 14px; font-size: 14px; font-family: var(--font-sans);
-      background: var(--white); color: var(--slate-700); outline: none;
-      cursor: pointer;
+      color: var(--slate-700); outline: none; cursor: pointer;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 1px 4px rgba(0,0,0,0.05);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .filter-bar input:focus, .filter-bar select:focus {
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 3px rgba(13,123,106,0.12), 0 1px 0 rgba(255,255,255,0.9) inset;
     }
     .filter-bar input { flex: 1; min-width: 180px; }
     .result-count { font-size: 13px; color: var(--slate-400); font-weight: 600; margin-bottom: 20px; }
@@ -277,11 +345,15 @@
     .org-links { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
     .org-phone { display: inline-flex; align-items: center; gap: 5px; color: var(--teal); font-weight: 700; font-size: 13px; }
 
-    /* ── POLICY ── */
+    /* ── POLICY ALERT — glass ── */
     .alert-box {
-      background: #fffbeb; border: 1.5px solid #fbbf24;
-      border-radius: 14px; padding: 18px 24px;
+      background: rgba(255,251,230,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 16px; padding: 18px 24px;
       margin-bottom: 32px; display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
     }
     .alert-emoji { font-size: 22px; flex-shrink: 0; line-height: 1.4; }
     .alert-title { font-weight: 800; font-size: 15px; color: #92400e; margin-bottom: 4px; }
@@ -299,10 +371,14 @@
     .contact-name  { color: rgba(255,255,255,.8); font-size: 15px; line-height: 1.6; margin-bottom: 6px; }
     .contact-sub   { color: rgba(255,255,255,.6); font-size: 14px; }
 
-    /* ── FOOTER ── */
+    /* ── FOOTER — glass ── */
     footer {
-      background: var(--white); border-top: 1.5px solid var(--slate-200);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.5);
       padding: 20px 24px; text-align: center;
+      box-shadow: 0 -1px 0 rgba(255,255,255,0.7) inset;
     }
     footer p { color: var(--slate-400); font-size: 13px; }
 
@@ -747,7 +823,40 @@ function showPage(id) {
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('nav-' + id).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Re-trigger scroll reveal for newly shown cards
+  setTimeout(revealCards, 50);
 }
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
+
+function revealCards() {
+  const cards = document.querySelectorAll('.card:not(.visible)');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 60); // staggered per card
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  cards.forEach(card => observer.observe(card));
+}
+
+// Initial reveal
+revealCards();
+
+// ── TOPBAR SCROLL GLASS INTENSIFY ────────────────────────────────────────────
+
+window.addEventListener('scroll', () => {
+  const topbar = document.getElementById('topbar');
+  if (window.scrollY > 10) {
+    topbar.classList.add('scrolled');
+  } else {
+    topbar.classList.remove('scrolled');
+  }
+}, { passive: true });
 </script>
 </body>
 </html>
