@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De Regenbooggids — LGBTQ+ & LVB in de zorg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal-dark:   #0a4a42;
+      --teal:        #0d7b6a;
+      --teal-light:  #1ab394;
+      --teal-bg:     #e0f7f4;
+      --violet:      #6d28d9;
+      --violet-bg:   #ede9fe;
+      --amber:       #b45309;
+      --amber-bg:    #fff3e0;
+      --rose:        #be123c;
+      --rose-bg:     #ffe4e6;
+      --slate-900:   #0f172a;
+      --slate-700:   #334155;
+      --slate-500:   #64748b;
+      --slate-400:   #94a3b8;
+      --slate-200:   #e2e8f0;
+      --slate-100:   #f1f5f9;
+      --slate-50:    #f8fafc;
+      --white:       #ffffff;
+      --font-serif:  'Playfair Display', Georgia, serif;
+      --font-sans:   'DM Sans', 'Segoe UI', system-ui, sans-serif;
+      --font-mono:   'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); background: var(--slate-100); color: var(--slate-700); min-height: 100vh; }
+
+    /* ── NAV ── */
+    #topbar {
+      background: var(--white);
+      border-bottom: 1.5px solid var(--slate-200);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    }
+    /* Subtiele regenboog lijn onderaan de topbar */
+    #topbar::after {
+      content: '';
+      display: block;
+      height: 3px;
+      background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4);
+      opacity: 0.6;
+    }
+    #topbar-inner {
+      max-width: 920px; margin: 0 auto;
+      padding: 0 24px;
+      display: flex; align-items: center; height: 60px; gap: 8px;
+    }
+    #logo {
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; margin-right: auto; text-decoration: none;
+    }
+    #logo-icon {
+      background: linear-gradient(135deg, #e85d8a 0%, #f4a44a 20%, #f7d44a 38%, #5bbf7a 56%, #4ab8d4 74%, #7b6fd4 100%);
+      border-radius: 9px; width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center; color: #fff;
+      flex-shrink: 0;
+    }
+    #logo span {
+      font-family: var(--font-serif); font-weight: 800; font-size: 15px;
+      background: linear-gradient(90deg, #c94b7b 0%, #d4874a 30%, #5aaa6e 60%, #4a7fc4 85%, #7060c0 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    nav { display: flex; gap: 4px; }
+    nav button {
+      background: transparent; border: none; border-radius: 8px;
+      padding: 7px 14px; font-size: 14px; font-weight: 600;
+      font-family: var(--font-sans); color: var(--slate-500);
+      cursor: pointer; transition: background .15s, color .15s;
+    }
+    nav button:hover { background: var(--slate-100); color: var(--slate-900); }
+    nav button.active { background: var(--teal-bg); color: var(--teal-dark); font-weight: 800; }
+
+    /* ── LAYOUT ── */
+    main { max-width: 920px; margin: 0 auto; padding: 36px 24px 72px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── TYPOGRAPHY ── */
+    h1 { font-family: var(--font-serif); font-size: 32px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; line-height: 1.2; }
+    h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 800; color: var(--slate-900); margin-bottom: 20px; }
+    .page-intro { color: var(--slate-500); font-size: 16px; line-height: 1.65; margin-bottom: 36px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white); border-radius: 16px;
+      border: 1.5px solid var(--slate-200);
+      padding: 24px 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.045);
+      transition: box-shadow .2s, transform .2s, border-color .2s;
+    }
+    .card.clickable { cursor: pointer; }
+    .card.clickable:hover {
+      box-shadow: 0 8px 32px rgba(13,123,106,.13);
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px; letter-spacing: .04em; white-space: nowrap;
+    }
+    .badge-teal   { background: var(--teal-bg);   color: var(--teal); }
+    .badge-violet { background: var(--violet-bg); color: var(--violet); }
+    .badge-amber  { background: var(--amber-bg);  color: var(--amber); }
+    .badge-rose   { background: var(--rose-bg);   color: var(--rose); }
+    .badge-slate  { background: var(--slate-100); color: var(--slate-500); }
+
+    /* ── LINK ── */
+    .ext-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-weight: 700; font-size: 14px; text-decoration: none;
+      font-family: var(--font-sans);
+    }
+    .ext-link:hover { text-decoration: underline; }
+    .ext-link-teal   { color: var(--teal); }
+    .ext-link-violet { color: var(--violet); }
+    .ext-link-amber  { color: var(--amber); }
+
+    /* ── HERO ── */
+    #hero {
+      background: linear-gradient(135deg, #0a4a42 0%, #0d7b6a 60%, #1ab394 100%);
+      border-radius: 24px; padding: 64px 48px;
+      margin-bottom: 48px; position: relative; overflow: hidden;
+    }
+    /* Subtiele regenboog shimmer bovenaan de hero */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4);
+      opacity: 0.75;
+      border-radius: 24px 24px 0 0;
+    }
+    .hero-deco {
+      position: absolute; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,.1); pointer-events: none;
+    }
+    #hero-content { max-width: 620px; position: relative; }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .hero-label-icon {
+      background: rgba(255,255,255,.15); border-radius: 10px;
+      padding: 6px 10px; color: #fff; display: flex;
+    }
+    .hero-label span {
+      color: rgba(255,255,255,.75); font-size: 13px;
+      font-family: var(--font-mono); letter-spacing: .08em; font-weight: 600;
+    }
+    #hero h1 { color: #fff; font-size: 42px; margin-bottom: 20px; }
+    #hero p  { color: rgba(255,255,255,.82); font-size: 17px; line-height: 1.7; margin-bottom: 36px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      background: #fff; color: var(--teal-dark); border: none;
+      border-radius: 10px; padding: 12px 24px;
+      font-weight: 700; font-size: 15px; font-family: var(--font-sans);
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,.15); color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 10px; padding: 12px 24px;
+      font-weight: 700; font-size: 15px; font-family: var(--font-sans);
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn-primary:hover, .btn-secondary:hover { opacity: .85; }
+
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 48px; }
+    .stat-card { text-align: center; padding: 20px 16px; }
+    .stat-n { font-size: 36px; font-weight: 800; color: var(--teal); font-family: var(--font-serif); line-height: 1; }
+    .stat-label { font-size: 13px; color: var(--slate-500); margin-top: 6px; font-weight: 500; }
+
+    /* ── QUICK NAV ── */
+    .quicknav-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 48px; }
+
+    .quicknav-card { display: flex; gap: 16px; align-items: flex-start; }
+    .quicknav-icon { border-radius: 12px; padding: 14px; flex-shrink: 0; }
+    .quicknav-title { font-weight: 800; font-size: 16px; color: var(--slate-900); margin-bottom: 6px; }
+    .quicknav-desc  { font-size: 14px; color: var(--slate-500); line-height: 1.55; }
+
+    /* ── CTA BLOCK ── */
+    .cta-block {
+      background: var(--slate-50); border-radius: 16px;
+      padding: 28px 32px; border: 1.5px solid var(--slate-200);
+    }
+    .cta-block strong { display: block; font-weight: 800; font-size: 17px; color: var(--slate-900); margin-bottom: 8px; }
+    .cta-block p { color: var(--slate-500); font-size: 14px; line-height: 1.6; }
+
+    /* ── FILTERS ── */
+    .filter-bar {
+      background: var(--slate-50); border-radius: 14px;
+      padding: 18px 24px; margin-bottom: 24px;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+      border: 1.5px solid var(--slate-200);
+    }
+    .filter-label { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; }
+    .filter-bar input, .filter-bar select {
+      border: 1.5px solid var(--slate-200); border-radius: 8px;
+      padding: 8px 14px; font-size: 14px; font-family: var(--font-sans);
+      background: var(--white); color: var(--slate-700); outline: none;
+      cursor: pointer;
+    }
+    .filter-bar input { flex: 1; min-width: 180px; }
+    .result-count { font-size: 13px; color: var(--slate-400); font-weight: 600; margin-bottom: 20px; }
+
+    /* ── TOOL CARD ── */
+    .card-grid-list { display: grid; gap: 16px; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 12px; }
+    .card-header-left { flex: 1; }
+    .card-title { font-weight: 800; font-size: 17px; color: var(--slate-900); margin-bottom: 4px; }
+    .card-org   { font-size: 13px; color: var(--slate-500); font-weight: 500; }
+    .card-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .card-desc  { color: #475569; font-size: 15px; line-height: 1.65; margin-bottom: 16px; }
+
+    /* ── ORG CARDS ── */
+    .org-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+    .org-regio { font-size: 12px; color: var(--slate-400); font-weight: 600; margin-bottom: 10px; letter-spacing: .04em; }
+    .org-links { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .org-phone { display: inline-flex; align-items: center; gap: 5px; color: var(--teal); font-weight: 700; font-size: 13px; }
+
+    /* ── POLICY ── */
+    .alert-box {
+      background: #fffbeb; border: 1.5px solid #fbbf24;
+      border-radius: 14px; padding: 18px 24px;
+      margin-bottom: 32px; display: flex; gap: 14px; align-items: flex-start;
+    }
+    .alert-emoji { font-size: 22px; flex-shrink: 0; line-height: 1.4; }
+    .alert-title { font-weight: 800; font-size: 15px; color: #92400e; margin-bottom: 4px; }
+    .alert-text  { color: #78350f; font-size: 14px; line-height: 1.6; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; gap: 24px; }
+    .about-card-title { font-weight: 800; font-size: 18px; color: var(--slate-900); margin-bottom: 12px; }
+    .about-card-text  { color: #475569; font-size: 15px; line-height: 1.7; }
+    .contact-block {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+      border-radius: 16px; padding: 28px 32px; color: #fff;
+    }
+    .contact-title { font-weight: 800; font-size: 17px; margin-bottom: 10px; }
+    .contact-name  { color: rgba(255,255,255,.8); font-size: 15px; line-height: 1.6; margin-bottom: 6px; }
+    .contact-sub   { color: rgba(255,255,255,.6); font-size: 14px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white); border-top: 1.5px solid var(--slate-200);
+      padding: 20px 24px; text-align: center;
+    }
+    footer p { color: var(--slate-400); font-size: 13px; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 56px 0; color: var(--slate-400); font-size: 15px; }
+
+    /* ── SVG ICONS ── */
+    .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+    @media (max-width: 640px) {
+      #hero { padding: 40px 24px; }
+      #hero h1 { font-size: 28px; }
+      nav button { padding: 7px 6px; font-size: 11px; }
+      #logo span { font-size: 13px; }
+      .stats-grid { grid-template-columns: repeat(3,1fr); gap: 8px; }
+      .stat-n { font-size: 26px; }
+      .stat-label { font-size: 11px; }
+      .stat-card { padding: 14px 6px; }
+      /* Quicknav: altijd 2 kolommen naast elkaar */
+      .quicknav-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .quicknav-card { flex-direction: column; gap: 8px; padding: 16px; }
+      .quicknav-icon { padding: 10px; }
+      .quicknav-title { font-size: 13px; }
+      .quicknav-desc { font-size: 12px; }
+      /* Filters */
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input, .filter-bar select { width: 100%; }
+      /* Org grid: 1 kolom op klein scherm is OK */
+      .org-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div id="topbar">
+  <div id="topbar-inner">
+    <a id="logo" onclick="showPage('home')">
+      <div id="logo-icon">
+        <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+      </div>
+      <span>De Regenbooggids</span>
+    </a>
+    <nav>
+      <button class="active" onclick="showPage('home')"   id="nav-home">Home</button>
+      <button onclick="showPage('tools')"  id="nav-tools">Tools</button>
+      <button onclick="showPage('orgs')"   id="nav-orgs">Organisaties</button>
+      <button onclick="showPage('policy')" id="nav-policy">Beleid</button>
+      <button onclick="showPage('about')"  id="nav-about">Over</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- HOME -->
+  <section class="page active" id="page-home">
+    <div id="hero">
+      <div class="hero-deco" style="width:320px;height:320px;right:-80px;top:-100px;"></div>
+      <div class="hero-deco" style="width:200px;height:200px;right:20px;top:-20px;"></div>
+      <div class="hero-deco" style="width:110px;height:110px;right:90px;top:50px;"></div>
+      <div id="hero-content">
+        <div class="hero-label">
+          <div class="hero-label-icon">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+          </div>
+          <span>De Regenbooggids — LGBTQ+ & LVB in de zorg</span>
+        </div>
+        <h1>Inclusiever begeleiden.<br>Alles op één plek.</h1>
+        <p>Een praktische hub voor begeleiders en organisaties in de Vlaamse zorg. Vind tools, methodieken, contactorganisaties en beleidsondersteuning rond LGBTQ+ en genderdiversiteit bij cliënten met een licht verstandelijke beperking.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('tools')">Bekijk tools</button>
+          <button class="btn-secondary" onclick="showPage('orgs')">Organisaties zoeken</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <h2>Waar wil je mee aan de slag?</h2>
+    <div class="quicknav-grid">
+      <div class="card clickable quicknav-card" onclick="showPage('tools')">
+        <div class="quicknav-icon" style="background:var(--teal-bg);color:var(--teal);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div>
+          <div class="quicknav-title">Tools &amp; Methodieken</div>
+          <div class="quicknav-desc">Praktische instrumenten voor in de begeleiding: werkboeken, zelfscanners, gesprekstools en meer.</div>
+        </div>
+      </div>
+      <div class="card clickable quicknav-card" onclick="showPage('orgs')">
+        <div class="quicknav-icon" style="background:var(--violet-bg);color:var(--violet);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="quicknav-title">Organisaties &amp; Contacten</div>
+          <div class="quicknav-desc">Vind verenigingen, steunpunten en diensten per regio — voor cliënten én begeleiders.</div>
+        </div>
+      </div>
+      <div class="card clickable quicknav-card" onclick="showPage('policy')">
+        <div class="quicknav-icon" style="background:var(--amber-bg);color:var(--amber);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="quicknav-title">Beleid &amp; Vorming</div>
+          <div class="quicknav-desc">Kaders, good practices en nascholing om LGBTQ+-inclusie structureel te verankeren in je organisatie.</div>
+        </div>
+      </div>
+      <div class="card clickable quicknav-card" onclick="showPage('about')">
+        <div class="quicknav-icon" style="background:var(--rose-bg);color:var(--rose);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <div class="quicknav-title">Over deze website</div>
+          <div class="quicknav-desc">Waarom deze hub bestaat, de link met onderzoek, en hoe je info kunt aanvullen of doorgeven.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <strong>Mis je iets op deze website?</strong>
+      <p>Ken je een tool, organisatie of good practice die hier thuishoort? Deze hub is bewust open gehouden voor aanvullingen. Neem contact op via de "Over"-pagina.</p>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="page" id="page-tools">
+    <h1>Tools &amp; Methodieken</h1>
+    <p class="page-intro">Praktische instrumenten voor begeleiders, teams en organisaties. Gefilterd op thema en doelgroep.</p>
+
+    <div class="filter-bar">
+      <div class="filter-label" style="color:var(--teal);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter
+      </div>
+      <input type="text" id="tool-search" placeholder="Zoek op naam of beschrijving…" oninput="renderTools()" />
+      <select id="tool-thema" onchange="renderTools()">
+        <option>Alle thema's</option>
+        <option>Seksualiteit &amp; Identiteit</option>
+        <option>Gender &amp; Trans</option>
+        <option>Beleid &amp; Organisatie</option>
+        <option>Netwerk &amp; Ontmoeting</option>
+      </select>
+      <select id="tool-doelgroep" onchange="renderTools()">
+        <option>Alle doelgroepen</option>
+        <option>Begeleiders</option>
+        <option>Cliënten</option>
+        <option>Cliënten &amp; Begeleiders</option>
+        <option>Organisaties</option>
+      </select>
+    </div>
+    <div class="result-count" id="tool-count"></div>
+    <div class="card-grid-list" id="tools-list"></div>
+  </section>
+
+  <!-- ORGS -->
+  <section class="page" id="page-orgs">
+    <h1>Organisaties &amp; Contacten</h1>
+    <p class="page-intro">Verenigingen, steunpunten en diensten voor LGBTQ+ personen met een beperking en hun begeleiders. Filter op regio of type.</p>
+
+    <div class="filter-bar">
+      <div class="filter-label" style="color:var(--violet);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter
+      </div>
+      <select id="org-regio" onchange="renderOrgs()">
+        <option>Alle regio's</option>
+        <option>Heel Vlaanderen</option>
+        <option>Antwerpen</option>
+        <option>Gent (Oost-Vlaanderen)</option>
+        <option>Leuven (Vlaams-Brabant)</option>
+      </select>
+      <select id="org-type" onchange="renderOrgs()">
+        <option>Alle types</option>
+        <option>Begeleiding &amp; Advies</option>
+        <option>Ontmoeting &amp; Activiteiten</option>
+        <option>Info &amp; Ondersteuning</option>
+        <option>Anonieme steun</option>
+      </select>
+    </div>
+    <div class="result-count" id="org-count"></div>
+    <div class="org-grid" id="orgs-list"></div>
+  </section>
+
+  <!-- POLICY -->
+  <section class="page" id="page-policy">
+    <h1>Beleid &amp; Vorming</h1>
+    <p class="page-intro">Juridische kaders, good practices en nascholing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie.</p>
+
+    <div class="alert-box">
+      <div class="alert-emoji">⚡</div>
+      <div>
+        <div class="alert-title">Wist je dat?</div>
+        <p class="alert-text">Onderzoek toont aan dat begeleiders vaak welwillend zijn tegenover LGBTQ+ cliënten, maar dat er een aanzienlijke <strong>handelingsverlegenheid</strong> bestaat. Specifieke vorming en een expliciet organisatiebeleid zijn essentieel om die kloof te dichten.</p>
+      </div>
+    </div>
+    <div class="card-grid-list" id="policy-list"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="page" id="page-about">
+    <h1>Over deze website</h1>
+    <p class="page-intro">Waarom deze hub bestaat, hoe ze tot stand kwam, en hoe je eraan kunt bijdragen.</p>
+    <div class="about-grid">
+      <div class="card">
+        <div class="about-card-title">Waarom deze website?</div>
+        <p class="about-card-text">Tools, methodieken en contactorganisaties rond LGBTQ+ en verstandelijke beperking bestaan wel degelijk — maar ze zijn versnipperd over tientallen websites. Voor een drukke begeleider of een team dat net wil starten met inclusiebeleid, is die versnippering een drempel. Deze hub brengt alles samen op één overzichtelijke, doorzoekbare plek. Het doel is laagdrempelig en praktisch: minder zoeken, meer doen.</p>
+      </div>
+      <div class="card">
+        <div class="about-card-title">Onderzoeksachtergrond</div>
+        <p class="about-card-text" style="margin-bottom:12px;">Deze website is ontwikkeld als aanvullend product bij een graduaatsproef over LGBTQ+ en genderdiversiteit in residentiële zorg voor personen met een licht verstandelijke beperking (UCLL, Graduaat Orthopedagogische Begeleiding, 2025–2026).</p>
+        <p class="about-card-text">Uit dat onderzoek bleek onder meer dat bestaande tools onvoldoende bekend en ingebed zijn in de Vlaamse zorgpraktijk. Deze hub is een directe respons op die vaststelling.</p>
+      </div>
+      <div class="card">
+        <div class="about-card-title">Aanvullingen &amp; feedback</div>
+        <p class="about-card-text">Ken je een tool, organisatie of good practice die hier thuishoort? Het overzicht is bewust niet als volledig beschouwd — het werkveld evolueert snel. Feedback en aanvullingen zijn welkom via de contactinformatie hieronder.</p>
+      </div>
+      <div class="contact-block">
+        <div class="contact-title">Contact</div>
+        <p class="contact-name">Kobe Cornelis — Graduaat Orthopedagogische Begeleiding, UCLL Sociale School Heverlee</p>
+        <p class="contact-sub">Eindwerkbegeleider: Elke Van Nooten · Groeneweg 151, 3001 Heverlee</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>DeRegenbooggids.be &nbsp;·&nbsp; Graduaatsproef UCLL Sociale School Heverlee &nbsp;·&nbsp; Kobe Cornelis, 2025–2026 &nbsp;·&nbsp; Niet commercieel</p>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const TOOLS = [
+  { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een VB. Inclusief inspiratiekaarten en LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/thema-s/seksualiteit/seksuele-diversiteit" },
+  { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een LVB. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl" },
+  { title:"Transgendergids voor LVB", org:"Transvisie, COC Zonder Stempel", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een LVB.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { title:"Seks @ relaties.kom!", org:"Çavaria / De Roze Pagina", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Werkboek rond relaties en seksualiteit voor mensen met een verstandelijke beperking. Laagdrempelig en visueel ondersteund.", url:"https://www.cavaria.be/derozepagina" },
+  { title:"Beleidsscan Seksualiteit & Intimiteit", org:"Rutgers", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Aan de hand van 33 stellingen bekijk je hoe jouw zorgorganisatie omgaat met seksualiteit en intimiteit. Geeft advies op maat.", url:"https://www.rutgers.nl" },
+  { title:"De Roze Pagina", org:"Çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Toegankelijke info voor LGBTI+ personen met een verstandelijke beperking: coming-out, verliefdheid, relaties en seksualiteit.", url:"https://www.cavaria.be/derozepagina" },
+  { title:"Aditi vzw – Individuele begeleiding", org:"Aditi vzw", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Advies en informatiecentrum voor personen met een beperking, psychische kwetsbaarheid en hun netwerk. Erkend door VAPH.", url:"https://aditivzw.be" },
+  { title:"Dito vzw – LGBTI+ & beperking", org:"Dito vzw", thema:"Netwerk & Ontmoeting", doelgroep:"Cliënten & Begeleiders", beschrijving:"Overzicht van organisaties voor LGBTI+ personen met een beperking in Vlaanderen, met info per regio.", url:"https://www.ditovzw.be/actie/projecten/eros/informatie/lgbti/" },
+];
+
+const ORGS = [
+  { naam:"Aditi vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Begeleiding bij vragen over relaties, intimiteit en seksualiteit voor personen met een beperking of psychische kwetsbaarheid. Erkend VAPH-aanbieder.", url:"https://aditivzw.be", telefoon:null },
+  { naam:"De Roze Ballon", regio:"Leuven (Vlaams-Brabant)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een verstandelijke beperking. Regelmatige activiteiten zoals bowlen, museumbezoek en uitstappen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Joker", regio:"Gent (Oost-Vlaanderen)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een beperking, maar iedereen is welkom. Zes toegankelijke activiteiten per jaar.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Bink", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Voor holebi's en transgender personen met een beperking (VB, fysiek of autisme). Tweemaandelijkse activiteiten: praatcafé, filmavond, bowling.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"Roze Wapper", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's met een verstandelijke beperking in de regio Antwerpen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"Çavaria – Roze Pagina", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Koepelorganisatie voor LGBTI+ in Vlaanderen. Beheert De Roze Pagina, brochures, en een overzicht van alle LGBTI+-verenigingen voor personen met een beperking.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"Dito vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Informatie en doorverwijzing voor LGBTI+ personen met een beperking en hun omgeving.", url:"https://www.ditovzw.be", telefoon:null },
+  { naam:"Lumi (voorheen Tele-Onthaal)", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"Anoniem praten over wat je bezighoudt, ook over seksualiteit of gender. Laagdrempelig voor cliënten die niet bij naam bekend willen zijn.", url:"https://www.lumi.be", telefoon:"106" },
+];
+
+const BELEID = [
+  { titel:"VN-Verdrag Rechten Personen met Handicap (VRPH)", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/wetgeving-en-aanbevelingen/wetgeving/vn-verdrag-handicap" },
+  { titel:"Seksueel Gezondheidsbeleid in zorgvoorzieningen", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
+  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", type:"Nascholing", beschrijving:"Çavaria biedt vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.cavaria.be" },
+  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een LVB een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { titel:"Affirmatieve zorgbenadering", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
+  { titel:"Handelingsverlegenheid bespreekbaar maken", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
+];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+
+const THEMA_COLORS = {
+  "Seksualiteit & Identiteit": "teal",
+  "Gender & Trans": "violet",
+  "Beleid & Organisatie": "amber",
+  "Netwerk & Ontmoeting": "rose",
+};
+const TYPE_COLORS = {
+  "Begeleiding & Advies": "teal",
+  "Ontmoeting & Activiteiten": "violet",
+  "Info & Ondersteuning": "amber",
+  "Anonieme steun": "rose",
+  "Juridisch kader": "teal",
+  "Good Practice": "violet",
+  "Nascholing": "amber",
+  "Wetenschappelijk kader": "slate",
+  "Praktijkkader": "rose",
+  "Teamtool": "teal",
+};
+
+function badge(label, color) {
+  return `<span class="badge badge-${color || 'slate'}">${label}</span>`;
+}
+
+function extLink(url, label, colorClass) {
+  return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="ext-link ${colorClass}">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    ${label}
+  </a>`;
+}
+
+// ── RENDER STATS ──────────────────────────────────────────────────────────────
+
+document.getElementById('stats-grid').innerHTML = [
+  [TOOLS.length, 'Tools &amp; methodieken'],
+  [ORGS.length, 'Organisaties in kaart'],
+  [BELEID.length, 'Beleids- &amp; vormingskaders'],
+].map(([n, label]) => `
+  <div class="card stat-card">
+    <div class="stat-n">${n}</div>
+    <div class="stat-label">${label}</div>
+  </div>
+`).join('');
+
+// ── RENDER TOOLS ──────────────────────────────────────────────────────────────
+
+function renderTools() {
+  const q  = document.getElementById('tool-search').value.toLowerCase();
+  const th = document.getElementById('tool-thema').value;
+  const dg = document.getElementById('tool-doelgroep').value;
+
+  const filtered = TOOLS.filter(t =>
+    (th === "Alle thema's"      || t.thema     === th) &&
+    (dg === "Alle doelgroepen"  || t.doelgroep === dg) &&
+    (!q || t.title.toLowerCase().includes(q) || t.beschrijving.toLowerCase().includes(q))
+  );
+
+  document.getElementById('tool-count').textContent =
+    `${filtered.length} resultaat${filtered.length !== 1 ? 'en' : ''}`;
+
+  document.getElementById('tools-list').innerHTML = filtered.length ? filtered.map(t => `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-title">${t.title}</div>
+          <div class="card-org">${t.org}</div>
+        </div>
+        <div class="card-badges">
+          ${badge(t.thema, THEMA_COLORS[t.thema] || 'slate')}
+          ${badge(t.doelgroep, 'slate')}
+        </div>
+      </div>
+      <p class="card-desc">${t.beschrijving}</p>
+      ${extLink(t.url, 'Bekijk tool', 'ext-link-teal')}
+    </div>
+  `).join('') : '<div class="empty">Geen resultaten gevonden. Pas je filters aan.</div>';
+}
+renderTools();
+
+// ── RENDER ORGS ───────────────────────────────────────────────────────────────
+
+function renderOrgs() {
+  const regio = document.getElementById('org-regio').value;
+  const type  = document.getElementById('org-type').value;
+
+  const filtered = ORGS.filter(o =>
+    (regio === "Alle regio's" || o.regio === regio) &&
+    (type  === "Alle types"   || o.type  === type)
+  );
+
+  document.getElementById('org-count').textContent =
+    `${filtered.length} organisatie${filtered.length !== 1 ? 's' : ''}`;
+
+  document.getElementById('orgs-list').innerHTML = filtered.map(o => `
+    <div class="card">
+      <div class="card-header" style="margin-bottom:6px;">
+        <div class="card-title" style="font-size:16px;">${o.naam}</div>
+        ${badge(o.type, TYPE_COLORS[o.type] || 'slate')}
+      </div>
+      <div class="org-regio">📍 ${o.regio}</div>
+      <p class="card-desc" style="font-size:14px;">${o.beschrijving}</p>
+      <div class="org-links">
+        ${o.telefoon ? `<span class="org-phone"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.48 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${o.telefoon}</span>` : ''}
+        ${extLink(o.url, 'Bezoek website', 'ext-link-violet')}
+      </div>
+    </div>
+  `).join('');
+}
+renderOrgs();
+
+// ── RENDER POLICY ─────────────────────────────────────────────────────────────
+
+document.getElementById('policy-list').innerHTML = BELEID.map(item => `
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">${item.titel}</div>
+      ${badge(item.type, TYPE_COLORS[item.type] || 'slate')}
+    </div>
+    <p class="card-desc">${item.beschrijving}</p>
+    ${extLink(item.url, 'Meer info', 'ext-link-amber')}
+  </div>
+`).join('');
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
