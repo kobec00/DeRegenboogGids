@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>De Regenbooggids — LGBTQ+ & LVB in de zorg</title>
+  <title>De Regenbooggids — LGBTQ+ & verstandelijke beperking in de zorg</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
   <style>
@@ -48,8 +48,8 @@
       content: '';
       display: block;
       height: 3px;
-      background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4);
-      opacity: 0.6;
+      background: linear-gradient(90deg, #c06080, #c8885a, #6aaa80, #5a90c8, #8070b8);
+      opacity: 0.45;
     }
     #topbar-inner {
       max-width: 920px; margin: 0 auto;
@@ -61,16 +61,59 @@
       cursor: pointer; margin-right: auto; text-decoration: none;
     }
     #logo-icon {
-      background: linear-gradient(135deg, #e85d8a 0%, #f4a44a 20%, #f7d44a 38%, #5bbf7a 56%, #4ab8d4 74%, #7b6fd4 100%);
-      border-radius: 9px; width: 34px; height: 34px;
-      display: flex; align-items: center; justify-content: center; color: #fff;
+      position: relative;
+      width: 36px; height: 36px;
+      border-radius: 10px;
       flex-shrink: 0;
+      overflow: hidden;
+      /* Zachte gedempte regenboog base */
+      background: linear-gradient(145deg,
+        rgba(210,120,160,0.55) 0%,
+        rgba(220,160,100,0.45) 22%,
+        rgba(130,195,150,0.45) 48%,
+        rgba(100,170,220,0.50) 72%,
+        rgba(140,120,210,0.55) 100%
+      );
+      /* Subtiele border */
+      box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.55),
+        inset 0 -1px 1px rgba(0,0,0,0.08),
+        0 2px 10px rgba(100,120,200,0.18),
+        0 1px 3px rgba(0,0,0,0.10);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.45);
+    }
+    /* Liquid glass glare overlay */
+    #logo-icon::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.04) 100%);
+      border-radius: 10px 10px 50% 50%;
+      pointer-events: none;
+    }
+    #logo-icon svg {
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+      color: rgba(255,255,255,0.92);
     }
     #logo span {
       font-family: var(--font-serif); font-weight: 800; font-size: 15px;
-      background: linear-gradient(90deg, #c94b7b 0%, #d4874a 30%, #5aaa6e 60%, #4a7fc4 85%, #7060c0 100%);
+      /* Zelfde pastel-muted palet als het liquid glass icoon */
+      background: linear-gradient(90deg,
+        #b05878 0%,
+        #b87848 20%,
+        #72aa88 45%,
+        #5888b8 68%,
+        #7868a8 88%,
+        #9858a0 100%
+      );
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
+      /* Subtiele letter-spacing voor dat strakke Apple-gevoel */
+      letter-spacing: -0.01em;
     }
     nav { display: flex; gap: 4px; }
     nav button {
@@ -327,10 +370,10 @@
           <div class="hero-label-icon">
             <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
           </div>
-          <span>De Regenbooggids — LGBTQ+ & LVB in de zorg</span>
+          <span>De Regenbooggids — LGBTQ+ & verstandelijke beperking in de zorg</span>
         </div>
         <h1>Inclusiever begeleiden.<br>Alles op één plek.</h1>
-        <p>Een praktische hub voor begeleiders en organisaties in de Vlaamse zorg. Vind tools, methodieken, contactorganisaties en beleidsondersteuning rond LGBTQ+ en genderdiversiteit bij cliënten met een licht verstandelijke beperking.</p>
+        <p>Een praktische hub voor begeleiders en organisaties in de Vlaamse zorg. Vind tools, methodieken, contactorganisaties en beleidsondersteuning rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking.</p>
         <div class="hero-btns">
           <button class="btn-primary" onclick="showPage('tools')">Bekijk tools</button>
           <button class="btn-secondary" onclick="showPage('orgs')">Organisaties zoeken</button>
@@ -462,8 +505,54 @@
 
   <!-- ABOUT -->
   <section class="page" id="page-about">
-    <h1>Over deze website</h1>
-    <p class="page-intro">Waarom deze hub bestaat, hoe ze tot stand kwam, en hoe je eraan kunt bijdragen.</p>
+
+    <!-- Groot gecentreerd logo -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:18px; padding: 48px 0 40px; text-align:center;">
+      <div style="
+        position:relative; width:96px; height:96px; border-radius:26px; overflow:hidden;
+        background: linear-gradient(145deg,
+          rgba(210,120,160,0.55) 0%,
+          rgba(220,160,100,0.45) 22%,
+          rgba(130,195,150,0.45) 48%,
+          rgba(100,170,220,0.50) 72%,
+          rgba(140,120,210,0.55) 100%
+        );
+        box-shadow:
+          inset 0 2px 3px rgba(255,255,255,0.55),
+          inset 0 -2px 3px rgba(0,0,0,0.08),
+          0 8px 32px rgba(100,120,200,0.22),
+          0 2px 8px rgba(0,0,0,0.12);
+        border: 1.5px solid rgba(255,255,255,0.45);
+        flex-shrink:0;
+      ">
+        <!-- Glare overlay -->
+        <div style="
+          position:absolute; top:0; left:0; right:0; height:52%;
+          background: linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.04) 100%);
+          border-radius:26px 26px 50% 50%;
+          pointer-events:none;
+        "></div>
+        <!-- Icon -->
+        <div style="position:relative; z-index:1; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="1.75" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <path d="M22 17a10 10 0 0 0-20 0"/>
+            <path d="M6 17a6 6 0 0 1 12 0"/>
+            <circle cx="12" cy="17" r="1.5" fill="rgba(255,255,255,0.92)" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+      <div style="
+        font-family: var(--font-serif); font-weight: 800; font-size: 32px;
+        background: linear-gradient(90deg,
+          #b05878 0%, #b87848 20%, #72aa88 45%,
+          #5888b8 68%, #7868a8 88%, #9858a0 100%
+        );
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; letter-spacing: -0.02em; line-height: 1.1;
+      ">De Regenbooggids</div>
+      <p style="color:var(--slate-400); font-size:13px; font-family:var(--font-mono); letter-spacing:0.06em; margin:0;">DeRegenbooggids.be &nbsp;·&nbsp; LGBTQ+ &amp; verstandelijke beperking in de zorg</p>
+    </div>
+
     <div class="about-grid">
       <div class="card">
         <div class="about-card-title">Waarom deze website?</div>
@@ -471,7 +560,7 @@
       </div>
       <div class="card">
         <div class="about-card-title">Onderzoeksachtergrond</div>
-        <p class="about-card-text" style="margin-bottom:12px;">Deze website is ontwikkeld als aanvullend product bij een graduaatsproef over LGBTQ+ en genderdiversiteit in residentiële zorg voor personen met een licht verstandelijke beperking (UCLL, Graduaat Orthopedagogische Begeleiding, 2025–2026).</p>
+        <p class="about-card-text" style="margin-bottom:12px;">Deze website is ontwikkeld als aanvullend product bij een graduaatsproef over LGBTQ+ en genderdiversiteit in residentiële zorg voor personen met een verstandelijke beperking (UCLL, Graduaat Orthopedagogische Begeleiding, 2025–2026).</p>
         <p class="about-card-text">Uit dat onderzoek bleek onder meer dat bestaande tools onvoldoende bekend en ingebed zijn in de Vlaamse zorgpraktijk. Deze hub is een directe respons op die vaststelling.</p>
       </div>
       <div class="card">
@@ -497,8 +586,8 @@
 
 const TOOLS = [
   { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een VB. Inclusief inspiratiekaarten en LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/thema-s/seksualiteit/seksuele-diversiteit" },
-  { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een LVB. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl" },
-  { title:"Transgendergids voor LVB", org:"Transvisie, COC Zonder Stempel", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een LVB.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een verstandelijke beperking. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl" },
+  { title:"Transgendergids voor verstandelijke beperking", org:"Transvisie, COC Zonder Stempel", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een verstandelijke beperking.", url:"https://www.kennispleingehandicaptensector.nl" },
   { title:"Seks @ relaties.kom!", org:"Çavaria / De Roze Pagina", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Werkboek rond relaties en seksualiteit voor mensen met een verstandelijke beperking. Laagdrempelig en visueel ondersteund.", url:"https://www.cavaria.be/derozepagina" },
   { title:"Beleidsscan Seksualiteit & Intimiteit", org:"Rutgers", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Aan de hand van 33 stellingen bekijk je hoe jouw zorgorganisatie omgaat met seksualiteit en intimiteit. Geeft advies op maat.", url:"https://www.rutgers.nl" },
   { title:"De Roze Pagina", org:"Çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Toegankelijke info voor LGBTI+ personen met een verstandelijke beperking: coming-out, verliefdheid, relaties en seksualiteit.", url:"https://www.cavaria.be/derozepagina" },
@@ -521,7 +610,7 @@ const BELEID = [
   { titel:"VN-Verdrag Rechten Personen met Handicap (VRPH)", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/wetgeving-en-aanbevelingen/wetgeving/vn-verdrag-handicap" },
   { titel:"Seksueel Gezondheidsbeleid in zorgvoorzieningen", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
   { titel:"Vorming: LGBTQ+-inclusieve begeleiding", type:"Nascholing", beschrijving:"Çavaria biedt vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.cavaria.be" },
-  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een LVB een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
   { titel:"Affirmatieve zorgbenadering", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
   { titel:"Handelingsverlegenheid bespreekbaar maken", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
 ];
