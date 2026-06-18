@@ -376,6 +376,14 @@
     .alert-text  { color: #78350f; font-size: 14px; line-height: 1.6; }
     .alert-source { color: #92400e; font-size: 12px; font-weight: 600; margin-top: 8px; opacity: 0.85; }
 
+    /* ── BELEID: groepen ── */
+    #policy-list { display: grid; gap: 16px; }
+    .policy-group { display: grid; gap: 16px; }
+    .policy-group-head { margin-top: 14px; }
+    .policy-group:first-child .policy-group-head { margin-top: 0; }
+    .policy-group-title { font-family: var(--font-serif); font-size: 19px; font-weight: 800; color: var(--slate-900); margin-bottom: 4px; }
+    .policy-group-intro { font-size: 14px; color: var(--slate-500); line-height: 1.5; }
+
     /* ── ABOUT ── */
     .about-grid { display: grid; gap: 24px; }
     .about-card-title { font-weight: 800; font-size: 18px; color: var(--slate-900); margin-bottom: 12px; }
@@ -552,7 +560,7 @@
     }
     body.a11y .page-intro, body.a11y .card-desc, body.a11y .about-card-text,
     body.a11y .quicknav-desc, body.a11y .stat-label, body.a11y .org-regio,
-    body.a11y .card-org, body.a11y footer p { color: #1a1a1a !important; }
+    body.a11y .card-org, body.a11y footer p, body.a11y .policy-group-intro { color: #1a1a1a !important; }
     /* Gradient-tekst wordt effen zwart zodat ze leesbaar is */
     body.a11y #logo span,
     body.a11y #page-about [style*="background-clip"] {
@@ -657,7 +665,7 @@
         </div>
         <div>
           <div class="quicknav-title">Beleid &amp; Vorming</div>
-          <div class="quicknav-desc">Kaders, good practices en nascholing om LGBTQ+-inclusie structureel te verankeren in je organisatie.</div>
+          <div class="quicknav-desc">Van antidiscriminatie-, gender- en transwetgeving tot Vlaams zorgbeleid, wetenschappelijke onderbouwing en vorming: de basis om LGBTQ+-inclusie te verankeren.</div>
         </div>
       </div>
       <div class="card clickable quicknav-card" onclick="showPage('about')">
@@ -742,7 +750,7 @@
   <!-- POLICY -->
   <section class="page" id="page-policy">
     <h1>Beleid &amp; Vorming</h1>
-    <p class="page-intro">Juridische kaders, good practices en nascholing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie.</p>
+    <p class="page-intro">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie.</p>
 
     <div class="alert-box">
       <div class="alert-emoji">⚡</div>
@@ -907,26 +915,26 @@ const ORGS = [
 ];
 
 const BELEID = [
-  // ── Juridische kaders ──
-  { titel:"VN-Verdrag Rechten Personen met een Handicap (VRPH)", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/discriminatie-handicap" },
-  { titel:"Antidiscriminatiewet (2007)", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, handicap en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
-  { titel:"Genderwet (2007, uitgebreid 2014/2020)", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van geslacht, en sinds 2014 ook expliciet genderidentiteit en genderexpressie. Beschermt trans en intersekse cliënten.", url:"https://igvm-iefh.belgium.be/nl" },
-  { titel:"Transgenderwet (2017)", type:"Juridisch kader", beschrijving:"Maakt het mogelijk om de geregistreerde voornaam en het geslacht te wijzigen op eenvoudig verzoek, zonder medische voorwaarde. Relevant bij naam- en registratievragen van trans cliënten.", url:"https://igvm-iefh.belgium.be/nl/themas/transgender" },
-  { titel:"Openstelling van het huwelijk (2003)", type:"Juridisch kader", beschrijving:"België was in 2003 het tweede land ter wereld waar koppels van hetzelfde geslacht konden huwen; adoptie volgde in 2006. Cliënten hebben gelijke relatierechten.", url:"" },
-  { titel:"Yogyakarta-beginselen (2006)", type:"Juridisch kader", beschrijving:"Toepassing van internationale mensenrechten op seksuele oriëntatie en genderidentiteit. Mensenrechtenreferentie, ook aangehaald bij de Belgische transgenderwet.", url:"https://yogyakartaprinciples.org" },
-  // ── Beleidskaders ──
-  { titel:"VAPH: bespreekbaarheid seksualiteit & kwaliteit", type:"Beleidskader", beschrijving:"Het Vlaams Agentschap voor Personen met een Handicap verwacht dat voorzieningen seksualiteit bespreekbaar maken en een veilig, kwaliteitsvol klimaat bieden. Vergunde aanbieders worden geïnspecteerd door Zorginspectie.", url:"https://www.vaph.be" },
-  { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een handicap als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
-  // ── Wetenschappelijke kaders ──
-  { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apa.org" },
-  { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int" },
-  { titel:"FRA: EU LGBTIQ Survey III (2024)", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een handicap, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
-  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
-  // ── Praktijk, vorming & teamtools ──
-  { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
-  { titel:"Affirmatieve zorgbenadering", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
-  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", type:"Nascholing", beschrijving:"çavaria en KliQ bieden vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.kliqvzw.be" },
-  { titel:"Handelingsverlegenheid bespreekbaar maken", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
+  // ── Rechten & wetgeving ──
+  { titel:"VN-Verdrag Rechten Personen met een Handicap (VRPH)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/discriminatie-handicap" },
+  { titel:"Antidiscriminatiewet (2007)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, handicap en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
+  { titel:"Genderwet (2007, uitgebreid 2014/2020)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van geslacht, en sinds 2014 ook expliciet genderidentiteit en genderexpressie. Beschermt trans en intersekse cliënten.", url:"https://igvm-iefh.belgium.be/nl" },
+  { titel:"Transgenderwet (2017)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Maakt het mogelijk om de geregistreerde voornaam en het geslacht te wijzigen op eenvoudig verzoek, zonder medische voorwaarde. Relevant bij naam- en registratievragen van trans cliënten.", url:"https://igvm-iefh.belgium.be/nl/themas/transgender" },
+  { titel:"Openstelling van het huwelijk (2003)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"België was in 2003 het tweede land ter wereld waar koppels van hetzelfde geslacht konden huwen; adoptie volgde in 2006. Cliënten hebben gelijke relatierechten.", url:"" },
+  { titel:"Yogyakarta-beginselen (2006)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Toepassing van internationale mensenrechten op seksuele oriëntatie en genderidentiteit. Mensenrechtenreferentie, ook aangehaald bij de Belgische transgenderwet.", url:"https://yogyakartaprinciples.org" },
+  // ── Vlaams zorgbeleid ──
+  { titel:"VAPH: bespreekbaarheid seksualiteit & kwaliteit", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Het Vlaams Agentschap voor Personen met een Handicap verwacht dat voorzieningen seksualiteit bespreekbaar maken en een veilig, kwaliteitsvol klimaat bieden. Vergunde aanbieders worden geïnspecteerd door Zorginspectie.", url:"https://www.vaph.be" },
+  { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een handicap als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
+  // ── Wetenschappelijke onderbouwing ──
+  { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apa.org" },
+  { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int" },
+  { titel:"FRA: EU LGBTIQ Survey III (2024)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een handicap, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
+  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
+  // ── Praktijk & vorming ──
+  { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", groep:"Praktijk & vorming", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
+  { titel:"Affirmatieve zorgbenadering", groep:"Praktijk & vorming", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
+  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", groep:"Praktijk & vorming", type:"Nascholing", beschrijving:"çavaria en KliQ bieden vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.kliqvzw.be" },
+  { titel:"Handelingsverlegenheid bespreekbaar maken", groep:"Praktijk & vorming", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
 ];
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
@@ -1043,18 +1051,37 @@ function renderOrgs() {
 }
 renderOrgs();
 
-// ── RENDER POLICY ─────────────────────────────────────────────────────────────
+// ── RENDER POLICY (gegroepeerd per categorie) ─────────────────────────────────
 
-document.getElementById('policy-list').innerHTML = BELEID.map(item => `
-  <div class="card visible">
-    <div class="card-header">
-      <div class="card-title">${item.titel}</div>
-      ${badge(item.type, TYPE_COLORS[item.type] || 'slate')}
+const BELEID_GROEPEN = [
+  { naam:"Rechten & wetgeving", intro:"Wat cliënten wettelijk mogen verwachten, en waartegen ze beschermd zijn." },
+  { naam:"Vlaams zorgbeleid", intro:"Wat voorzieningen en begeleiders vanuit het zorgkader moeten waarmaken." },
+  { naam:"Wetenschappelijke onderbouwing", intro:"De feiten en cijfers achter een affirmatieve, niet-pathologiserende benadering." },
+  { naam:"Praktijk & vorming", intro:"Concrete kaders, good practices en nascholing voor in het team." },
+];
+
+document.getElementById('policy-list').innerHTML = BELEID_GROEPEN.map(groep => {
+  const items = BELEID.filter(b => b.groep === groep.naam);
+  if (!items.length) return '';
+  return `
+    <div class="policy-group">
+      <div class="policy-group-head">
+        <h2 class="policy-group-title">${groep.naam}</h2>
+        <p class="policy-group-intro">${groep.intro}</p>
+      </div>
+      ${items.map(item => `
+        <div class="card visible">
+          <div class="card-header">
+            <div class="card-title">${item.titel}</div>
+            ${badge(item.type, TYPE_COLORS[item.type] || 'slate')}
+          </div>
+          <p class="card-desc">${item.beschrijving}</p>
+          ${item.url ? extLink(item.url, 'Meer info', 'ext-link-amber') : ''}
+        </div>
+      `).join('')}
     </div>
-    <p class="card-desc">${item.beschrijving}</p>
-    ${item.url ? extLink(item.url, 'Meer info', 'ext-link-amber') : ''}
-  </div>
-`).join('');
+  `;
+}).join('');
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 
