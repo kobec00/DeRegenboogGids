@@ -560,31 +560,42 @@
     }
 
     /* ── FLOATING TOEGANKELIJKHEIDSKNOP ── */
-    .a11y-fab {
+    /* ── FLOATING KNOPPEN (stapel rechtsonder) ── */
+    .fab-stack {
       position: fixed; right: 18px; bottom: 18px; z-index: 200;
+      display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+    }
+    .fab {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--teal-dark); color: #fff;
-      border: 2px solid rgba(255,255,255,0.7); border-radius: 999px;
+      color: #fff; border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.7);
       padding: 10px 16px; cursor: pointer; font-family: var(--font-sans);
       font-weight: 700; font-size: 14px;
-      box-shadow: 0 6px 22px rgba(10,74,66,0.35);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.30);
+      transition: transform .15s, box-shadow .2s;
     }
-    .a11y-fab svg { flex-shrink: 0; }
-    .a11y-fab .a11y-switch {
+    .fab:hover { transform: translateY(-1px); }
+    .fab svg { flex-shrink: 0; }
+    .a11y-fab { background: var(--teal-dark); box-shadow: 0 6px 22px rgba(10,74,66,0.35); }
+    .dark-fab { background: #1e2433; border-color: rgba(255,255,255,0.45); box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
+    .fab-switch {
       width: 38px; height: 22px; border-radius: 999px;
-      background: rgba(255,255,255,0.35); position: relative; transition: background .2s;
+      background: rgba(255,255,255,0.30); position: relative; transition: background .2s;
       flex-shrink: 0;
     }
-    .a11y-fab .a11y-switch::after {
+    .fab-switch::after {
       content: ''; position: absolute; top: 2px; left: 2px;
       width: 18px; height: 18px; border-radius: 50%; background: #fff;
       transition: transform .2s;
     }
-    body.a11y .a11y-fab .a11y-switch { background: var(--teal-light); }
-    body.a11y .a11y-fab .a11y-switch::after { transform: translateX(16px); }
+    body.a11y .a11y-fab .fab-switch { background: var(--teal-light); }
+    body.a11y .a11y-fab .fab-switch::after { transform: translateX(16px); }
+    body.dark .dark-fab .fab-switch { background: #8b7bff; }
+    body.dark .dark-fab .fab-switch::after { transform: translateX(16px); }
     @media (max-width: 640px) {
-      .a11y-fab .a11y-label-full { display: none; }
-      .a11y-fab { right: 12px; bottom: 12px; padding: 10px 12px; }
+      .fab .fab-label { display: none; }
+      .fab-stack { right: 12px; bottom: 12px; }
+      .fab { padding: 10px 12px; }
     }
 
     /* ── TOEGANKELIJKE MODUS: hoog contrast, geen glas, grotere tekst ── */
@@ -649,6 +660,109 @@
     body.a11y nav button { font-size: 16px; }
     body.a11y nav button.active { border: 2px solid #0a4a42 !important; color: #0a4a42 !important; }
     body.a11y .filter-bar input::placeholder { color: #555 !important; }
+
+    /* ════════════════════════════════════════════════════════════════
+       DONKERE MODUS — sfeervolle dark variant van het origineel ontwerp
+       ════════════════════════════════════════════════════════════════ */
+    body.dark {
+      color: #c7cdd9;
+      background:
+        radial-gradient(ellipse at 15% 18%, rgba(190,90,150,0.17) 0%, transparent 50%),
+        radial-gradient(ellipse at 82% 8%,  rgba(70,150,210,0.16) 0%, transparent 48%),
+        radial-gradient(ellipse at 92% 72%, rgba(120,90,210,0.17) 0%, transparent 50%),
+        radial-gradient(ellipse at 8% 84%,  rgba(40,170,150,0.15) 0%, transparent 46%),
+        radial-gradient(ellipse at 50% 50%, rgba(230,160,90,0.06) 0%, transparent 60%),
+        #0b0e14;
+    }
+    /* Topbar */
+    body.dark #topbar {
+      background: rgba(16,20,28,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 4px 24px rgba(0,0,0,0.45);
+    }
+    body.dark #topbar.scrolled { background: rgba(16,20,28,0.9); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    body.dark #topbar::after { opacity: 0.7; }
+    body.dark nav button { color: #aeb6c4; }
+    body.dark nav button:hover { color: #fff; }
+    body.dark nav button.active { background: rgba(255,255,255,0.10); color: #fff; }
+    body.dark nav { background: rgba(16,20,28,0.96); }
+    body.dark .nav-toggle { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.14); color: #d7dce5; }
+    /* Kaarten (donker glas) */
+    body.dark .card,
+    body.dark .cta-block,
+    body.dark .filter-bar {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.09);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 6px 28px rgba(0,0,0,0.35);
+    }
+    body.dark .card.clickable:hover {
+      background: rgba(255,255,255,0.075);
+      border-color: rgba(62,214,184,0.35);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 14px 44px rgba(0,0,0,0.45);
+    }
+    /* Tekstkleuren */
+    body.dark h1, body.dark h2,
+    body.dark .card-title, body.dark .about-card-title,
+    body.dark .quicknav-title, body.dark .cta-block strong,
+    body.dark .policy-group-title { color: #f0f3f8; }
+    body.dark .page-intro, body.dark .card-desc, body.dark .about-card-text,
+    body.dark .quicknav-desc, body.dark .cta-block p, body.dark .policy-group-intro { color: #aab2c0; }
+    body.dark .card-org, body.dark .stat-label, body.dark .result-count,
+    body.dark .org-regio, body.dark .empty, body.dark footer p { color: #8b93a3; }
+    /* Accenten lichter zodat ze oplichten op donker */
+    body.dark .stat-n { color: #3ed6b8; }
+    body.dark .ext-link-teal, body.dark .org-phone { color: #3ed6b8; }
+    body.dark .org-phone:hover { color: #6fe6cf; }
+    body.dark .ext-link-violet { color: #b69bff; }
+    body.dark .ext-link-amber { color: #f2c14e; }
+    /* Filters / inputs */
+    body.dark .filter-bar input, body.dark .filter-bar select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #e6e9f0; box-shadow: none;
+    }
+    body.dark .filter-bar input::placeholder { color: #7c8494; }
+    body.dark .filter-bar input:focus, body.dark .filter-bar select:focus {
+      background: rgba(255,255,255,0.10);
+      box-shadow: 0 0 0 3px rgba(62,214,184,0.25);
+    }
+    body.dark .filter-bar select option { background: #161c26; color: #e6e9f0; }
+    body.dark .filter-label { color: #b69bff !important; }
+    /* Badges feller op donker */
+    body.dark .badge { border-color: rgba(255,255,255,0.12); }
+    body.dark .badge-teal   { background: rgba(45,160,140,0.28); color: #7fe9d4; }
+    body.dark .badge-violet { background: rgba(130,100,230,0.28); color: #c6b3ff; }
+    body.dark .badge-amber  { background: rgba(200,140,40,0.26); color: #f5cd72; }
+    body.dark .badge-rose   { background: rgba(220,70,100,0.26); color: #ffaebd; }
+    body.dark .badge-slate  { background: rgba(150,160,180,0.22); color: #c2cad6; }
+    /* Alert-box (wist je dat) */
+    body.dark .alert-box {
+      background: rgba(245,200,90,0.10);
+      border: 1px solid rgba(245,200,90,0.30);
+      box-shadow: none;
+    }
+    body.dark .alert-title, body.dark .alert-source { color: #f3cf7f; }
+    body.dark .alert-text { color: #e7d3a8; }
+    body.dark .alert-text strong { color: #f7dd9a; }
+    /* Hero verdiept met meer diepte */
+    body.dark #hero {
+      background: linear-gradient(135deg, #06302b 0%, #0a5a4e 55%, #11806e 100%);
+      box-shadow: 0 22px 60px rgba(0,0,0,0.5);
+    }
+    /* Contact-block iets dieper */
+    body.dark .contact-block { background: linear-gradient(135deg, #06342e, #0a5a4e); }
+    body.dark .contact-email-btn { background: #eafff9; color: #06342e; }
+    /* Footer */
+    body.dark footer {
+      background: rgba(16,20,28,0.6);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      box-shadow: none;
+    }
+    /* About-logo: extra gloed op donker */
+    body.dark .about-logo-surface {
+      box-shadow: inset 0 2px 3px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28),
+        0 16px 48px rgba(80,120,220,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    }
   </style>
 </head>
 <body>
@@ -888,12 +1002,19 @@
   <p style="margin-top:6px; font-size:12px; opacity:0.8;">Laatst bijgewerkt: juni 2026 &nbsp;·&nbsp; Controleer steeds de actuele info bij de bron.</p>
 </footer>
 
-<!-- ── FLOATING TOEGANKELIJKHEIDSKNOP ── -->
-<button class="a11y-fab" id="a11y-fab" onclick="toggleA11y()" aria-pressed="false" aria-label="Toegankelijke modus aan- of uitzetten">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M5 8h14"/><path d="M9 8v5l-2 7"/><path d="M15 8v5l2 7"/></svg>
-  <span class="a11y-label-full">Toegankelijke modus</span>
-  <span class="a11y-switch" aria-hidden="true"></span>
-</button>
+<!-- ── FLOATING KNOPPEN: donkere modus + toegankelijke modus ── -->
+<div class="fab-stack">
+  <button class="fab dark-fab" id="dark-fab" onclick="toggleDark()" aria-pressed="false" aria-label="Donkere modus aan- of uitzetten">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <span class="fab-label">Donkere modus</span>
+    <span class="fab-switch" aria-hidden="true"></span>
+  </button>
+  <button class="fab a11y-fab" id="a11y-fab" onclick="toggleA11y()" aria-pressed="false" aria-label="Toegankelijke modus aan- of uitzetten">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M5 8h14"/><path d="M9 8v5l-2 7"/><path d="M15 8v5l2 7"/></svg>
+    <span class="fab-label">Toegankelijke modus</span>
+    <span class="fab-switch" aria-hidden="true"></span>
+  </button>
+</div>
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -1150,6 +1271,20 @@ function toggleNav() {
 function toggleA11y() {
   const on = document.body.classList.toggle('a11y');
   document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
+  // Toegankelijke en donkere modus sluiten elkaar uit
+  if (on && document.body.classList.contains('dark')) {
+    document.body.classList.remove('dark');
+    document.getElementById('dark-fab').setAttribute('aria-pressed', 'false');
+  }
+}
+
+function toggleDark() {
+  const on = document.body.classList.toggle('dark');
+  document.getElementById('dark-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
+  if (on && document.body.classList.contains('a11y')) {
+    document.body.classList.remove('a11y');
+    document.getElementById('a11y-fab').setAttribute('aria-pressed', 'false');
+  }
 }
 
 // ── OVER-LOGO: 3D-kanteling en glow volgen de cursor ──────────────────────────
