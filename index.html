@@ -432,6 +432,63 @@
     /* ── SVG ICONS ── */
     .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 
+    /* ── OVER: geanimeerd, cursor-reactief logo ── */
+    .about-logo-stage { perspective: 750px; }
+    .about-logo {
+      width: 104px; height: 104px; flex-shrink: 0;
+      transform: rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
+      transition: transform .25s ease-out;
+      will-change: transform;
+    }
+    .about-logo-float { width: 100%; height: 100%; animation: logoFloat 5.5s ease-in-out infinite; }
+    .about-logo-surface {
+      position: relative; width: 100%; height: 100%;
+      border-radius: 28px; overflow: hidden;
+      background: linear-gradient(135deg,
+        rgba(210,120,160,0.68) 0%, rgba(220,160,100,0.58) 22%,
+        rgba(130,195,150,0.58) 48%, rgba(100,170,220,0.62) 72%,
+        rgba(140,120,210,0.68) 100%);
+      background-size: 200% 200%;
+      animation: logoGrad 8s ease-in-out infinite;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      box-shadow:
+        inset 0 2px 3px rgba(255,255,255,0.6),
+        inset 0 -2px 3px rgba(0,0,0,0.10),
+        0 12px 36px rgba(100,120,200,0.32),
+        0 2px 8px rgba(0,0,0,0.14);
+    }
+    .about-logo-glare {
+      position: absolute; top:0; left:0; right:0; height:52%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.44) 0%, rgba(255,255,255,0.04) 100%);
+      border-radius: 28px 28px 50% 50%; pointer-events:none; z-index:2;
+    }
+    .about-logo-shine {
+      position:absolute; top:-40%; left:-70%; width:45%; height:200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.72), transparent);
+      transform: rotate(18deg); pointer-events:none; z-index:3;
+      animation: logoShine 4.8s ease-in-out infinite;
+    }
+    .about-logo-glow {
+      position:absolute; inset:0; pointer-events:none; z-index:2;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%),
+        rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%);
+      opacity:0; transition: opacity .3s ease;
+    }
+    .about-logo.is-hover .about-logo-glow { opacity:1; }
+    .about-logo-icon { position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center; }
+    @keyframes logoFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+    @keyframes logoGrad  { 0%,100%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } }
+    @keyframes logoShine { 0%{ left:-70%; } 55%,100%{ left:140%; } }
+    .about-logo-title {
+      font-family: var(--font-serif); font-weight: 800; font-size: 32px;
+      background: linear-gradient(90deg, #b05878 0%, #b87848 18%, #72aa88 42%, #5888b8 64%, #7868a8 84%, #9858a0 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: -0.02em; line-height: 1.3; padding-bottom: 0.14em;
+      animation: titleShift 11s ease-in-out infinite;
+    }
+    @keyframes titleShift { 0%,100%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } }
+
     @media (max-width: 640px) {
       #topbar-inner { padding: 0 16px; height: 56px; }
       #logo span { font-size: 14px; white-space: nowrap; }
@@ -563,11 +620,17 @@
     body.a11y .card-org, body.a11y footer p, body.a11y .policy-group-intro { color: #1a1a1a !important; }
     /* Gradient-tekst wordt effen zwart zodat ze leesbaar is */
     body.a11y #logo span,
+    body.a11y .about-logo-title,
     body.a11y #page-about [style*="background-clip"] {
       -webkit-text-fill-color: #000 !important;
       background: none !important;
       color: #000 !important;
     }
+    /* Logo-animaties stilzetten in toegankelijke modus (rustiger beeld) */
+    body.a11y .about-logo, body.a11y .about-logo-float, body.a11y .about-logo-surface,
+    body.a11y .about-logo-shine, body.a11y .about-logo-title { animation: none !important; }
+    body.a11y .about-logo { transform: none !important; }
+    body.a11y .about-logo-shine, body.a11y .about-logo-glow { display: none !important; }
     /* Links altijd onderlijnd en hoog contrast */
     body.a11y a:not(.btn-primary):not(.btn-secondary):not(.contact-email-btn):not(.a11y-fab) {
       color: #0a4a42 !important; text-decoration: underline !important; font-weight: 700;
@@ -665,7 +728,7 @@
         </div>
         <div>
           <div class="quicknav-title">Beleid &amp; Vorming</div>
-          <div class="quicknav-desc">Van antidiscriminatie-, gender- en transwetgeving tot Vlaams zorgbeleid, wetenschappelijke onderbouwing en vorming: de basis om LGBTQ+-inclusie te verankeren.</div>
+          <div class="quicknav-desc">Wetgeving en rechten, Vlaams zorgbeleid, wetenschappelijke onderbouwing en vorming rond LGBTQ+-inclusie.</div>
         </div>
       </div>
       <div class="card clickable quicknav-card" onclick="showPage('about')">
@@ -766,50 +829,25 @@
   <!-- ABOUT -->
   <section class="page" id="page-about">
 
-    <!-- Groot gecentreerd logo -->
-    <div style="display:flex; flex-direction:column; align-items:center; gap:18px; padding: 48px 0 40px; text-align:center;">
-      <div style="
-        position:relative; width:96px; height:96px; border-radius:26px; overflow:hidden;
-        background: linear-gradient(145deg,
-          rgba(210,120,160,0.55) 0%,
-          rgba(220,160,100,0.45) 22%,
-          rgba(130,195,150,0.45) 48%,
-          rgba(100,170,220,0.50) 72%,
-          rgba(140,120,210,0.55) 100%
-        );
-        box-shadow:
-          inset 0 2px 3px rgba(255,255,255,0.55),
-          inset 0 -2px 3px rgba(0,0,0,0.08),
-          0 8px 32px rgba(100,120,200,0.22),
-          0 2px 8px rgba(0,0,0,0.12);
-        border: 1.5px solid rgba(255,255,255,0.45);
-        flex-shrink:0;
-      ">
-        <!-- Glare overlay -->
-        <div style="
-          position:absolute; top:0; left:0; right:0; height:52%;
-          background: linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.04) 100%);
-          border-radius:26px 26px 50% 50%;
-          pointer-events:none;
-        "></div>
-        <!-- Icon -->
-        <div style="position:relative; z-index:1; display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="1.75" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
-            <path d="M22 17a10 10 0 0 0-20 0"/>
-            <path d="M6 17a6 6 0 0 1 12 0"/>
-            <circle cx="12" cy="17" r="1.5" fill="rgba(255,255,255,0.92)" stroke="none"/>
-          </svg>
+    <!-- Groot gecentreerd logo (geanimeerd, reageert op cursor) -->
+    <div class="about-logo-stage" style="display:flex; flex-direction:column; align-items:center; gap:18px; padding: 48px 0 40px; text-align:center;">
+      <div class="about-logo" id="aboutLogo">
+        <div class="about-logo-float">
+          <div class="about-logo-surface">
+            <div class="about-logo-glow"></div>
+            <div class="about-logo-shine"></div>
+            <div class="about-logo-glare"></div>
+            <div class="about-logo-icon">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.75" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
+                <path d="M22 17a10 10 0 0 0-20 0"/>
+                <path d="M6 17a6 6 0 0 1 12 0"/>
+                <circle cx="12" cy="17" r="1.5" fill="rgba(255,255,255,0.95)" stroke="none"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
-      <div style="
-        font-family: var(--font-serif); font-weight: 800; font-size: 32px;
-        background: linear-gradient(90deg,
-          #b05878 0%, #b87848 20%, #72aa88 45%,
-          #5888b8 68%, #7868a8 88%, #9858a0 100%
-        );
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text; letter-spacing: -0.02em; line-height: 1.3; padding-bottom: 0.14em;
-      ">De Regenbooggids</div>
+      <div class="about-logo-title">De Regenbooggids</div>
       <p style="color:var(--slate-400); font-size:13px; font-family:var(--font-mono); letter-spacing:0.06em; margin:0;">DeRegenbooggids.be &nbsp;·&nbsp; LGBTQ+ &amp; verstandelijke beperking in de zorg</p>
     </div>
 
@@ -1113,6 +1151,34 @@ function toggleA11y() {
   const on = document.body.classList.toggle('a11y');
   document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
 }
+
+// ── OVER-LOGO: 3D-kanteling en glow volgen de cursor ──────────────────────────
+
+(function () {
+  const stage = document.querySelector('.about-logo-stage');
+  const logo  = document.getElementById('aboutLogo');
+  if (!stage || !logo) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const MAX = 16;
+  stage.addEventListener('pointermove', (e) => {
+    const r = logo.getBoundingClientRect();
+    if (!r.width) return;
+    let dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+    let dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+    dx = Math.max(-1.6, Math.min(1.6, dx));
+    dy = Math.max(-1.6, Math.min(1.6, dy));
+    logo.style.setProperty('--rx', (dx * MAX).toFixed(2) + 'deg');
+    logo.style.setProperty('--ry', (-dy * MAX).toFixed(2) + 'deg');
+    logo.style.setProperty('--mx', ((dx * 0.5 + 0.5) * 100).toFixed(1) + '%');
+    logo.style.setProperty('--my', ((dy * 0.5 + 0.5) * 100).toFixed(1) + '%');
+    logo.classList.add('is-hover');
+  });
+  stage.addEventListener('pointerleave', () => {
+    logo.style.setProperty('--rx', '0deg');
+    logo.style.setProperty('--ry', '0deg');
+    logo.classList.remove('is-hover');
+  });
+})();
 
 // ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
 
