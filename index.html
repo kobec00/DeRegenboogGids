@@ -4,6 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>De Regenbooggids — LGBTQ+ & verstandelijke beperking in de zorg</title>
+  <meta name="description" content="Een praktische hub voor begeleiders en organisaties in de Vlaamse zorg: tools, methodieken, contactorganisaties en beleid rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking." />
+  <meta name="author" content="Kobe Cornelis" />
+  <meta name="theme-color" content="#0d7b6a" />
+  <!-- Social preview (Open Graph + Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="De Regenbooggids — LGBTQ+ & verstandelijke beperking in de zorg" />
+  <meta property="og:description" content="Tools, methodieken, organisaties en beleid rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking. Alles op één plek." />
+  <meta property="og:url" content="https://www.deregenbooggids.be" />
+  <meta property="og:locale" content="nl_BE" />
+  <meta property="og:site_name" content="De Regenbooggids" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="De Regenbooggids" />
+  <meta name="twitter:description" content="LGBTQ+ en genderdiversiteit in de zorg voor mensen met een verstandelijke beperking. Tools, organisaties en beleid op één plek." />
+  <!-- Favicon: regenboog-icoon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230d7b6a'/%3E%3Cg fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M20 16a8 8 0 0 0-16 0'/%3E%3Cpath d='M7 16a5 5 0 0 1 10 0'/%3E%3C/g%3E%3Ccircle cx='12' cy='16' r='1' fill='white'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
   <style>
@@ -343,7 +358,8 @@
     .org-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
     .org-regio { font-size: 12px; color: var(--slate-400); font-weight: 600; margin-bottom: 10px; letter-spacing: .04em; }
     .org-links { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-    .org-phone { display: inline-flex; align-items: center; gap: 5px; color: var(--teal); font-weight: 700; font-size: 13px; }
+    .org-phone { display: inline-flex; align-items: center; gap: 5px; color: var(--teal); font-weight: 700; font-size: 13px; text-decoration: none; transition: color .15s; }
+    .org-phone:hover { color: var(--teal-dark); text-decoration: underline; }
 
     /* ── POLICY ALERT — glass ── */
     .alert-box {
@@ -358,6 +374,7 @@
     .alert-emoji { font-size: 22px; flex-shrink: 0; line-height: 1.4; }
     .alert-title { font-weight: 800; font-size: 15px; color: #92400e; margin-bottom: 4px; }
     .alert-text  { color: #78350f; font-size: 14px; line-height: 1.6; }
+    .alert-source { color: #92400e; font-size: 12px; font-weight: 600; margin-top: 8px; opacity: 0.85; }
 
     /* ── ABOUT ── */
     .about-grid { display: grid; gap: 24px; }
@@ -370,6 +387,25 @@
     .contact-title { font-weight: 800; font-size: 17px; margin-bottom: 10px; }
     .contact-name  { color: rgba(255,255,255,.8); font-size: 15px; line-height: 1.6; margin-bottom: 6px; }
     .contact-sub   { color: rgba(255,255,255,.6); font-size: 14px; }
+    .contact-email-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 18px; padding: 11px 20px; border-radius: 10px;
+      background: #fff; color: var(--teal-dark);
+      font-weight: 700; font-size: 14px; font-family: var(--font-sans);
+      text-decoration: none; transition: opacity .15s, transform .15s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .contact-email-btn:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* ── MOBILE NAV TOGGLE (hamburger) ── */
+    .nav-toggle {
+      display: none; background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.6); border-radius: 9px;
+      width: 40px; height: 36px; cursor: pointer; color: var(--slate-700);
+      align-items: center; justify-content: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .nav-toggle:active { background: rgba(255,255,255,0.9); }
 
     /* ── FOOTER — glass ── */
     footer {
@@ -389,26 +425,159 @@
     .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 
     @media (max-width: 640px) {
-      #hero { padding: 40px 24px; }
+      #topbar-inner { padding: 0 16px; height: 56px; }
+      #logo span { font-size: 14px; white-space: nowrap; }
+      /* Hamburger zichtbaar, nav wordt een uitklapbaar paneel */
+      .nav-toggle { display: flex; }
+      nav {
+        display: none;
+        position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; gap: 2px;
+        background: rgba(255,255,255,0.985);
+        backdrop-filter: blur(24px) saturate(1.8);
+        -webkit-backdrop-filter: blur(24px) saturate(1.8);
+        padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.6);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      }
+      nav.open { display: flex; }
+      nav button { width: 100%; text-align: left; padding: 13px 16px; font-size: 15px; border-radius: 10px; }
+
+      main { padding: 24px 16px 96px; }
+      h1 { font-size: 26px; }
+      .page-intro { font-size: 15px; margin-bottom: 24px; }
+      .card { padding: 20px; border-radius: 16px; }
+
+      #hero { padding: 36px 22px; border-radius: 20px; margin-bottom: 32px; }
       #hero h1 { font-size: 28px; }
-      nav button { padding: 7px 6px; font-size: 11px; }
-      #logo span { font-size: 13px; }
-      .stats-grid { grid-template-columns: repeat(3,1fr); gap: 8px; }
-      .stat-n { font-size: 26px; }
-      .stat-label { font-size: 11px; }
+      #hero p { font-size: 15px; }
+      .hero-btns { gap: 10px; }
+      .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+
+      .stats-grid { grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 32px; }
+      .stat-n { font-size: 24px; }
+      .stat-label { font-size: 10.5px; }
       .stat-card { padding: 14px 6px; }
-      /* Quicknav: altijd 2 kolommen naast elkaar */
-      .quicknav-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+
+      .quicknav-grid { grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 32px; }
       .quicknav-card { flex-direction: column; gap: 8px; padding: 16px; }
       .quicknav-icon { padding: 10px; }
       .quicknav-title { font-size: 13px; }
       .quicknav-desc { font-size: 12px; }
-      /* Filters */
+
       .filter-bar { flex-direction: column; align-items: stretch; }
       .filter-bar input, .filter-bar select { width: 100%; }
-      /* Org grid: 1 kolom op klein scherm is OK */
+
       .org-grid { grid-template-columns: 1fr; }
+      /* Telefoon op mobiel: enkel icoon, grotere tikzone om te bellen */
+      .org-phone-num { display: none; }
+      .org-phone {
+        background: var(--teal-bg); border-radius: 9px;
+        padding: 8px 12px; min-height: 40px; min-width: 44px; justify-content: center;
+      }
+      .card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .card-badges { justify-content: flex-start; }
+
+      .contact-block { padding: 24px 22px; }
+      .about-grid { gap: 18px; }
     }
+
+    /* ── BASIS-TOEGANKELIJKHEID ── */
+    /* Zichtbare focus voor toetsenbordnavigatie */
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--teal);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+    /* Respecteer systeemvoorkeur voor minder beweging */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .card { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ── FLOATING TOEGANKELIJKHEIDSKNOP ── */
+    .a11y-fab {
+      position: fixed; right: 18px; bottom: 18px; z-index: 200;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--teal-dark); color: #fff;
+      border: 2px solid rgba(255,255,255,0.7); border-radius: 999px;
+      padding: 10px 16px; cursor: pointer; font-family: var(--font-sans);
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 6px 22px rgba(10,74,66,0.35);
+    }
+    .a11y-fab svg { flex-shrink: 0; }
+    .a11y-fab .a11y-switch {
+      width: 38px; height: 22px; border-radius: 999px;
+      background: rgba(255,255,255,0.35); position: relative; transition: background .2s;
+      flex-shrink: 0;
+    }
+    .a11y-fab .a11y-switch::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 18px; height: 18px; border-radius: 50%; background: #fff;
+      transition: transform .2s;
+    }
+    body.a11y .a11y-fab .a11y-switch { background: var(--teal-light); }
+    body.a11y .a11y-fab .a11y-switch::after { transform: translateX(16px); }
+    @media (max-width: 640px) {
+      .a11y-fab .a11y-label-full { display: none; }
+      .a11y-fab { right: 12px; bottom: 12px; padding: 10px 12px; }
+    }
+
+    /* ── TOEGANKELIJKE MODUS: hoog contrast, geen glas, grotere tekst ── */
+    body.a11y {
+      background: #ffffff !important;
+      color: #1a1a1a;
+      font-size: 18px;
+    }
+    body.a11y #topbar,
+    body.a11y .card,
+    body.a11y .filter-bar,
+    body.a11y .cta-block,
+    body.a11y footer,
+    body.a11y nav,
+    body.a11y .filter-bar input,
+    body.a11y .filter-bar select {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 2px solid #1a1a1a !important;
+      box-shadow: none !important;
+    }
+    body.a11y #topbar { border-width: 0 0 3px 0 !important; }
+    body.a11y #topbar::after { display: none; }
+    body.a11y .card { opacity: 1 !important; transform: none !important; }
+    body.a11y h1, body.a11y h2,
+    body.a11y .card-title, body.a11y .about-card-title,
+    body.a11y .quicknav-title, body.a11y .stat-n {
+      color: #000 !important;
+    }
+    body.a11y .page-intro, body.a11y .card-desc, body.a11y .about-card-text,
+    body.a11y .quicknav-desc, body.a11y .stat-label, body.a11y .org-regio,
+    body.a11y .card-org, body.a11y footer p { color: #1a1a1a !important; }
+    /* Gradient-tekst wordt effen zwart zodat ze leesbaar is */
+    body.a11y #logo span,
+    body.a11y #page-about [style*="background-clip"] {
+      -webkit-text-fill-color: #000 !important;
+      background: none !important;
+      color: #000 !important;
+    }
+    /* Links altijd onderlijnd en hoog contrast */
+    body.a11y a:not(.btn-primary):not(.btn-secondary):not(.contact-email-btn):not(.a11y-fab) {
+      color: #0a4a42 !important; text-decoration: underline !important; font-weight: 700;
+    }
+    body.a11y .ext-link svg, body.a11y .org-phone svg { color: #0a4a42 !important; }
+    /* Badges met rand i.p.v. enkel kleurvlak */
+    body.a11y .badge {
+      background: #fff !important; color: #000 !important;
+      border: 2px solid #000 !important; backdrop-filter: none !important;
+    }
+    /* Hero blijft donker met witte tekst (voldoende contrast), maar zonder shimmer */
+    body.a11y #hero { background: #0a4a42 !important; }
+    body.a11y #hero::before { display: none; }
+    body.a11y #hero h1, body.a11y #hero p, body.a11y .hero-label span { color: #fff !important; }
+    /* Grotere, duidelijke knoppen */
+    body.a11y nav button { font-size: 16px; }
+    body.a11y nav button.active { border: 2px solid #0a4a42 !important; color: #0a4a42 !important; }
+    body.a11y .filter-bar input::placeholder { color: #555 !important; }
   </style>
 </head>
 <body>
@@ -416,7 +585,7 @@
 <!-- ── TOPBAR ── -->
 <div id="topbar">
   <div id="topbar-inner">
-    <a id="logo" onclick="showPage('home')">
+    <a id="logo" onclick="showPage('home')" role="button" tabindex="0" aria-label="De Regenbooggids, naar startpagina" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showPage('home');}">
       <div id="logo-icon">
         <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
       </div>
@@ -429,6 +598,9 @@
       <button onclick="showPage('policy')" id="nav-policy">Beleid</button>
       <button onclick="showPage('about')"  id="nav-about">Over</button>
     </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="toggleNav()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </div>
 
@@ -521,7 +693,6 @@
         <option>Seksualiteit &amp; Identiteit</option>
         <option>Gender &amp; Trans</option>
         <option>Beleid &amp; Organisatie</option>
-        <option>Netwerk &amp; Ontmoeting</option>
       </select>
       <select id="tool-doelgroep" onchange="renderTools()">
         <option>Alle doelgroepen</option>
@@ -545,12 +716,16 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
         Filter
       </div>
+      <input type="text" id="org-search" placeholder="Zoek op naam of beschrijving…" oninput="renderOrgs()" />
       <select id="org-regio" onchange="renderOrgs()">
         <option>Alle regio's</option>
         <option>Heel Vlaanderen</option>
         <option>Antwerpen</option>
         <option>Gent (Oost-Vlaanderen)</option>
         <option>Leuven (Vlaams-Brabant)</option>
+        <option>West-Vlaanderen</option>
+        <option>Limburg</option>
+        <option>Brussel</option>
       </select>
       <select id="org-type" onchange="renderOrgs()">
         <option>Alle types</option>
@@ -574,6 +749,7 @@
       <div>
         <div class="alert-title">Wist je dat?</div>
         <p class="alert-text">Onderzoek toont aan dat begeleiders vaak welwillend zijn tegenover LGBTQ+ cliënten, maar dat er een aanzienlijke <strong>handelingsverlegenheid</strong> bestaat. Specifieke vorming en een expliciet organisatiebeleid zijn essentieel om die kloof te dichten.</p>
+        <p class="alert-source">Bron: McCann et al. (2016); De Wit et al. (2022)</p>
       </div>
     </div>
     <div class="card-grid-list" id="policy-list"></div>
@@ -624,7 +800,7 @@
           #5888b8 68%, #7868a8 88%, #9858a0 100%
         );
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text; letter-spacing: -0.02em; line-height: 1.1;
+        background-clip: text; letter-spacing: -0.02em; line-height: 1.3; padding-bottom: 0.14em;
       ">De Regenbooggids</div>
       <p style="color:var(--slate-400); font-size:13px; font-family:var(--font-mono); letter-spacing:0.06em; margin:0;">DeRegenbooggids.be &nbsp;·&nbsp; LGBTQ+ &amp; verstandelijke beperking in de zorg</p>
     </div>
@@ -643,10 +819,18 @@
         <div class="about-card-title">Aanvullingen &amp; feedback</div>
         <p class="about-card-text">Ken je een tool, organisatie of good practice die hier thuishoort? Het overzicht is bewust niet als volledig beschouwd — het werkveld evolueert snel. Feedback en aanvullingen zijn welkom via de contactinformatie hieronder.</p>
       </div>
+      <div class="card">
+        <div class="about-card-title">Actualiteit &amp; disclaimer</div>
+        <p class="about-card-text">Deze gids verzamelt bestaande bronnen, maar het werkveld verandert snel: organisaties fuseren, websites verhuizen en methodieken worden bijgewerkt. Controleer daarom altijd de actuele informatie rechtstreeks bij de bron via de externe links. <strong>Laatst bijgewerkt: juni 2026.</strong></p>
+      </div>
       <div class="contact-block">
         <div class="contact-title">Contact</div>
         <p class="contact-name">Kobe Cornelis — Graduaat Orthopedagogische Begeleiding, UCLL Sociale School Heverlee</p>
         <p class="contact-sub">Eindwerkbegeleider: Elke Van Nooten · Groeneweg 151, 3001 Heverlee</p>
+        <a class="contact-email-btn" href="mailto:kobe.cornelis4@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+          E-mail versturen
+        </a>
       </div>
     </div>
   </section>
@@ -655,39 +839,93 @@
 
 <footer>
   <p>DeRegenbooggids.be &nbsp;·&nbsp; Graduaatsproef UCLL Sociale School Heverlee &nbsp;·&nbsp; Kobe Cornelis, 2025–2026 &nbsp;·&nbsp; Niet commercieel</p>
+  <p style="margin-top:6px; font-size:12px; opacity:0.8;">Laatst bijgewerkt: juni 2026 &nbsp;·&nbsp; Controleer steeds de actuele info bij de bron.</p>
 </footer>
+
+<!-- ── FLOATING TOEGANKELIJKHEIDSKNOP ── -->
+<button class="a11y-fab" id="a11y-fab" onclick="toggleA11y()" aria-pressed="false" aria-label="Toegankelijke modus aan- of uitzetten">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M5 8h14"/><path d="M9 8v5l-2 7"/><path d="M15 8v5l2 7"/></svg>
+  <span class="a11y-label-full">Toegankelijke modus</span>
+  <span class="a11y-switch" aria-hidden="true"></span>
+</button>
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
 const TOOLS = [
-  { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een VB. Inclusief inspiratiekaarten en LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/thema-s/seksualiteit/seksuele-diversiteit" },
+  // ── Voor cliënten: eenvoudige taal ──
+  { title:"De Roze Pagina", org:"çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Toegankelijke website in eenvoudige taal voor holebi, transgender en intersekse personen met een verstandelijke beperking en hun omgeving. Met info over coming-out, verliefdheid, relaties en seksualiteit, en doorverwijzing naar de regionale ontmoetingsgroepen.", url:"https://www.cavaria.be/derozepagina" },
+  { title:"Meer weten over transgender zijn", org:"çavaria", thema:"Gender & Trans", doelgroep:"Cliënten", beschrijving:"Gids in begrijpelijke taal die uitlegt wat transgender zijn is, hoe het kan voelen, wat je kan meemaken en wie kan helpen. Geschikt om samen met een cliënt door te nemen.", url:"https://cavaria.be/tools-lgbti-handicap" },
+  { title:"allesoverseks.be", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Publiekswebsite in toegankelijke taal (B1-niveau) over lichaam, relaties, gender, soa's en consent. Bekroond met de Wablieft-prijs voor heldere taal.", url:"https://www.allesoverseks.be" },
+  { title:"Zanzu", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Meertalige website (A1-niveau) met afbeeldingen en voorleesfunctie over seksuele gezondheid in veertien talen. Breed toegankelijk, ook voor laaggeletterde cliënten.", url:"https://www.zanzu.be/nl" },
+  { title:"Seks @ relaties.kom!", org:"çavaria / De Roze Pagina", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Werkboek rond relaties en seksualiteit voor mensen met een verstandelijke beperking. Laagdrempelig en visueel ondersteund.", url:"https://www.cavaria.be/derozepagina" },
+  // ── Voor begeleiders: methodieken ──
+  { title:"Sensoa Vlaggensysteem", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"De Vlaamse basismethodiek om (grensoverschrijdend) seksueel gedrag in te schatten via zes criteria en gepast te reageren met een kleurensysteem. Maakt grenzen en seksualiteit bespreekbaar.", url:"https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag" },
+  { title:"Sensoa Vlaggensysteem voor Volwassenen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Variant van het Vlaggensysteem specifiek voor professionals in voorzieningen voor personen met een beperking, woonzorg en geestelijke gezondheidszorg.", url:"https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek" },
+  { title:"Buiten de lijnen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Aanvulling op het Vlaggensysteem voor mensen met een disharmonisch ontwikkelingsprofiel (beperking, trauma, gender). Ook bruikbaar bij volwassenen met een verstandelijke beperking via hun ontwikkelingsniveau.", url:"https://www.sensoa.be/materiaal/buiten-de-lijnen-methodiek" },
+  { title:"Vlaggensysteem op een bordje", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Visueel spelmateriaal in makkelijke taal waarmee ook kwetsbare volwassenen zelf kunnen deelnemen aan het gesprek over seksualiteit en grenzen.", url:"https://www.sensoa.be/materiaal/vlaggensysteem-op-een-bordje-methodiek" },
+  { title:"Op het kruispunt: toolset LGBTI+ & handicap", org:"çavaria en partners", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Vier downloadbare tools om je organisatie inclusiever te maken: een gids inclusieve communicatie, tips voor inclusief vergaderen, een inclusiescan en de gids 'Meer weten over transgender zijn'.", url:"https://cavaria.be/tools-lgbti-handicap" },
+  { title:"Zonder Stempel: instrumentenbox", org:"COC Nederland, LFB & Vilans", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Instrumentenbox met werkvormen, een training en een handleiding voor ontmoetingsgroepen om seksuele en genderdiversiteit bespreekbaar te maken in de zorg voor mensen met een (licht) verstandelijke beperking.", url:"https://zonderstempel.nl" },
+  { title:"LHBTI's met een verstandelijke beperking willen zichtbaar zijn!", org:"Movisie", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Handreiking met knelpunten en een concrete aanpak om deze groep te ondersteunen en zichtbaarder te maken in de zorg.", url:"https://www.movisie.nl/publicatie/lhbtis-verstandelijke-beperking-willen-zichtbaar-zijn" },
+  { title:"Roze Loper: scan & toolkit", org:"Roze 50+/COC, Movisie & Vilans", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Certificeringstraject met scan en toolkit voor LHBT-vriendelijkheid in zorginstellingen, ook toegepast bij organisaties voor mensen met een verstandelijke beperking.", url:"https://www.rozezorg.nl" },
+  { title:"Grenswijs", org:"Sensoa e.a.", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Online tool om een beleid rond grensoverschrijdend gedrag op te stellen, met info over seksualiteit binnen de leefgroep en over seksuele dienstverlening.", url:"https://www.grenswijs.be" },
+  { title:"Beleidsscan Seksualiteit & Intimiteit", org:"Rutgers", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Aan de hand van 33 stellingen bekijk je hoe jouw zorgorganisatie omgaat met seksualiteit en intimiteit. Geeft advies op maat.", url:"https://www.rutgers.nl" },
+  { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een verstandelijke beperking. Inclusief inspiratiekaarten en een LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/thema-s/seksualiteit/seksuele-diversiteit" },
   { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een verstandelijke beperking. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl" },
   { title:"Transgendergids voor verstandelijke beperking", org:"Transvisie, COC Zonder Stempel", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een verstandelijke beperking.", url:"https://www.kennispleingehandicaptensector.nl" },
-  { title:"Seks @ relaties.kom!", org:"Çavaria / De Roze Pagina", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Werkboek rond relaties en seksualiteit voor mensen met een verstandelijke beperking. Laagdrempelig en visueel ondersteund.", url:"https://www.cavaria.be/derozepagina" },
-  { title:"Beleidsscan Seksualiteit & Intimiteit", org:"Rutgers", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Aan de hand van 33 stellingen bekijk je hoe jouw zorgorganisatie omgaat met seksualiteit en intimiteit. Geeft advies op maat.", url:"https://www.rutgers.nl" },
-  { title:"De Roze Pagina", org:"Çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Toegankelijke info voor LGBTI+ personen met een verstandelijke beperking: coming-out, verliefdheid, relaties en seksualiteit.", url:"https://www.cavaria.be/derozepagina" },
-  { title:"Aditi vzw – Individuele begeleiding", org:"Aditi vzw", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Advies en informatiecentrum voor personen met een beperking, psychische kwetsbaarheid en hun netwerk. Erkend door VAPH.", url:"https://aditivzw.be" },
-  { title:"Dito vzw – LGBTI+ & beperking", org:"Dito vzw", thema:"Netwerk & Ontmoeting", doelgroep:"Cliënten & Begeleiders", beschrijving:"Overzicht van organisaties voor LGBTI+ personen met een beperking in Vlaanderen, met info per regio.", url:"https://www.ditovzw.be/actie/projecten/eros/informatie/lgbti/" },
 ];
 
 const ORGS = [
-  { naam:"Aditi vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Begeleiding bij vragen over relaties, intimiteit en seksualiteit voor personen met een beperking of psychische kwetsbaarheid. Erkend VAPH-aanbieder.", url:"https://aditivzw.be", telefoon:null },
-  { naam:"De Roze Ballon", regio:"Leuven (Vlaams-Brabant)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een verstandelijke beperking. Regelmatige activiteiten zoals bowlen, museumbezoek en uitstappen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Joker", regio:"Gent (Oost-Vlaanderen)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een beperking, maar iedereen is welkom. Zes toegankelijke activiteiten per jaar.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Bink", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Voor holebi's en transgender personen met een beperking (VB, fysiek of autisme). Tweemaandelijkse activiteiten: praatcafé, filmavond, bowling.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"Roze Wapper", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's met een verstandelijke beperking in de regio Antwerpen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"Çavaria – Roze Pagina", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Koepelorganisatie voor LGBTI+ in Vlaanderen. Beheert De Roze Pagina, brochures, en een overzicht van alle LGBTI+-verenigingen voor personen met een beperking.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  // ── Kern: kruispunt zorg, beperking & seksualiteit ──
+  { naam:"Aditi vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Advies- en informatiecentrum rond relaties, intimiteit en seksualiteit voor personen met een beperking of psychische kwetsbaarheid en hun netwerk. Erkend door het VAPH; biedt teamondersteuning, vorming en individuele begeleiding.", url:"https://aditivzw.be", telefoon:null },
+  { naam:"Sensoa", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams expertisecentrum voor seksuele gezondheid. Ontwikkelt methodieken zoals het Vlaggensysteem en toegankelijke websites om seksualiteit en grenzen bespreekbaar te maken.", url:"https://www.sensoa.be", telefoon:null },
+  // ── Koepel & algemeen LGBTI+ ──
+  { naam:"çavaria", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaamse belangenverdediger en koepel voor LGBTI+ personen en verenigingen. Beheert De Roze Pagina, het project 'Op het kruispunt' en een woordenlijst, en biedt vorming via KliQ.", url:"https://www.cavaria.be", telefoon:null },
+  { naam:"Lumi", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"De gratis en anonieme onthaal- en infolijn van çavaria voor alle vragen over gender, geslacht en seksuele oriëntatie, via telefoon, chat en mail. Ook voor naasten en begeleiders.", url:"https://www.lumi.be", telefoon:"0800 99 533" },
+  { naam:"Transgender Infopunt (TIP)", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams onthaal- en expertisecentrum voor transgenderthema's, ingebed in UZ Gent. Gratis en anoniem, met een zorgkaart van gespecialiseerde hulpverleners.", url:"https://www.transgenderinfo.be", telefoon:"0800 96 316" },
+  { naam:"KliQ vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Het advies- en vormingscentrum van çavaria. Verzorgt vorming en trajectbegeleiding voor sectoren zoals woonzorg en hulpverlening die inclusiever willen werken.", url:"https://www.kliqvzw.be", telefoon:null },
+  { naam:"Konekt vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Zet in op een inclusieve wereld waarin personen met en zonder handicap samen leven en leren. Biedt vorming voor begeleiders en talenttrajecten.", url:"https://konekt.be", telefoon:null },
+  { naam:"GRIP vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Mensenrechtenorganisatie van en voor personen met een handicap. Heeft een eigen pagina in eenvoudige taal en denkt mee over het kruispunt handicap en LGBTI+.", url:"https://www.gripvzw.be", telefoon:null },
+  { naam:"Inter", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams expertisecentrum in toegankelijkheid en Universal Design. Helpt locaties, events en digitale informatie toegankelijk te maken.", url:"https://www.inter.vlaanderen", telefoon:null },
+  { naam:"Intersekse Vlaanderen", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Eerste en enige Vlaamse belangenvereniging van, voor en door mensen geboren met een intersekse variatie en hun ouders.", url:"https://www.interseksevlaanderen.be", telefoon:null },
+  { naam:"Wel Jong vzw", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Jeugdorganisatie voor en door LGBTQ+ jongeren tot 30 jaar, met laagdrempelige activiteiten en deelwerkingen zoals Min19 en T-Jong.", url:"https://www.weljong.be", telefoon:null },
+  { naam:"Aut & Out", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Activiteiten en ontmoetingsplekken voor en door LGBTQIA+ volwassenen met autisme. De enige werking in België op dit kruispunt (deelname zonder begeleider).", url:"https://www.autenout.be", telefoon:null },
   { naam:"Dito vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Informatie en doorverwijzing voor LGBTI+ personen met een beperking en hun omgeving.", url:"https://www.ditovzw.be", telefoon:null },
-  { naam:"Lumi (voorheen Tele-Onthaal)", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"Anoniem praten over wat je bezighoudt, ook over seksualiteit of gender. Laagdrempelig voor cliënten die niet bij naam bekend willen zijn.", url:"https://www.lumi.be", telefoon:"106" },
+  // ── Regenbooghuizen per provincie ──
+  { naam:"Het Roze Huis", regio:"Antwerpen", type:"Info & Ondersteuning", beschrijving:"Regenbooghuis en koepel voor LGBTQIA+ verenigingen in de provincie Antwerpen. Met ontmoeting, belangenbehartiging en een RegenboogBib.", url:"https://www.hetrozehuis.be", telefoon:null },
+  { naam:"Regenbooghuis Gent (Casa Rosa)", regio:"Gent (Oost-Vlaanderen)", type:"Info & Ondersteuning", beschrijving:"Koepel en ontmoetingshuis voor LGBTI+ personen in Oost-Vlaanderen. De werking heropent onder een nieuwe naam na een wijziging in de financiering; controleer de actuele info.", url:"https://www.casarosa.be", telefoon:null },
+  { naam:"UniQue", regio:"Leuven (Vlaams-Brabant)", type:"Info & Ondersteuning", beschrijving:"Vlaams-Brabants regenbooghuis dat verenigingen en vrijwilligers ondersteunt. Nam mee het initiatief voor De Roze Ballon voor holebi's met een verstandelijke beperking.", url:"https://www.unique-rbh.be", telefoon:null },
+  { naam:"Genres Pluriels", regio:"Brussel", type:"Begeleiding & Advies", beschrijving:"Franstalige organisatie die de rechten van transgender, genderfluïde en intersekse personen verdedigt. Biedt therapie, permanenties en steungroepen.", url:"https://www.genrespluriels.be", telefoon:null },
+  { naam:"Rainbowhouse Brussel", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"LGBTQIA+ gemeenschapscentrum in Brussel, ook met een meldpunt voor LGBTQI+-fobe incidenten.", url:"https://rainbowhouse.be/nl/", telefoon:null },
+  { naam:"Merhaba vzw", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"Organisatie voor LGBT+ personen met een migratieachtergrond, bereikbaar via telefoon, WhatsApp en mail, met praatgroepen.", url:"https://www.merhaba.be", telefoon:null },
+  // ── Regionale ontmoetingsgroepen voor de doelgroep zelf ──
+  { naam:"De Roze Ballon", regio:"Leuven (Vlaams-Brabant)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een verstandelijke beperking. Regelmatige activiteiten zoals bowlen, museumbezoek en uitstappen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Maks", regio:"West-Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's en LGBTI+ personen met een verstandelijke beperking in West-Vlaanderen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Joker", regio:"Gent (Oost-Vlaanderen)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een beperking, maar iedereen is welkom. Zes toegankelijke activiteiten per jaar.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Wapper", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's met een verstandelijke beperking in de regio Antwerpen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Bink", regio:"Limburg", type:"Ontmoeting & Activiteiten", beschrijving:"Voor holebi's en transgender personen met een beperking. Activiteiten zoals een praatcafé, filmavond en bowling.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
 ];
 
 const BELEID = [
-  { titel:"VN-Verdrag Rechten Personen met Handicap (VRPH)", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/wetgeving-en-aanbevelingen/wetgeving/vn-verdrag-handicap" },
-  { titel:"Seksueel Gezondheidsbeleid in zorgvoorzieningen", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
-  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", type:"Nascholing", beschrijving:"Çavaria biedt vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.cavaria.be" },
+  // ── Juridische kaders ──
+  { titel:"VN-Verdrag Rechten Personen met een Handicap (VRPH)", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/discriminatie-handicap" },
+  { titel:"Antidiscriminatiewet (2007)", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, handicap en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
+  { titel:"Genderwet (2007, uitgebreid 2014/2020)", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van geslacht, en sinds 2014 ook expliciet genderidentiteit en genderexpressie. Beschermt trans en intersekse cliënten.", url:"https://igvm-iefh.belgium.be/nl" },
+  { titel:"Transgenderwet (2017)", type:"Juridisch kader", beschrijving:"Maakt het mogelijk om de geregistreerde voornaam en het geslacht te wijzigen op eenvoudig verzoek, zonder medische voorwaarde. Relevant bij naam- en registratievragen van trans cliënten.", url:"https://igvm-iefh.belgium.be/nl/themas/transgender" },
+  { titel:"Openstelling van het huwelijk (2003)", type:"Juridisch kader", beschrijving:"België was in 2003 het tweede land ter wereld waar koppels van hetzelfde geslacht konden huwen; adoptie volgde in 2006. Cliënten hebben gelijke relatierechten.", url:"" },
+  { titel:"Yogyakarta-beginselen (2006)", type:"Juridisch kader", beschrijving:"Toepassing van internationale mensenrechten op seksuele oriëntatie en genderidentiteit. Mensenrechtenreferentie, ook aangehaald bij de Belgische transgenderwet.", url:"https://yogyakartaprinciples.org" },
+  // ── Beleidskaders ──
+  { titel:"VAPH: bespreekbaarheid seksualiteit & kwaliteit", type:"Beleidskader", beschrijving:"Het Vlaams Agentschap voor Personen met een Handicap verwacht dat voorzieningen seksualiteit bespreekbaar maken en een veilig, kwaliteitsvol klimaat bieden. Vergunde aanbieders worden geïnspecteerd door Zorginspectie.", url:"https://www.vaph.be" },
+  { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een handicap als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
+  // ── Wetenschappelijke kaders ──
+  { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apa.org" },
+  { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int" },
+  { titel:"FRA: EU LGBTIQ Survey III (2024)", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een handicap, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
   { titel:"Intersectionaliteit & dubbele kwetsbaarheid", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
+  // ── Praktijk, vorming & teamtools ──
+  { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
   { titel:"Affirmatieve zorgbenadering", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
+  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", type:"Nascholing", beschrijving:"çavaria en KliQ bieden vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.kliqvzw.be" },
   { titel:"Handelingsverlegenheid bespreekbaar maken", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
 ];
 
@@ -710,6 +948,7 @@ const TYPE_COLORS = {
   "Wetenschappelijk kader": "slate",
   "Praktijkkader": "rose",
   "Teamtool": "teal",
+  "Beleidskader": "amber",
 };
 
 function badge(label, color) {
@@ -753,7 +992,7 @@ function renderTools() {
     `${filtered.length} resultaat${filtered.length !== 1 ? 'en' : ''}`;
 
   document.getElementById('tools-list').innerHTML = filtered.length ? filtered.map(t => `
-    <div class="card">
+    <div class="card visible">
       <div class="card-header">
         <div class="card-header-left">
           <div class="card-title">${t.title}</div>
@@ -774,19 +1013,21 @@ renderTools();
 // ── RENDER ORGS ───────────────────────────────────────────────────────────────
 
 function renderOrgs() {
+  const q     = document.getElementById('org-search').value.toLowerCase();
   const regio = document.getElementById('org-regio').value;
   const type  = document.getElementById('org-type').value;
 
   const filtered = ORGS.filter(o =>
     (regio === "Alle regio's" || o.regio === regio) &&
-    (type  === "Alle types"   || o.type  === type)
+    (type  === "Alle types"   || o.type  === type) &&
+    (!q || o.naam.toLowerCase().includes(q) || o.beschrijving.toLowerCase().includes(q))
   );
 
   document.getElementById('org-count').textContent =
     `${filtered.length} organisatie${filtered.length !== 1 ? 's' : ''}`;
 
   document.getElementById('orgs-list').innerHTML = filtered.map(o => `
-    <div class="card">
+    <div class="card visible">
       <div class="card-header" style="margin-bottom:6px;">
         <div class="card-title" style="font-size:16px;">${o.naam}</div>
         ${badge(o.type, TYPE_COLORS[o.type] || 'slate')}
@@ -794,24 +1035,24 @@ function renderOrgs() {
       <div class="org-regio">📍 ${o.regio}</div>
       <p class="card-desc" style="font-size:14px;">${o.beschrijving}</p>
       <div class="org-links">
-        ${o.telefoon ? `<span class="org-phone"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.48 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${o.telefoon}</span>` : ''}
+        ${o.telefoon ? `<a class="org-phone" href="tel:${o.telefoon.replace(/\s/g,'')}" aria-label="Bel ${o.naam} op ${o.telefoon}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.48 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="org-phone-num">${o.telefoon}</span></a>` : ''}
         ${extLink(o.url, 'Bezoek website', 'ext-link-violet')}
       </div>
     </div>
-  `).join('');
+  `).join('') || '<div class="empty">Geen organisaties gevonden. Pas je filters aan.</div>';
 }
 renderOrgs();
 
 // ── RENDER POLICY ─────────────────────────────────────────────────────────────
 
 document.getElementById('policy-list').innerHTML = BELEID.map(item => `
-  <div class="card">
+  <div class="card visible">
     <div class="card-header">
       <div class="card-title">${item.titel}</div>
       ${badge(item.type, TYPE_COLORS[item.type] || 'slate')}
     </div>
     <p class="card-desc">${item.beschrijving}</p>
-    ${extLink(item.url, 'Meer info', 'ext-link-amber')}
+    ${item.url ? extLink(item.url, 'Meer info', 'ext-link-amber') : ''}
   </div>
 `).join('');
 
@@ -822,9 +1063,28 @@ function showPage(id) {
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('nav-' + id).classList.add('active');
+  // Mobiel menu sluiten na een keuze
+  const navEl = document.querySelector('nav');
+  navEl.classList.remove('open');
+  document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   // Re-trigger scroll reveal for newly shown cards
   setTimeout(revealCards, 50);
+}
+
+// ── MOBILE NAV TOGGLE ─────────────────────────────────────────────────────────
+
+function toggleNav() {
+  const navEl = document.querySelector('nav');
+  const open = navEl.classList.toggle('open');
+  document.getElementById('nav-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+// ── TOEGANKELIJKE MODUS ───────────────────────────────────────────────────────
+
+function toggleA11y() {
+  const on = document.body.classList.toggle('a11y');
+  document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
 }
 
 // ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
