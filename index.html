@@ -413,6 +413,35 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.12);
     }
     .contact-email-btn:hover { opacity: .9; transform: translateY(-1px); }
+    /* Knoppenrij in het contactblok */
+    .contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+    .contact-actions .contact-email-btn { margin-top: 0; }
+    /* Subtiele scheiding tussen hoofdactie en de social-icoontjes */
+    .contact-actions .contact-socials {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-left: 6px; padding-left: 14px;
+      border-left: 1px solid rgba(255,255,255,0.22);
+    }
+    /* Ronde icoonknopjes (website + LinkedIn): ingetogen en gelijkwaardig */
+    .contact-social {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: background .15s, border-color .15s, color .15s, transform .15s;
+    }
+    .contact-social svg { width: 16px; height: 16px; }
+    .contact-social:hover {
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.55);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    @media (max-width: 480px) {
+      .contact-actions .contact-socials { margin-left: 0; padding-left: 0; border-left: none; }
+    }
 
     /* ── MOBILE NAV TOGGLE (hamburger) ── */
     .nav-toggle {
@@ -652,7 +681,7 @@
     body.a11y .about-logo { transform: none !important; }
     body.a11y .about-logo-shine, body.a11y .about-logo-glow { display: none !important; }
     /* Links altijd onderlijnd en hoog contrast */
-    body.a11y a:not(.btn-primary):not(.btn-secondary):not(.contact-email-btn):not(.a11y-fab) {
+    body.a11y a:not(.btn-primary):not(.btn-secondary):not(.contact-email-btn):not(.contact-social):not(.a11y-fab) {
       color: #0a4a42 !important; text-decoration: underline !important; font-weight: 700;
     }
     body.a11y .ext-link svg, body.a11y .org-phone svg { color: #0a4a42 !important; }
@@ -773,58 +802,14 @@
         0 16px 48px rgba(80,120,220,0.5), 0 0 0 1px rgba(255,255,255,0.05);
     }
 
-    /* ════════════════════════════════════════════════════════════════
-       VLOEIENDE MODUS-OVERGANGEN
-       ════════════════════════════════════════════════════════════════ */
-
-    /* 1. DONKERE MODUS: zachte crossfade van de hele pagina (View Transitions).
-          Vangt ook de gradient-achtergrond, wat met een gewone transition niet lukt. */
+    /* DONKERE MODUS: zachte crossfade van de hele pagina (View Transitions).
+       Vangt ook de gradient-achtergrond, wat met een gewone transition niet lukt. */
     @media (prefers-reduced-motion: no-preference) {
       ::view-transition-old(root),
       ::view-transition-new(root) {
         animation-duration: 0.5s;
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       }
-    }
-
-    /* 2. TOEGANKELIJKE MODUS: de contrastrand 'tekent' zich vloeiend rond elk kader.
-          Een dunne lijn loopt één keer rond de omtrek en zakt dan in de vaste rand. */
-    @property --rbg-trace {
-      syntax: '<angle>';
-      inherits: false;
-      initial-value: 0deg;
-    }
-    body.a11y-trace .card,
-    body.a11y-trace .cta-block,
-    body.a11y-trace .filter-bar,
-    body.a11y-trace footer { position: relative; }
-
-    body.a11y-trace .card::after,
-    body.a11y-trace .cta-block::after,
-    body.a11y-trace .filter-bar::after,
-    body.a11y-trace footer::after {
-      content: '';
-      position: absolute; inset: -2px;
-      border-radius: inherit;
-      padding: 2px;                       /* dikte van de lopende lijn */
-      background: conic-gradient(from -90deg,
-        #0a4a42 var(--rbg-trace),
-        rgba(10,74,66,0) var(--rbg-trace));
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-              mask-composite: exclude;
-      pointer-events: none;
-      animation: rbgTrace 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    /* lichte cascade zodat de lijnen als een golf rondlopen */
-    body.a11y-trace .card:nth-child(even)::after { animation-delay: 0.12s; }
-    body.a11y-trace .card:nth-child(3n)::after   { animation-delay: 0.20s; }
-
-    @keyframes rbgTrace {
-      0%   { --rbg-trace: 0deg;   opacity: 1; }
-      82%  { --rbg-trace: 360deg; opacity: 1; }
-      100% { --rbg-trace: 360deg; opacity: 0; }   /* zakt in de vaste rand */
     }
   </style>
 </head>
@@ -1050,10 +1035,20 @@
         <div class="contact-title">Contact</div>
         <p class="contact-name">Kobe Cornelis — Graduaat Orthopedagogische Begeleiding, UCLL Sociale School Heverlee</p>
         <p class="contact-sub">Eindwerkbegeleider: Elke Van Nooten · Groeneweg 151, 3001 Heverlee</p>
-        <a class="contact-email-btn" href="mailto:kobe.cornelis4@gmail.com">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-          E-mail versturen
-        </a>
+        <div class="contact-actions">
+          <a class="contact-email-btn" href="mailto:kobe.cornelis4@gmail.com">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+            E-mail versturen
+          </a>
+          <span class="contact-socials">
+            <a class="contact-social" href="https://kobecornelis.com" target="_blank" rel="noopener noreferrer" title="Mijn website" aria-label="Mijn website (opent in nieuw tabblad)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </a>
+            <a class="contact-social" href="https://www.linkedin.com/in/kobecornelis/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn-profiel (opent in nieuw tabblad)">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   </section>
@@ -1334,34 +1329,13 @@ function toggleNav() {
 const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function toggleA11y() {
-  const apply = () => {
-    const on = document.body.classList.toggle('a11y');
-    document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
-    // Toegankelijke en donkere modus sluiten elkaar uit
-    if (on && document.body.classList.contains('dark')) {
-      document.body.classList.remove('dark');
-      document.getElementById('dark-fab').setAttribute('aria-pressed', 'false');
-    }
-  };
-  if (document.startViewTransition && !prefersReduced()) {
-    // Zachte crossfade naar hoog contrast, daarna de randen rond de kaders laten lopen
-    document.startViewTransition(apply).finished
-      .then(() => { if (document.body.classList.contains('a11y')) traceFrames(); })
-      .catch(() => {});
-  } else {
-    apply();
+  const on = document.body.classList.toggle('a11y');
+  document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
+  // Toegankelijke en donkere modus sluiten elkaar uit
+  if (on && document.body.classList.contains('dark')) {
+    document.body.classList.remove('dark');
+    document.getElementById('dark-fab').setAttribute('aria-pressed', 'false');
   }
-}
-
-// Laat de contrastrand één keer vloeiend rond elk kader lopen
-function traceFrames() {
-  document.body.classList.remove('a11y-trace');
-  void document.body.offsetWidth;            // forceer reflow zodat de animatie herstart
-  document.body.classList.add('a11y-trace');
-  clearTimeout(window.__rbgTraceTimer);
-  window.__rbgTraceTimer = setTimeout(() => {
-    document.body.classList.remove('a11y-trace');
-  }, 1600);
 }
 
 function toggleDark() {
