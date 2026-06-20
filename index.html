@@ -323,6 +323,17 @@
     }
     .cta-block strong { display: block; font-weight: 800; font-size: 17px; color: var(--slate-900); margin-bottom: 8px; }
     .cta-block p { color: var(--slate-500); font-size: 14px; line-height: 1.6; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+      background: var(--teal); color: #fff; border: none; border-radius: 11px;
+      padding: 11px 20px; font-weight: 700; font-size: 14px; font-family: var(--font-sans);
+      cursor: pointer; transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(13,123,106,0.28);
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,123,106,0.34); }
+    body.dark .cta-btn { background: var(--teal-light); color: #04201c; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+    body.a11y .cta-btn { background: #0a4a42 !important; color: #fff !important; box-shadow: none !important; }
+    body.a11y .cta-btn:hover { transform: none !important; }
 
     /* ── FILTERS — glass ── */
     .filter-bar {
@@ -811,6 +822,587 @@
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       }
     }
+
+    /* ════════════════════════════════════════════════════════════════
+       NIEUWE COMPONENTEN — Wegwijzer · Praktijk · Taalgids · Zelfscan ·
+       Tijdlijn · Snelle hulp. Allemaal in dezelfde liquid-glass stijl,
+       met dark- en toegankelijke-modus varianten verderop.
+       ════════════════════════════════════════════════════════════════ */
+
+    /* ── Sectie-intro met icoonkop (herbruikbaar) ── */
+    .section-kop { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .section-kop-icon {
+      width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ══════════════ HOME: Wegwijzer-instapblok ══════════════ */
+    .ww-teaser {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #0a4a42 0%, #0d7b6a 58%, #1ab394 100%);
+      border-radius: 22px; padding: 32px 34px; margin-bottom: 48px;
+      box-shadow: 0 14px 44px rgba(13,123,106,0.22);
+    }
+    .ww-teaser::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4);
+      opacity: 0.8;
+    }
+    .ww-teaser-deco {
+      position: absolute; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.12); pointer-events: none;
+    }
+    .ww-teaser-content { position: relative; max-width: 560px; }
+    .ww-teaser .pill {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px;
+      background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 999px;
+      color: rgba(255,255,255,0.85); font-family: var(--font-mono);
+      font-size: 12px; letter-spacing: 0.06em; font-weight: 600;
+    }
+    .ww-teaser h2 { color: #fff; font-size: 26px; margin-bottom: 10px; line-height: 1.25; }
+    .ww-teaser p { color: rgba(255,255,255,0.85); font-size: 15.5px; line-height: 1.65; margin-bottom: 22px; }
+    .ww-teaser-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: #fff; color: var(--teal-dark); border: none;
+      border-radius: 11px; padding: 13px 24px; cursor: pointer;
+      font-weight: 800; font-size: 15px; font-family: var(--font-sans);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.16); transition: transform .15s, box-shadow .2s;
+    }
+    .ww-teaser-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+
+    /* ══════════════ WEGWIJZER-PAGINA ══════════════ */
+    .ww-shell {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: 22px;
+      padding: 30px 32px; margin-top: 8px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 6px 28px rgba(0,0,0,0.06);
+    }
+    /* Voortgang */
+    .ww-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
+    .ww-progress-step { flex: 1; height: 6px; border-radius: 999px; background: rgba(13,123,106,0.14); overflow: hidden; }
+    .ww-progress-step .fill { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), var(--teal-light)); border-radius: 999px; transition: width .4s ease; }
+    .ww-progress-step.done .fill { width: 100%; }
+    .ww-progress-step.current .fill { width: 50%; }
+    .ww-steplabel { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--teal); font-weight: 600; margin-bottom: 8px; }
+    .ww-question { font-family: var(--font-serif); font-size: 23px; font-weight: 800; color: var(--slate-900); margin-bottom: 22px; line-height: 1.3; }
+    .ww-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .ww-option {
+      text-align: left; cursor: pointer;
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.7); border-radius: 16px;
+      padding: 20px; display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 2px 10px rgba(0,0,0,0.05);
+      transition: transform .15s, box-shadow .2s, border-color .2s, background .2s;
+      font-family: var(--font-sans);
+    }
+    .ww-option:hover {
+      transform: translateY(-3px); background: rgba(255,255,255,0.92);
+      border-color: rgba(26,179,148,0.55);
+      box-shadow: 0 12px 32px rgba(13,123,106,0.14), 0 1px 0 rgba(255,255,255,0.9) inset;
+    }
+    .ww-option-ic { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--teal-bg); color: var(--teal); }
+    .ww-option-t { display: block; font-weight: 800; font-size: 15.5px; color: var(--slate-900); margin-bottom: 3px; }
+    .ww-option-d { display: block; font-size: 13px; color: var(--slate-500); line-height: 1.5; }
+    .ww-back {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 24px;
+      background: none; border: none; cursor: pointer; color: var(--slate-500);
+      font-weight: 700; font-size: 14px; font-family: var(--font-sans); padding: 6px 0;
+      transition: color .15s;
+    }
+    .ww-back:hover { color: var(--teal); }
+    /* Resultaten */
+    .ww-result-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
+    .ww-result-badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--teal); font-weight: 600; margin-bottom: 8px; }
+    .ww-result-title { font-family: var(--font-serif); font-size: 24px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; line-height: 1.25; }
+    .ww-result-sub { font-size: 15px; color: var(--slate-500); line-height: 1.6; margin-bottom: 26px; }
+    .ww-result-group { margin-bottom: 26px; }
+    .ww-result-group-t { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px; color: var(--slate-700); margin-bottom: 12px; letter-spacing: 0.01em; }
+    .ww-result-group-t .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .ww-mini { display: grid; gap: 10px; }
+    .ww-mini-card {
+      background: rgba(255,255,255,0.62); border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 13px; padding: 14px 16px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 6px rgba(0,0,0,0.04);
+    }
+    .ww-mini-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
+    .ww-mini-t { font-weight: 800; font-size: 14.5px; color: var(--slate-900); }
+    .ww-mini-org { font-size: 12px; color: var(--slate-500); font-weight: 500; margin-bottom: 6px; }
+    .ww-mini-d { font-size: 13px; color: #475569; line-height: 1.55; margin-bottom: 8px; }
+    .ww-cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .ww-cta {
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      border-radius: 11px; padding: 11px 18px; font-weight: 700; font-size: 14px;
+      font-family: var(--font-sans); border: 1.5px solid transparent; transition: transform .15s, box-shadow .2s, background .2s;
+    }
+    .ww-cta-primary { background: var(--teal); color: #fff; box-shadow: 0 4px 14px rgba(13,123,106,0.28); }
+    .ww-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,123,106,0.34); }
+    .ww-cta-ghost { background: rgba(255,255,255,0.7); color: var(--teal-dark); border-color: rgba(13,123,106,0.25); }
+    .ww-cta-ghost:hover { background: rgba(255,255,255,0.95); transform: translateY(-2px); }
+    .ww-empty { text-align: center; padding: 20px; color: var(--slate-400); font-size: 14px; }
+
+    /* ══════════════ SEGMENTED CONTROL (Praktijk-subnav) ══════════════ */
+    .seg {
+      display: inline-flex; gap: 4px; padding: 5px; border-radius: 14px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border: 1px solid rgba(255,255,255,0.55); margin-bottom: 28px; flex-wrap: wrap;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .seg-btn {
+      background: transparent; border: none; cursor: pointer;
+      padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 14px;
+      font-family: var(--font-sans); color: var(--slate-500); transition: background .15s, color .15s;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .seg-btn:hover { color: var(--slate-900); background: rgba(255,255,255,0.5); }
+    .seg-btn.active {
+      background: rgba(255,255,255,0.9); color: var(--teal-dark); font-weight: 800;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .seg-panel { display: none; }
+    .seg-panel.active { display: block; animation: segFade .35s ease; }
+    @keyframes segFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ══════════════ CASUÏSTIEK (accordion) ══════════════ */
+    .casus-list { display: grid; gap: 14px; }
+    .casus {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(18px) saturate(1.5); -webkit-backdrop-filter: blur(18px) saturate(1.5);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: 16px; overflow: hidden;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.045);
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .casus.open { border-color: rgba(125,111,212,0.4); box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 10px 32px rgba(109,40,217,0.10); }
+    .casus-head {
+      width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+      padding: 20px 22px; display: flex; align-items: center; gap: 16px;
+      font-family: var(--font-sans);
+    }
+    .casus-icon {
+      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+      background: var(--violet-bg); color: var(--violet);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .casus-head-text { flex: 1; }
+    .casus-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: var(--violet); font-weight: 600; text-transform: uppercase; }
+    .casus-title { font-weight: 800; font-size: 16px; color: var(--slate-900); margin-top: 3px; line-height: 1.4; }
+    .casus-chev { flex-shrink: 0; color: var(--slate-400); transition: transform .25s ease; }
+    .casus.open .casus-chev { transform: rotate(180deg); }
+    .casus-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .casus.open .casus-body { max-height: 1400px; }
+    .casus-inner { padding: 0 22px 24px 22px; }
+    .casus-divider { height: 1px; background: rgba(15,23,42,0.08); margin: 0 0 18px; }
+    .casus-sub { font-weight: 800; font-size: 13px; color: var(--violet); margin: 16px 0 6px; letter-spacing: 0.02em; display: flex; align-items: center; gap: 7px; }
+    .casus-sub:first-child { margin-top: 0; }
+    .casus-sub .num { width: 20px; height: 20px; border-radius: 50%; background: var(--violet-bg); color: var(--violet); font-size: 11px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--font-mono); }
+    .casus-p { font-size: 14.5px; color: #475569; line-height: 1.65; margin-bottom: 8px; }
+    .casus-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(15,23,42,0.07); }
+    .casus-chip {
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      background: rgba(237,233,254,0.7); color: var(--violet); border: 1px solid rgba(125,111,212,0.25);
+      border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 700;
+      font-family: var(--font-sans); transition: background .15s, transform .15s;
+      text-decoration: none;
+    }
+    .casus-chip:hover { background: rgba(237,233,254,0.95); transform: translateY(-1px); }
+
+    /* ══════════════ TAALGIDS ══════════════ */
+    .term-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+    .term-chip {
+      cursor: pointer; border-radius: 999px; padding: 7px 15px; font-size: 13px; font-weight: 700;
+      font-family: var(--font-sans); border: 1px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.6); color: var(--slate-500); transition: all .15s;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .term-chip:hover { color: var(--slate-900); background: rgba(255,255,255,0.85); }
+    .term-chip.active { background: var(--teal); color: #fff; border-color: var(--teal); box-shadow: 0 3px 10px rgba(13,123,106,0.25); }
+    .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .term-card {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: 15px; padding: 18px 20px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 10px rgba(0,0,0,0.04);
+      transition: transform .18s, box-shadow .2s, border-color .2s;
+    }
+    .term-card:hover { transform: translateY(-2px); border-color: rgba(26,179,148,0.4); box-shadow: 0 10px 28px rgba(13,123,106,0.10), 0 1px 0 rgba(255,255,255,0.9) inset; }
+    .term-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .term-word { font-family: var(--font-serif); font-size: 18px; font-weight: 800; color: var(--slate-900); line-height: 1.25; }
+    .term-def { font-size: 14px; color: #475569; line-height: 1.6; }
+    .term-tip {
+      margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+      background: rgba(224,247,244,0.6); border-left: 3px solid var(--teal-light);
+      font-size: 13px; color: var(--teal-dark); line-height: 1.55;
+    }
+    .term-tip strong { color: var(--teal-dark); }
+    .term-tip.warn { background: rgba(255,228,230,0.55); border-left-color: var(--rose); color: #9f1239; }
+    .term-tip.warn strong { color: #9f1239; }
+
+    /* ══════════════ TEAM-ZELFSCAN ══════════════ */
+    .scan-intro-card {
+      background: rgba(255,243,224,0.6);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(251,191,36,0.3); border-radius: 16px; padding: 18px 22px;
+      margin-bottom: 24px; box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+    }
+    .scan-intro-card p { color: #78350f; font-size: 14px; line-height: 1.6; }
+    .scan-q {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: 15px; padding: 18px 20px; margin-bottom: 12px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 8px rgba(0,0,0,0.035);
+    }
+    .scan-q-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .scan-q-num { width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; background: var(--amber-bg); color: var(--amber); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); }
+    .scan-q-text { font-size: 14.5px; color: var(--slate-700); line-height: 1.55; font-weight: 500; padding-top: 2px; }
+    .scan-q-domain { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; color: var(--amber); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+    .scan-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .scan-opt {
+      cursor: pointer; border-radius: 10px; padding: 10px 8px; text-align: center;
+      font-size: 13.5px; font-weight: 700; font-family: var(--font-sans);
+      background: rgba(255,255,255,0.55); border: 1.5px solid rgba(15,23,42,0.1); color: var(--slate-500);
+      transition: all .15s;
+    }
+    .scan-opt:hover { border-color: var(--amber); color: var(--amber); }
+    .scan-opt.sel { background: var(--amber); color: #fff; border-color: var(--amber); box-shadow: 0 3px 10px rgba(180,83,9,0.28); }
+    .scan-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; align-items: center; }
+    .scan-btn {
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      border-radius: 11px; padding: 12px 24px; font-weight: 800; font-size: 15px; font-family: var(--font-sans);
+      border: none; transition: transform .15s, box-shadow .2s, opacity .2s;
+    }
+    .scan-btn-go { background: var(--amber); color: #fff; box-shadow: 0 4px 14px rgba(180,83,9,0.3); }
+    .scan-btn-go:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(180,83,9,0.36); }
+    .scan-btn-reset { background: rgba(255,255,255,0.7); color: var(--slate-500); border: 1.5px solid rgba(15,23,42,0.12); }
+    .scan-btn-reset:hover { color: var(--slate-900); }
+    .scan-hint { font-size: 13px; color: var(--slate-400); font-weight: 600; }
+    /* Resultaat */
+    .scan-result { margin-top: 8px; }
+    .scan-score-card {
+      position: relative; overflow: hidden;
+      border-radius: 20px; padding: 30px 32px; margin-bottom: 22px; color: #fff;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.16);
+    }
+    .scan-score-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4); opacity: 0.85; }
+    .scan-band-start { background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%); }
+    .scan-band-mid   { background: linear-gradient(135deg, #b45309 0%, #d97706 100%); }
+    .scan-band-strong{ background: linear-gradient(135deg, #0a4a42 0%, #0d7b6a 100%); }
+    .scan-score-n { font-family: var(--font-serif); font-size: 46px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+    .scan-score-n small { font-size: 22px; opacity: 0.7; font-weight: 700; }
+    .scan-band-label { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .scan-band-desc { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.9); }
+    .scan-advice-t { font-weight: 800; font-size: 15px; color: var(--slate-900); margin: 22px 0 12px; }
+    .scan-advice { display: grid; gap: 10px; }
+    .scan-advice-item {
+      background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.55); border-radius: 13px;
+      padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+    }
+    .scan-advice-item .ai-dot { width: 22px; height: 22px; border-radius: 7px; background: var(--amber-bg); color: var(--amber); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .scan-advice-item-body { font-size: 13.5px; color: #475569; line-height: 1.55; }
+    .scan-advice-item-body strong { color: var(--slate-900); }
+
+    /* ══════════════ MIJLPALEN-TIJDLIJN ══════════════ */
+    .tl-section { margin-top: 56px; }
+    .tl-divider {
+      height: 1px; border: none; margin: 0 0 38px;
+      background: linear-gradient(90deg, transparent, rgba(15,23,42,0.13) 18%, rgba(15,23,42,0.13) 82%, transparent);
+    }
+    .tl-header { margin-bottom: 34px; }
+    .tl-eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.14em; color: var(--teal); margin-bottom: 12px;
+    }
+    .tl-eyebrow::before {
+      content: ''; width: 26px; height: 3px; border-radius: 3px;
+      background: linear-gradient(90deg, #e85d8a, #f4a44a, #5bbf7a, #4ab8d4, #7b6fd4);
+    }
+    .tl-h2 { font-family: var(--font-serif); font-size: 27px; font-weight: 800; color: var(--slate-900); margin-bottom: 10px; line-height: 1.2; }
+    .tl-intro { font-size: 15px; color: var(--slate-500); line-height: 1.65; margin-bottom: 20px; max-width: 650px; }
+    .tl-legend { display: flex; flex-wrap: wrap; gap: 18px; }
+    .tl-leg-item { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--slate-500); }
+    .tl-leg-dot { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid var(--c, var(--teal)); flex-shrink: 0; }
+
+    /* Categorie-kleuren (via --c, dark/a11y verderop) */
+    .tl-cat-science { --c: var(--teal); }
+    .tl-cat-move    { --c: var(--rose); }
+    .tl-cat-law     { --c: var(--violet); }
+
+    .tl { position: relative; padding-left: 40px; }
+    .tl::before {
+      content: ''; position: absolute; left: 13px; top: 10px; bottom: 10px; width: 3px;
+      background: linear-gradient(180deg, #e85d8a, #f4a44a, #f7d44a 32%, #5bbf7a 52%, #4ab8d4 74%, #7b6fd4);
+      border-radius: 3px; opacity: 0.5;
+      box-shadow: 0 0 14px rgba(123,111,212,0.22);
+    }
+    .tl-item { position: relative; margin-bottom: 14px; --c: var(--teal); }
+    .tl-dot {
+      position: absolute; left: -40px; top: 19px; width: 17px; height: 17px; border-radius: 50%;
+      background: #fff; border: 4px solid var(--c);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.75), 0 2px 8px rgba(0,0,0,0.14);
+      transition: transform .25s cubic-bezier(0.16,1,0.3,1), box-shadow .25s; z-index: 1;
+    }
+    .tl-item.open .tl-dot { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(255,255,255,0.8), 0 3px 12px rgba(0,0,0,0.2); }
+    .tl-card {
+      width: 100%; text-align: left; cursor: pointer; font-family: var(--font-sans);
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border: 1px solid rgba(255,255,255,0.55); border-left: 3px solid var(--c);
+      border-radius: 14px; padding: 16px 18px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(0,0,0,0.05);
+      transition: transform .18s, box-shadow .2s;
+    }
+    .tl-card:hover { transform: translateX(4px); box-shadow: 0 10px 28px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.9) inset; }
+    .tl-item.open .tl-card { box-shadow: 0 12px 34px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.9) inset; }
+    .tl-head { display: flex; align-items: center; gap: 14px; }
+    .tl-year { font-family: var(--font-serif); font-size: 25px; font-weight: 800; color: var(--c); flex-shrink: 0; min-width: 60px; line-height: 1; letter-spacing: -0.01em; }
+    .tl-title { font-weight: 700; font-size: 15px; color: var(--slate-900); flex: 1; line-height: 1.4; }
+    .tl-chev { flex-shrink: 0; color: var(--slate-400); transition: transform .25s; }
+    .tl-item.open .tl-chev { transform: rotate(180deg); }
+    .tl-desc-wrap { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    .tl-item.open .tl-desc-wrap { max-height: 360px; }
+    .tl-desc { font-size: 13.5px; color: #475569; line-height: 1.65; padding: 13px 2px 2px; border-top: 1px solid rgba(15,23,42,0.08); margin-top: 14px; }
+    .tl-desc a { color: var(--c); font-weight: 700; text-decoration: none; }
+    .tl-desc a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      .tl-h2 { font-size: 22px; }
+      .tl-year { font-size: 21px; min-width: 50px; }
+      .tl-legend { gap: 10px 16px; }
+    }
+
+    /* ══════════════ SNELLE HULP — FAB + modal ══════════════ */
+    .help-fab { background: linear-gradient(135deg, #be123c, #e11d48); border-color: rgba(255,255,255,0.55); box-shadow: 0 6px 22px rgba(190,18,60,0.4); }
+    .help-fab .fab-pulse { width: 9px; height: 9px; border-radius: 50%; background: #fff; flex-shrink: 0; animation: helpPulse 2s ease-in-out infinite; }
+    @keyframes helpPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+    .help-overlay {
+      position: fixed; inset: 0; z-index: 500; display: none;
+      align-items: flex-start; justify-content: center; padding: 40px 16px;
+      background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      overflow-y: auto;
+    }
+    .help-overlay.open { display: flex; animation: helpFadeIn .25s ease; }
+    @keyframes helpFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .help-modal {
+      width: 100%; max-width: 520px; margin: auto 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(28px) saturate(1.8); -webkit-backdrop-filter: blur(28px) saturate(1.8);
+      border: 1px solid rgba(255,255,255,0.7); border-radius: 22px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      animation: helpSlideUp .3s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes helpSlideUp { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .help-modal-head {
+      background: linear-gradient(135deg, #9f1239, #be123c); color: #fff;
+      padding: 22px 24px; position: relative;
+    }
+    .help-modal-head::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4); opacity: 0.85; }
+    .help-modal-title { font-family: var(--font-serif); font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .help-modal-sub { font-size: 13.5px; color: rgba(255,255,255,0.88); line-height: 1.5; }
+    .help-close {
+      position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s;
+    }
+    .help-close:hover { background: rgba(255,255,255,0.3); }
+    .help-list { padding: 16px; display: grid; gap: 10px; }
+    .help-line {
+      display: flex; gap: 14px; align-items: center;
+      background: rgba(255,255,255,0.7); border: 1px solid rgba(15,23,42,0.07); border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .help-line-ic { width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .help-line-body { flex: 1; min-width: 0; }
+    .help-line-name { font-weight: 800; font-size: 14.5px; color: var(--slate-900); }
+    .help-line-desc { font-size: 12.5px; color: var(--slate-500); line-height: 1.45; margin-top: 1px; }
+    .help-line-actions { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+    .help-call {
+      display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+      background: var(--teal); color: #fff; border-radius: 999px; padding: 8px 15px;
+      font-weight: 800; font-size: 13.5px; font-family: var(--font-sans); white-space: nowrap;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .help-call:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,123,106,0.3); }
+    .help-chat {
+      display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
+      background: rgba(255,255,255,0.8); color: var(--teal-dark); border: 1px solid rgba(13,123,106,0.25);
+      border-radius: 999px; padding: 8px 13px; font-weight: 700; font-size: 12.5px; font-family: var(--font-sans); white-space: nowrap;
+      transition: background .15s;
+    }
+    .help-chat:hover { background: #fff; }
+    .help-foot {
+      padding: 14px 20px 18px; font-size: 12.5px; color: var(--slate-500); line-height: 1.55;
+      border-top: 1px solid rgba(15,23,42,0.07); text-align: center;
+    }
+    .help-foot strong { color: var(--rose); }
+    @media (max-width: 520px) {
+      .help-line { flex-wrap: wrap; }
+      .help-line-actions { width: 100%; justify-content: flex-start; margin-top: 4px; }
+    }
+
+    /* ── Mobiel: nieuwe componenten compacter ── */
+    @media (max-width: 640px) {
+      .ww-teaser { padding: 26px 22px; }
+      .ww-teaser h2 { font-size: 22px; }
+      .ww-shell { padding: 22px 18px; }
+      .ww-question { font-size: 20px; }
+      .ww-options { grid-template-columns: 1fr; }
+      .seg { width: 100%; }
+      .seg-btn { flex: 1; justify-content: center; padding: 9px 10px; font-size: 13px; }
+      .term-grid { grid-template-columns: 1fr; }
+      .scan-opts { grid-template-columns: 1fr; }
+      .scan-score-card { padding: 24px 22px; }
+      .scan-score-n { font-size: 38px; }
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       DONKERE MODUS — overrides voor de nieuwe componenten
+       ════════════════════════════════════════════════════════════════ */
+    body.dark .ww-shell, body.dark .seg, body.dark .casus, body.dark .term-card,
+    body.dark .scan-q, body.dark .tl-card, body.dark .ww-mini-card, body.dark .scan-advice-item {
+      background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 6px 28px rgba(0,0,0,0.35);
+    }
+    body.dark .ww-question, body.dark .ww-result-title, body.dark .ww-option-t,
+    body.dark .ww-mini-t, body.dark .casus-title, body.dark .term-word,
+    body.dark .scan-advice-t, body.dark .scan-advice-item-body strong, body.dark .tl-title,
+    body.dark .ww-result-group-t { color: #f0f3f8; }
+    body.dark .ww-option-d, body.dark .ww-result-sub, body.dark .ww-mini-d,
+    body.dark .casus-p, body.dark .term-def, body.dark .scan-q-text,
+    body.dark .tl-desc, body.dark .scan-advice-item-body, body.dark .ww-mini-org { color: #aab2c0; }
+    body.dark .ww-steplabel, body.dark .ww-result-badge { color: #3ed6b8; }
+    body.dark .ww-option { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+    body.dark .ww-option:hover { background: rgba(255,255,255,0.09); border-color: rgba(62,214,184,0.4); }
+    body.dark .ww-option-ic { background: rgba(45,160,140,0.22); color: #7fe9d4; }
+    body.dark .ww-progress-step { background: rgba(255,255,255,0.1); }
+    body.dark .ww-back:hover { color: #3ed6b8; }
+    body.dark .ww-cta-ghost { background: rgba(255,255,255,0.07); color: #d7f5ee; border-color: rgba(62,214,184,0.3); }
+    body.dark .ww-cta-ghost:hover { background: rgba(255,255,255,0.12); }
+    body.dark .seg-btn { color: #aeb6c4; }
+    body.dark .seg-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    body.dark .seg-btn.active { background: rgba(255,255,255,0.1); color: #fff; }
+    body.dark .casus.open { border-color: rgba(150,130,255,0.4); }
+    body.dark .casus-icon { background: rgba(130,100,230,0.24); color: #c6b3ff; }
+    body.dark .casus-tag, body.dark .casus-sub { color: #c6b3ff; }
+    body.dark .casus-sub .num { background: rgba(130,100,230,0.24); color: #c6b3ff; }
+    body.dark .casus-divider, body.dark .casus-links { border-color: rgba(255,255,255,0.08); }
+    body.dark .casus-chip { background: rgba(130,100,230,0.16); color: #c6b3ff; border-color: rgba(150,130,255,0.3); }
+    body.dark .casus-chip:hover { background: rgba(130,100,230,0.26); }
+    body.dark .term-chip { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: #aeb6c4; }
+    body.dark .term-chip:hover { color: #fff; background: rgba(255,255,255,0.1); }
+    body.dark .term-chip.active { background: var(--teal-light); color: #04201c; border-color: var(--teal-light); }
+    body.dark .term-card:hover { border-color: rgba(62,214,184,0.4); }
+    body.dark .term-tip { background: rgba(45,160,140,0.15); color: #aef0e3; border-left-color: #3ed6b8; }
+    body.dark .term-tip strong { color: #d7f5ee; }
+    body.dark .term-tip.warn { background: rgba(220,70,100,0.16); color: #ffb3c0; border-left-color: #ff6b85; }
+    body.dark .term-tip.warn strong { color: #ffd0d8; }
+    body.dark .scan-intro-card { background: rgba(245,200,90,0.1); border-color: rgba(245,200,90,0.28); }
+    body.dark .scan-intro-card p { color: #e7d3a8; }
+    body.dark .scan-q-domain, body.dark .tl-year { }
+    body.dark .scan-q-num { background: rgba(200,140,40,0.26); color: #f5cd72; }
+    body.dark .scan-q-domain { color: #f5cd72; }
+    body.dark .scan-opt { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); color: #aeb6c4; }
+    body.dark .scan-opt:hover { border-color: #f5cd72; color: #f5cd72; }
+    body.dark .scan-opt.sel { background: #d97706; color: #fff; border-color: #d97706; }
+    body.dark .scan-btn-reset { background: rgba(255,255,255,0.07); color: #aeb6c4; border-color: rgba(255,255,255,0.14); }
+    body.dark .scan-btn-reset:hover { color: #fff; }
+    body.dark .scan-advice-item .ai-dot { background: rgba(200,140,40,0.26); color: #f5cd72; }
+    body.dark .tl-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.4); }
+    body.dark .tl-dot { background: #11161f; box-shadow: 0 0 0 4px rgba(17,22,31,0.85), 0 2px 8px rgba(0,0,0,0.4); }
+    body.dark .tl-item.open .tl-dot { box-shadow: 0 0 0 5px rgba(17,22,31,0.9), 0 3px 12px rgba(0,0,0,0.5); }
+    body.dark .tl-cat-science { --c: #3ed6b8; }
+    body.dark .tl-cat-move    { --c: #ff8fa3; }
+    body.dark .tl-cat-law     { --c: #b69bff; }
+    body.dark .tl-h2 { color: #f0f3f8; }
+    body.dark .tl-intro, body.dark .tl-leg-item { color: #aab2c0; }
+    body.dark .tl-eyebrow { color: #3ed6b8; }
+    body.dark .tl-divider { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 18%, rgba(255,255,255,0.12) 82%, transparent); }
+    body.dark .tl-leg-dot { background: #11161f; }
+    body.dark .tl-desc { border-color: rgba(255,255,255,0.08); }
+    body.dark .help-modal { background: rgba(22,28,38,0.95); border-color: rgba(255,255,255,0.1); }
+    body.dark .help-line { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.09); }
+    body.dark .help-line-name { color: #f0f3f8; }
+    body.dark .help-line-desc { color: #99a1b0; }
+    body.dark .help-chat { background: rgba(255,255,255,0.08); color: #d7f5ee; border-color: rgba(62,214,184,0.3); }
+    body.dark .help-chat:hover { background: rgba(255,255,255,0.13); }
+    body.dark .help-foot { color: #99a1b0; border-color: rgba(255,255,255,0.08); }
+    body.dark .help-foot strong { color: #ff8fa3; }
+    body.dark .casus-divider { background: rgba(255,255,255,0.08); }
+
+    /* ════════════════════════════════════════════════════════════════
+       TOEGANKELIJKE MODUS — overrides voor de nieuwe componenten
+       ════════════════════════════════════════════════════════════════ */
+    body.a11y .ww-shell, body.a11y .seg, body.a11y .casus, body.a11y .term-card,
+    body.a11y .scan-q, body.a11y .tl-card, body.a11y .ww-option, body.a11y .ww-mini-card,
+    body.a11y .scan-advice-item, body.a11y .scan-intro-card, body.a11y .help-modal, body.a11y .help-line {
+      background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+      border: 2px solid #1a1a1a !important; box-shadow: none !important;
+    }
+    body.a11y .ww-question, body.a11y .ww-result-title, body.a11y .ww-option-t,
+    body.a11y .ww-mini-t, body.a11y .casus-title, body.a11y .term-word, body.a11y .scan-advice-t,
+    body.a11y .tl-title, body.a11y .help-modal-title, body.a11y .help-line-name,
+    body.a11y .scan-advice-item-body strong, body.a11y .ww-result-group-t, body.a11y .term-tip strong { color: #000 !important; }
+    body.a11y .ww-option-d, body.a11y .ww-result-sub, body.a11y .ww-mini-d, body.a11y .casus-p,
+    body.a11y .term-def, body.a11y .scan-q-text, body.a11y .tl-desc, body.a11y .scan-advice-item-body,
+    body.a11y .ww-mini-org, body.a11y .help-line-desc, body.a11y .scan-intro-card p { color: #1a1a1a !important; }
+    body.a11y .ww-steplabel, body.a11y .ww-result-badge, body.a11y .tl-year, body.a11y .casus-tag,
+    body.a11y .casus-sub, body.a11y .scan-q-domain { color: #0a4a42 !important; }
+    body.a11y .ww-option-ic, body.a11y .casus-icon, body.a11y .scan-q-num, body.a11y .help-line-ic,
+    body.a11y .casus-sub .num, body.a11y .scan-advice-item .ai-dot {
+      background: #fff !important; color: #000 !important; border: 2px solid #000 !important;
+    }
+    body.a11y .ww-option:hover, body.a11y .term-card:hover, body.a11y .tl-card:hover { transform: none !important; }
+    body.a11y .term-chip, body.a11y .seg-btn, body.a11y .scan-opt {
+      background: #fff !important; border: 2px solid #1a1a1a !important; color: #000 !important;
+    }
+    body.a11y .term-chip.active, body.a11y .seg-btn.active, body.a11y .scan-opt.sel {
+      background: #0a4a42 !important; color: #fff !important; border-color: #0a4a42 !important;
+    }
+    body.a11y .ww-cta-primary, body.a11y .scan-btn-go { background: #0a4a42 !important; color: #fff !important; box-shadow: none !important; }
+    body.a11y .tl-cat-science, body.a11y .tl-cat-move, body.a11y .tl-cat-law { --c: #0a4a42 !important; }
+    body.a11y .tl-h2, body.a11y .tl-leg-item { color: #000 !important; }
+    body.a11y .tl-intro { color: #1a1a1a !important; }
+    body.a11y .tl-eyebrow { color: #0a4a42 !important; }
+    body.a11y .tl-eyebrow::before { background: #0a4a42 !important; }
+    body.a11y .tl-divider { background: #1a1a1a !important; }
+    body.a11y .tl-leg-dot { background: #fff !important; border-color: #0a4a42 !important; }
+    body.a11y .tl-card { border-left: 4px solid #0a4a42 !important; }
+    body.a11y .tl-desc { border-color: #1a1a1a !important; }
+    body.a11y .ww-cta-ghost, body.a11y .scan-btn-reset, body.a11y .casus-chip, body.a11y .help-chat {
+      background: #fff !important; border: 2px solid #0a4a42 !important; color: #0a4a42 !important;
+    }
+    body.a11y .term-tip { background: #fff !important; border: 2px solid #0a4a42 !important; border-left: 4px solid #0a4a42 !important; color: #1a1a1a !important; }
+    body.a11y .term-tip.warn { border-color: #9f1239 !important; border-left-color: #9f1239 !important; color: #9f1239 !important; }
+    body.a11y .term-tip.warn strong { color: #9f1239 !important; }
+    body.a11y .tl::before { background: #1a1a1a !important; opacity: 1 !important; }
+    body.a11y .tl-dot { background: #fff !important; border-color: #000 !important; box-shadow: 0 0 0 2px #fff !important; }
+    body.a11y .ww-teaser, body.a11y .scan-score-card { background: #0a4a42 !important; }
+    body.a11y .ww-teaser::before, body.a11y .scan-score-card::before { display: none !important; }
+    body.a11y .ww-teaser h2, body.a11y .ww-teaser p, body.a11y .ww-teaser .pill,
+    body.a11y .scan-band-label, body.a11y .scan-band-desc, body.a11y .scan-score-n { color: #fff !important; }
+    body.a11y .ww-teaser-btn { background: #fff !important; color: #0a4a42 !important; }
+    body.a11y .help-modal-head { background: #9f1239 !important; }
+    body.a11y .help-call { background: #0a4a42 !important; color: #fff !important; }
+    body.a11y .help-foot strong { color: #9f1239 !important; }
+    body.a11y .help-overlay { background: rgba(0,0,0,0.7) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    body.a11y .scan-advice-item .ai-dot, body.a11y .help-line-ic svg { color: #000 !important; }
+
+    /* ── Nav vroeger inklappen (7 items passen niet op smalle desktop/tablet) ── */
+    @media (max-width: 880px) {
+      .nav-toggle { display: flex; }
+      nav {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; gap: 2px;
+        background: rgba(255,255,255,0.985);
+        backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8);
+        padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.6);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      }
+      nav.open { display: flex; }
+      nav button { width: 100%; text-align: left; padding: 13px 16px; font-size: 15px; border-radius: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -828,6 +1420,7 @@
       <button class="active" onclick="showPage('home')"   id="nav-home">Home</button>
       <button onclick="showPage('tools')"  id="nav-tools">Tools</button>
       <button onclick="showPage('orgs')"   id="nav-orgs">Organisaties</button>
+      <button onclick="showPage('praktijk')" id="nav-praktijk">Praktijk</button>
       <button onclick="showPage('policy')" id="nav-policy">Beleid</button>
       <button onclick="showPage('about')"  id="nav-about">Over</button>
     </nav>
@@ -862,6 +1455,25 @@
       </div>
     </div>
 
+    <!-- Wegwijzer-instapblok -->
+    <div class="ww-teaser">
+      <div class="ww-teaser-deco" style="width:280px;height:280px;right:-80px;top:-100px;"></div>
+      <div class="ww-teaser-deco" style="width:160px;height:160px;right:40px;top:30px;"></div>
+      <div class="ww-teaser-deco" style="width:90px;height:90px;right:110px;top:90px;"></div>
+      <div class="ww-teaser-content">
+        <span class="pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          KEUZEHULP
+        </span>
+        <h2>Niet zeker waar te beginnen?</h2>
+        <p>Beantwoord drie korte vragen en de Wegwijzer stelt meteen de juiste tools, organisaties en kaders voor — afgestemd op jouw situatie.</p>
+        <button class="ww-teaser-btn" onclick="showPage('wegwijzer')">
+          Start de Wegwijzer
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
     <div class="stats-grid" id="stats-grid"></div>
 
     <h2>Waar wil je mee aan de slag?</h2>
@@ -873,6 +1485,15 @@
         <div>
           <div class="quicknav-title">Tools &amp; Methodieken</div>
           <div class="quicknav-desc">Praktische instrumenten voor in de begeleiding: werkboeken, zelfscanners, gesprekstools en meer.</div>
+        </div>
+      </div>
+      <div class="card clickable quicknav-card" onclick="showPage('praktijk')">
+        <div class="quicknav-icon" style="background:var(--violet-bg);color:var(--violet);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        </div>
+        <div>
+          <div class="quicknav-title">Praktijk</div>
+          <div class="quicknav-desc">Casuïstiek met handvatten, een taalgids met de juiste woorden, en een zelfscan voor je team.</div>
         </div>
       </div>
       <div class="card clickable quicknav-card" onclick="showPage('orgs')">
@@ -893,20 +1514,15 @@
           <div class="quicknav-desc">Wetgeving en rechten, Vlaams zorgbeleid, wetenschappelijke onderbouwing en vorming rond LGBTQ+-inclusie.</div>
         </div>
       </div>
-      <div class="card clickable quicknav-card" onclick="showPage('about')">
-        <div class="quicknav-icon" style="background:var(--rose-bg);color:var(--rose);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div>
-          <div class="quicknav-title">Over deze website</div>
-          <div class="quicknav-desc">Waarom deze hub bestaat, de link met onderzoek, en hoe je info kunt aanvullen of doorgeven.</div>
-        </div>
-      </div>
     </div>
 
     <div class="cta-block">
       <strong>Mis je iets op deze website?</strong>
-      <p>Ken je een tool, organisatie of good practice die hier thuishoort? Deze hub is bewust open gehouden voor aanvullingen. Neem contact op via de "Over"-pagina.</p>
+      <p>Ken je een tool, organisatie of good practice die hier thuishoort? Deze hub is bewust open gehouden voor aanvullingen.</p>
+      <button class="cta-btn" onclick="gaContact()">
+        Neem contact op
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </button>
     </div>
   </section>
 
@@ -977,6 +1593,11 @@
     <h1>Beleid &amp; Vorming</h1>
     <p class="page-intro">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie.</p>
 
+    <button class="cta-btn" style="margin-top:0; margin-bottom:28px;" onclick="document.getElementById('tijdlijn').scrollIntoView({behavior:'smooth', block:'start'})">
+      Bekijk de mijlpalen-tijdlijn
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </button>
+
     <div class="alert-box">
       <div class="alert-emoji">⚡</div>
       <div>
@@ -986,6 +1607,16 @@
       </div>
     </div>
     <div class="card-grid-list" id="policy-list"></div>
+
+    <div class="tl-section" id="tijdlijn">
+      <hr class="tl-divider" />
+      <div class="tl-header">
+        <span class="tl-eyebrow">TIJDLIJN</span>
+        <h2 class="tl-h2">Mijlpalen: rechten &amp; erkenning</h2>
+        <p class="tl-intro">Inclusieve zorg staat niet op zichzelf. Ze rust op decennia van wetenschappelijke, maatschappelijke en juridische kantelpunten — van het onderzoek dat homoseksualiteit depathologiseerde tot de hedendaagse Belgische wetgeving. Klik op een jaar voor meer uitleg.</p>
+      </div>
+      <div class="tl" id="tl"></div>
+    </div>
   </section>
 
   <!-- ABOUT -->
@@ -1031,7 +1662,7 @@
         <div class="about-card-title">Actualiteit &amp; disclaimer</div>
         <p class="about-card-text">Deze gids verzamelt bestaande bronnen, maar het werkveld verandert snel: organisaties fuseren, websites verhuizen en methodieken worden bijgewerkt. Controleer daarom altijd de actuele informatie rechtstreeks bij de bron via de externe links. <strong>Laatst bijgewerkt: juni 2026.</strong></p>
       </div>
-      <div class="contact-block">
+      <div class="contact-block" id="contact">
         <div class="contact-title">Contact</div>
         <p class="contact-name">Kobe Cornelis — Graduaat Orthopedagogische Begeleiding, UCLL Sociale School Heverlee</p>
         <p class="contact-sub">Eindwerkbegeleider: Elke Van Nooten · Groeneweg 151, 3001 Heverlee</p>
@@ -1052,6 +1683,81 @@
       </div>
     </div>
   </section>
+  <!-- WEGWIJZER -->
+  <section class="page" id="page-wegwijzer">
+    <div class="section-kop">
+      <div class="section-kop-icon" style="background:var(--teal-bg);color:var(--teal);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+      </div>
+      <h1 style="margin-bottom:0;">De Wegwijzer</h1>
+    </div>
+    <p class="page-intro">Een korte keuzehulp die je in enkele stappen naar de meest relevante tools, organisaties en kaders leidt.</p>
+    <div class="ww-shell" id="ww-shell"><!-- JS rendert hier de stappen of resultaten --></div>
+  </section>
+
+  <!-- PRAKTIJK -->
+  <section class="page" id="page-praktijk">
+    <div class="section-kop">
+      <div class="section-kop-icon" style="background:var(--violet-bg);color:var(--violet);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      </div>
+      <h1 style="margin-bottom:0;">Praktijk</h1>
+    </div>
+    <p class="page-intro">Drie instrumenten voor in de begeleiding: concrete praktijksituaties met handvatten, een taalgids met de juiste woorden, en een zelfscan voor je team of voorziening.</p>
+
+    <div class="seg" role="tablist" aria-label="Praktijkinstrumenten">
+      <button class="seg-btn active" id="seg-casus" role="tab" aria-selected="true" onclick="showPraktijk('casus')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Casuïstiek
+      </button>
+      <button class="seg-btn" id="seg-taal" role="tab" aria-selected="false" onclick="showPraktijk('taal')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Taalgids
+      </button>
+      <button class="seg-btn" id="seg-scan" role="tab" aria-selected="false" onclick="showPraktijk('scan')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Team-zelfscan
+      </button>
+    </div>
+
+    <!-- Panel: Casuïstiek -->
+    <div class="seg-panel active" id="panel-casus" role="tabpanel" aria-labelledby="seg-casus">
+      <p class="page-intro" style="margin-bottom:22px; font-size:15px;">Herkenbare situaties uit de leefgroep, met telkens een korte duiding en concrete handvatten. Vouw een situatie open om verder te lezen.</p>
+      <div class="casus-list" id="casus-list"></div>
+    </div>
+
+    <!-- Panel: Taalgids -->
+    <div class="seg-panel" id="panel-taal" role="tabpanel" aria-labelledby="seg-taal">
+      <p class="page-intro" style="margin-bottom:22px; font-size:15px;">De juiste woorden maken een gesprek veiliger. Een beknopt naslagwerk met begrippen rond seksuele en genderdiversiteit, in toegankelijke taal.</p>
+      <div class="filter-bar">
+        <div class="filter-label" style="color:var(--teal);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Zoek
+        </div>
+        <input type="text" id="term-search" placeholder="Zoek een woord of betekenis…" oninput="renderTermen()" />
+      </div>
+      <div class="term-chips" id="term-chips"></div>
+      <div class="result-count" id="term-count"></div>
+      <div class="term-grid" id="term-grid"></div>
+    </div>
+
+    <!-- Panel: Team-zelfscan -->
+    <div class="seg-panel" id="panel-scan" role="tabpanel" aria-labelledby="seg-scan">
+      <div class="scan-intro-card">
+        <p><strong>Even vooraf:</strong> dit is een reflectie-instrument, geen audit of examen. Beantwoord de stellingen samen met je team en gebruik de uitkomst als startpunt voor een gesprek over waar je staat en waar groei mogelijk is.</p>
+      </div>
+      <div id="scan-questions"></div>
+      <div class="scan-actions">
+        <button class="scan-btn scan-btn-go" onclick="berekenScan()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          Toon resultaat
+        </button>
+        <button class="scan-btn scan-btn-reset" onclick="resetScan()">Opnieuw</button>
+        <span class="scan-hint" id="scan-hint"></span>
+      </div>
+      <div id="scan-result"></div>
+    </div>
+  </section>
 
 </main>
 
@@ -1062,6 +1768,11 @@
 
 <!-- ── FLOATING KNOPPEN: donkere modus + toegankelijke modus ── -->
 <div class="fab-stack">
+  <button class="fab help-fab" id="help-fab" onclick="openHelp()" aria-haspopup="dialog" aria-label="Snelle hulp en crisislijnen openen">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span class="fab-label">Hulp nodig?</span>
+    <span class="fab-pulse" aria-hidden="true"></span>
+  </button>
   <button class="fab dark-fab" id="dark-fab" onclick="toggleDark()" aria-pressed="false" aria-label="Donkere modus aan- of uitzetten">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     <span class="fab-label">Donkere modus</span>
@@ -1072,6 +1783,23 @@
     <span class="fab-label">Toegankelijke modus</span>
     <span class="fab-switch" aria-hidden="true"></span>
   </button>
+</div>
+
+<!-- ── SNELLE HULP: modal met crisis- en hulplijnen ── -->
+<div class="help-overlay" id="help-overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" aria-hidden="true">
+  <div class="help-modal">
+    <div class="help-modal-head">
+      <button class="help-close" onclick="closeHelp()" aria-label="Sluiten">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="help-modal-title" id="help-title">Je staat er niet alleen voor</div>
+      <div class="help-modal-sub">Gratis en anoniem. Voor jezelf, voor een cliënt of voor een naaste — bij elke lijn kan je bellen of chatten.</div>
+    </div>
+    <div class="help-list" id="help-list"><!-- JS rendert de hulplijnen --></div>
+    <div class="help-foot">
+      <strong>Acuut levensgevaar of nood?</strong> Bel meteen de hulpdiensten op <a href="tel:112" style="color:inherit;font-weight:800;">112</a> of de huisarts van wacht op <a href="tel:1733" style="color:inherit;font-weight:800;">1733</a>.
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1089,7 +1817,7 @@ const TOOLS = [
   { title:"Sensoa Vlaggensysteem voor Volwassenen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Variant van het Vlaggensysteem specifiek voor professionals in voorzieningen voor personen met een beperking, woonzorg en geestelijke gezondheidszorg.", url:"https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek" },
   { title:"Buiten de lijnen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Aanvulling op het Vlaggensysteem voor mensen met een disharmonisch ontwikkelingsprofiel (beperking, trauma, gender). Ook bruikbaar bij volwassenen met een verstandelijke beperking via hun ontwikkelingsniveau.", url:"https://www.sensoa.be/materiaal/buiten-de-lijnen-methodiek" },
   { title:"Vlaggensysteem op een bordje", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Visueel spelmateriaal in makkelijke taal waarmee ook kwetsbare volwassenen zelf kunnen deelnemen aan het gesprek over seksualiteit en grenzen.", url:"https://www.sensoa.be/materiaal/vlaggensysteem-op-een-bordje-methodiek" },
-  { title:"Op het kruispunt: toolset LGBTI+ & handicap", org:"çavaria en partners", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Vier downloadbare tools om je organisatie inclusiever te maken: een gids inclusieve communicatie, tips voor inclusief vergaderen, een inclusiescan en de gids 'Meer weten over transgender zijn'.", url:"https://cavaria.be/tools-lgbti-handicap" },
+  { title:"Op het kruispunt: toolset LGBTI+ & beperking", org:"çavaria en partners", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Vier downloadbare tools om je organisatie inclusiever te maken: een gids inclusieve communicatie, tips voor inclusief vergaderen, een inclusiescan en de gids 'Meer weten over transgender zijn'.", url:"https://cavaria.be/tools-lgbti-handicap" },
   { title:"Zonder Stempel: instrumentenbox", org:"COC Nederland, LFB & Vilans", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Instrumentenbox met werkvormen, een training en een handleiding voor ontmoetingsgroepen om seksuele en genderdiversiteit bespreekbaar te maken in de zorg voor mensen met een (licht) verstandelijke beperking.", url:"https://zonderstempel.nl" },
   { title:"LHBTI's met een verstandelijke beperking willen zichtbaar zijn!", org:"Movisie", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Handreiking met knelpunten en een concrete aanpak om deze groep te ondersteunen en zichtbaarder te maken in de zorg.", url:"https://www.movisie.nl/publicatie/lhbtis-verstandelijke-beperking-willen-zichtbaar-zijn" },
   { title:"Roze Loper: scan & toolkit", org:"Roze 50+/COC, Movisie & Vilans", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Certificeringstraject met scan en toolkit voor LHBT-vriendelijkheid in zorginstellingen, ook toegepast bij organisaties voor mensen met een verstandelijke beperking.", url:"https://www.rozezorg.nl" },
@@ -1109,8 +1837,8 @@ const ORGS = [
   { naam:"Lumi", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"De gratis en anonieme onthaal- en infolijn van çavaria voor alle vragen over gender, geslacht en seksuele oriëntatie, via telefoon, chat en mail. Ook voor naasten en begeleiders.", url:"https://www.lumi.be", telefoon:"0800 99 533" },
   { naam:"Transgender Infopunt (TIP)", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams onthaal- en expertisecentrum voor transgenderthema's, ingebed in UZ Gent. Gratis en anoniem, met een zorgkaart van gespecialiseerde hulpverleners.", url:"https://www.transgenderinfo.be", telefoon:"0800 96 316" },
   { naam:"KliQ vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Het advies- en vormingscentrum van çavaria. Verzorgt vorming en trajectbegeleiding voor sectoren zoals woonzorg en hulpverlening die inclusiever willen werken.", url:"https://www.kliqvzw.be", telefoon:null },
-  { naam:"Konekt vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Zet in op een inclusieve wereld waarin personen met en zonder handicap samen leven en leren. Biedt vorming voor begeleiders en talenttrajecten.", url:"https://konekt.be", telefoon:null },
-  { naam:"GRIP vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Mensenrechtenorganisatie van en voor personen met een handicap. Heeft een eigen pagina in eenvoudige taal en denkt mee over het kruispunt handicap en LGBTI+.", url:"https://www.gripvzw.be", telefoon:null },
+  { naam:"Konekt vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Zet in op een inclusieve wereld waarin personen met en zonder beperking samen leven en leren. Biedt vorming voor begeleiders en talenttrajecten.", url:"https://konekt.be", telefoon:null },
+  { naam:"GRIP vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Mensenrechtenorganisatie van en voor personen met een beperking. Heeft een eigen pagina in eenvoudige taal en denkt mee over het kruispunt beperking en LGBTI+.", url:"https://www.gripvzw.be", telefoon:null },
   { naam:"Inter", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams expertisecentrum in toegankelijkheid en Universal Design. Helpt locaties, events en digitale informatie toegankelijk te maken.", url:"https://www.inter.vlaanderen", telefoon:null },
   { naam:"Intersekse Vlaanderen", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Eerste en enige Vlaamse belangenvereniging van, voor en door mensen geboren met een intersekse variatie en hun ouders.", url:"https://www.interseksevlaanderen.be", telefoon:null },
   { naam:"Wel Jong vzw", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Jeugdorganisatie voor en door LGBTQ+ jongeren tot 30 jaar, met laagdrempelige activiteiten en deelwerkingen zoals Min19 en T-Jong.", url:"https://www.weljong.be", telefoon:null },
@@ -1134,18 +1862,18 @@ const ORGS = [
 const BELEID = [
   // ── Rechten & wetgeving ──
   { titel:"VN-Verdrag Rechten Personen met een Handicap (VRPH)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Het VRPH garandeert het recht op volledige inclusie en participatie, inclusief op het vlak van relaties en seksualiteit. Bindend voor België.", url:"https://www.unia.be/nl/discriminatie-handicap" },
-  { titel:"Antidiscriminatiewet (2007)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, handicap en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
+  { titel:"Antidiscriminatiewet (2007)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, beperking en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
   { titel:"Genderwet (2007, uitgebreid 2014/2020)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van geslacht, en sinds 2014 ook expliciet genderidentiteit en genderexpressie. Beschermt trans en intersekse cliënten.", url:"https://igvm-iefh.belgium.be/nl" },
   { titel:"Transgenderwet (2017)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Maakt het mogelijk om de geregistreerde voornaam en het geslacht te wijzigen op eenvoudig verzoek, zonder medische voorwaarde. Relevant bij naam- en registratievragen van trans cliënten.", url:"https://igvm-iefh.belgium.be/nl/themas/transgender" },
   { titel:"Openstelling van het huwelijk (2003)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"België was in 2003 het tweede land ter wereld waar koppels van hetzelfde geslacht konden huwen; adoptie volgde in 2006. Cliënten hebben gelijke relatierechten.", url:"" },
   { titel:"Yogyakarta-beginselen (2006)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Toepassing van internationale mensenrechten op seksuele oriëntatie en genderidentiteit. Mensenrechtenreferentie, ook aangehaald bij de Belgische transgenderwet.", url:"https://yogyakartaprinciples.org" },
   // ── Vlaams zorgbeleid ──
   { titel:"VAPH: bespreekbaarheid seksualiteit & kwaliteit", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Het Vlaams Agentschap voor Personen met een Handicap verwacht dat voorzieningen seksualiteit bespreekbaar maken en een veilig, kwaliteitsvol klimaat bieden. Vergunde aanbieders worden geïnspecteerd door Zorginspectie.", url:"https://www.vaph.be" },
-  { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een handicap als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
+  { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een beperking als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
   // ── Wetenschappelijke onderbouwing ──
   { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apa.org" },
   { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int" },
-  { titel:"FRA: EU LGBTIQ Survey III (2024)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een handicap, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
+  { titel:"FRA: EU LGBTIQ Survey III (2024)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een beperking, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
   { titel:"Intersectionaliteit & dubbele kwetsbaarheid", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
   // ── Praktijk & vorming ──
   { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", groep:"Praktijk & vorming", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
@@ -1306,7 +2034,8 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  document.getElementById('nav-' + id).classList.add('active');
+  const navBtn = document.getElementById('nav-' + id);
+  if (navBtn) navBtn.classList.add('active');
   // Mobiel menu sluiten na een keuze
   const navEl = document.querySelector('nav');
   navEl.classList.remove('open');
@@ -1412,6 +2141,549 @@ window.addEventListener('scroll', () => {
     topbar.classList.remove('scrolled');
   }
 }, { passive: true });
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NIEUWE FUNCTIONALITEIT — Snelle hulp · Wegwijzer · Casuïstiek · Taalgids ·
+//  Team-zelfscan · Wetgevingstijdlijn
+// ══════════════════════════════════════════════════════════════════════════════
+
+const ICO_EXT  = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
+const ICO_ARROW = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+const ICO_REFRESH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>';
+const ICO_PHONE = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.48 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+
+function kort(s, n) { n = n || 148; return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, '') + '…' : s; }
+
+// ── Navigatiehelpers die de loop sluiten met de bestaande overzichten ──────────
+function gaTools(thKey, dgKey) {
+  const TH = { sek: 'Seksualiteit & Identiteit', gen: 'Gender & Trans', bel: 'Beleid & Organisatie' };
+  const DG = { client: 'Cliënten', begeleider: 'Begeleiders', team: 'Organisaties' };
+  showPage('tools');
+  document.getElementById('tool-thema').value = TH[thKey] || "Alle thema's";
+  document.getElementById('tool-doelgroep').value = DG[dgKey] || 'Alle doelgroepen';
+  renderTools();
+}
+function gaOrgs(regio) {
+  showPage('orgs');
+  document.getElementById('org-regio').value = regio || "Alle regio's";
+  renderOrgs();
+}
+function gaPraktijk(tab) { showPage('praktijk'); showPraktijk(tab); }
+function gaContact() {
+  showPage('about');
+  setTimeout(() => {
+    const el = document.getElementById('contact');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 120);
+}
+
+// ══════════════ SNELLE HULP ══════════════
+const HELP_ICONS = {
+  heart: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  rainbow: '<path d="M22 17a10 10 0 0 0-20 0"/><path d="M18 17a6 6 0 0 0-12 0"/><path d="M14 17a2 2 0 0 0-4 0"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  star: '<path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/>',
+};
+const HULPLIJNEN = [
+  { naam: 'Zelfmoordlijn 1813', desc: 'Bij gedachten aan zelfdoding — voor jezelf of voor iemand anders. Dag en nacht.', tel: '1813', chat: 'https://www.zelfmoord1813.be/ik-heb-hulp-nodig', kleur: 'rose', icon: 'heart' },
+  { naam: 'Tele-Onthaal', desc: 'Een luisterend oor bij elke zorg of crisis, 24 uur op 24.', tel: '106', chat: 'https://www.tele-onthaal.be', kleur: 'teal', icon: 'chat' },
+  { naam: 'Lumi', desc: 'De LGBTI+ infolijn van çavaria: gender, geaardheid, coming-out. Ook voor begeleiders en naasten.', tel: '0800 99 533', chat: 'https://lumi.be', kleur: 'violet', icon: 'rainbow' },
+  { naam: '1712', desc: 'Bij geweld, misbruik of grensoverschrijdend gedrag. Gratis en discreet.', tel: '1712', chat: 'https://www.1712.be', kleur: 'amber', icon: 'shield' },
+  { naam: 'Awel', desc: 'Voor kinderen en jongeren met een vraag, verhaal of probleem.', tel: '102', chat: 'https://www.awel.be', kleur: 'teal', icon: 'star' },
+];
+function renderHelp() {
+  const C = { rose: ['rgba(255,228,230,0.7)', 'var(--rose)'], teal: ['var(--teal-bg)', 'var(--teal)'], violet: ['var(--violet-bg)', 'var(--violet)'], amber: ['var(--amber-bg)', 'var(--amber)'] };
+  document.getElementById('help-list').innerHTML = HULPLIJNEN.map(l => {
+    const c = C[l.kleur] || C.teal;
+    return `
+    <div class="help-line">
+      <div class="help-line-ic" style="background:${c[0]};color:${c[1]};">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${HELP_ICONS[l.icon] || HELP_ICONS.heart}</svg>
+      </div>
+      <div class="help-line-body">
+        <div class="help-line-name">${l.naam}</div>
+        <div class="help-line-desc">${l.desc}</div>
+      </div>
+      <div class="help-line-actions">
+        ${l.tel ? `<a class="help-call" href="tel:${l.tel.replace(/\s/g, '')}" aria-label="Bel ${l.naam} op ${l.tel}">${ICO_PHONE}${l.tel}</a>` : ''}
+        ${l.chat ? `<a class="help-chat" href="${l.chat}" target="_blank" rel="noopener noreferrer">Chat ${ICO_EXT}</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+let helpReturnFocus = null;
+function openHelp() {
+  const ov = document.getElementById('help-overlay');
+  ov.classList.add('open'); ov.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  helpReturnFocus = document.activeElement;
+  const btn = ov.querySelector('.help-close'); if (btn) btn.focus();
+}
+function closeHelp() {
+  const ov = document.getElementById('help-overlay');
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (helpReturnFocus && helpReturnFocus.focus) helpReturnFocus.focus();
+}
+document.getElementById('help-overlay').addEventListener('click', e => { if (e.target.id === 'help-overlay') closeHelp(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('help-overlay').classList.contains('open')) closeHelp(); });
+
+// ══════════════ PRAKTIJK: subnavigatie ══════════════
+function showPraktijk(tab) {
+  ['casus', 'taal', 'scan'].forEach(t => {
+    const seg = document.getElementById('seg-' + t);
+    const pan = document.getElementById('panel-' + t);
+    seg.classList.toggle('active', t === tab);
+    seg.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+    pan.classList.toggle('active', t === tab);
+  });
+}
+
+// ══════════════ DE WEGWIJZER ══════════════
+const WW_ICONS = {
+  user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  badge: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M14 9h3"/><path d="M14 12h3"/><path d="M7 16h10"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  heart: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>',
+  gender: '<circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  spark: '<path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9z"/>',
+  doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  pin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+};
+const WW_STAPPEN = [
+  {
+    key: 'wie', vraag: 'Voor wie zoek je iets?', opties: [
+      { val: 'client', t: 'Een cliënt', d: 'Iets toegankelijks om samen te bekijken of door te geven.', icon: 'user' },
+      { val: 'begeleider', t: 'Mezelf als begeleider', d: 'Methodieken en achtergrond om sterker in mijn schoenen te staan.', icon: 'badge' },
+      { val: 'team', t: 'Mijn team of organisatie', d: 'Beleid, vorming en structurele inbedding.', icon: 'users' },
+    ]
+  },
+  {
+    key: 'wat', vraag: 'Waar gaat het vooral over?', opties: [
+      { val: 'seksualiteit', t: 'Seksualiteit & relaties', d: 'Verliefdheid, intimiteit, grenzen en consent.', icon: 'heart' },
+      { val: 'gender', t: 'Gender & transgender', d: 'Genderidentiteit, transitie, de juiste naam.', icon: 'gender' },
+      { val: 'taal', t: 'Taal & begrippen', d: 'De juiste woorden vinden om erover te praten.', icon: 'book' },
+      { val: 'situatie', t: 'Een concrete situatie', d: 'Ik zit met een specifiek moment in de leefgroep.', icon: 'spark' },
+      { val: 'beleid', t: 'Beleid opzetten', d: 'Een visie of kader uitwerken voor de werking.', icon: 'doc' },
+      { val: 'doorverwijzen', t: 'Iemand doorverwijzen', d: 'Een organisatie of aanspreekpunt vinden.', icon: 'compass' },
+    ]
+  },
+  {
+    key: 'regio', vraag: 'In welke regio?', optioneel: true, opties: [
+      { val: 'Heel Vlaanderen', t: 'Maakt niet uit', d: 'Toon ook Vlaanderenbrede werkingen.', icon: 'globe' },
+      { val: 'Antwerpen', t: 'Antwerpen', icon: 'pin' },
+      { val: 'Gent (Oost-Vlaanderen)', t: 'Oost-Vlaanderen', icon: 'pin' },
+      { val: 'Leuven (Vlaams-Brabant)', t: 'Vlaams-Brabant', icon: 'pin' },
+      { val: 'West-Vlaanderen', t: 'West-Vlaanderen', icon: 'pin' },
+      { val: 'Limburg', t: 'Limburg', icon: 'pin' },
+      { val: 'Brussel', t: 'Brussel', icon: 'pin' },
+    ]
+  },
+];
+const WW_ORDER = ['wie', 'wat', 'regio'];
+let wwState = { antw: {} };
+
+function wwFlow() {
+  const f = ['wie', 'wat'];
+  if (wwState.antw.wat && !['taal', 'situatie'].includes(wwState.antw.wat)) f.push('regio');
+  return f;
+}
+function wwHuidige() {
+  for (const k of wwFlow()) if (!wwState.antw[k]) return k;
+  return null;
+}
+function wwKies(key, val) {
+  wwState.antw[key] = val;
+  const i = WW_ORDER.indexOf(key);
+  WW_ORDER.slice(i + 1).forEach(k => delete wwState.antw[k]);
+  renderWegwijzer();
+}
+function wwTerug() {
+  const f = wwFlow();
+  for (let i = f.length - 1; i >= 0; i--) { if (wwState.antw[f[i]]) { delete wwState.antw[f[i]]; break; } }
+  renderWegwijzer();
+}
+function wwReset() { wwState = { antw: {} }; renderWegwijzer(); }
+
+function renderWegwijzer() {
+  const shell = document.getElementById('ww-shell');
+  if (!shell) return;
+  const huidige = wwHuidige();
+  if (!huidige) { shell.innerHTML = wwResultaatHTML(); return; }
+  const stap = WW_STAPPEN.find(s => s.key === huidige);
+  const flow = wwFlow();
+  const idx = flow.indexOf(huidige);
+  shell.innerHTML = `
+    <div class="ww-progress">${flow.map((k, i) => `<div class="ww-progress-step ${i < idx ? 'done' : i === idx ? 'current' : ''}"><span class="fill"></span></div>`).join('')}</div>
+    <div class="ww-steplabel">STAP ${idx + 1} VAN ${flow.length}${stap.optioneel ? ' · OPTIONEEL' : ''}</div>
+    <div class="ww-question">${stap.vraag}</div>
+    <div class="ww-options">
+      ${stap.opties.map(o => `
+        <button class="ww-option" onclick="wwKies('${stap.key}','${o.val}')">
+          <span class="ww-option-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${WW_ICONS[o.icon] || ''}</svg></span>
+          <span><span class="ww-option-t">${o.t}</span>${o.d ? `<span class="ww-option-d">${o.d}</span>` : ''}</span>
+        </button>`).join('')}
+    </div>
+    ${idx > 0 ? `<button class="ww-back" onclick="wwTerug()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Vorige stap</button>` : ''}
+  `;
+}
+function wwTools() {
+  const a = wwState.antw;
+  let dg;
+  if (a.wie === 'client') dg = ['Cliënten', 'Cliënten & Begeleiders'];
+  else if (a.wie === 'begeleider') dg = ['Begeleiders', 'Cliënten & Begeleiders'];
+  else dg = ['Organisaties', 'Begeleiders', 'Cliënten & Begeleiders'];
+  let th = a.wat === 'seksualiteit' ? 'Seksualiteit & Identiteit' : a.wat === 'gender' ? 'Gender & Trans' : a.wat === 'beleid' ? 'Beleid & Organisatie' : null;
+  let res = TOOLS.filter(t => dg.includes(t.doelgroep) && (!th || t.thema === th));
+  if (!res.length) res = TOOLS.filter(t => !th || t.thema === th);
+  return res.slice(0, 4);
+}
+function wwOrgs() {
+  const a = wwState.antw;
+  const regio = a.regio;
+  let res = (regio && regio !== 'Heel Vlaanderen') ? ORGS.filter(o => o.regio === regio || o.regio === 'Heel Vlaanderen') : ORGS.slice();
+  const pref = a.wie === 'client' ? ['Ontmoeting & Activiteiten', 'Anonieme steun'] : ['Begeleiding & Advies', 'Info & Ondersteuning'];
+  res.sort((x, y) => (pref.includes(y.type) ? 1 : 0) - (pref.includes(x.type) ? 1 : 0));
+  return res.slice(0, 4);
+}
+function wwBeleid() {
+  const a = wwState.antw;
+  if (a.wat === 'beleid') return BELEID.filter(b => b.groep === 'Vlaams zorgbeleid' || b.groep === 'Praktijk & vorming').slice(0, 3);
+  if (a.wie === 'team') return BELEID.filter(b => b.groep === 'Praktijk & vorming' || b.groep === 'Rechten & wetgeving').slice(0, 3);
+  return BELEID.filter(b => b.groep === 'Rechten & wetgeving').slice(0, 2);
+}
+function wwToolCard(t) {
+  return `<div class="ww-mini-card">
+    <div class="ww-mini-top"><div><div class="ww-mini-t">${t.title}</div><div class="ww-mini-org">${t.org}</div></div>${badge(t.doelgroep, 'slate')}</div>
+    <div class="ww-mini-d">${kort(t.beschrijving)}</div>
+    ${extLink(t.url, 'Bekijk tool', 'ext-link-teal')}
+  </div>`;
+}
+function wwOrgCard(o) {
+  return `<div class="ww-mini-card">
+    <div class="ww-mini-top"><div class="ww-mini-t">${o.naam}</div>${badge(o.type, TYPE_COLORS[o.type] || 'slate')}</div>
+    <div class="ww-mini-org">📍 ${o.regio}</div>
+    <div class="ww-mini-d">${kort(o.beschrijving)}</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+      ${o.telefoon ? `<a class="org-phone" href="tel:${o.telefoon.replace(/\s/g, '')}">${ICO_PHONE}<span>${o.telefoon}</span></a>` : ''}
+      ${extLink(o.url, 'Website', 'ext-link-violet')}
+    </div>
+  </div>`;
+}
+function wwBeleidCard(b) {
+  return `<div class="ww-mini-card">
+    <div class="ww-mini-top"><div class="ww-mini-t">${b.titel}</div>${badge(b.type, TYPE_COLORS[b.type] || 'slate')}</div>
+    <div class="ww-mini-d">${kort(b.beschrijving)}</div>
+    ${b.url ? extLink(b.url, 'Meer info', 'ext-link-amber') : ''}
+  </div>`;
+}
+function wwResultaatHTML() {
+  const a = wwState.antw;
+  const WIE = { client: 'een cliënt', begeleider: 'jezelf als begeleider', team: 'je team of organisatie' };
+  const WAT = { seksualiteit: 'seksualiteit en relaties', gender: 'gender en transgender', taal: 'taal en begrippen', situatie: 'een concrete situatie', beleid: 'beleid opzetten', doorverwijzen: 'iemand doorverwijzen' };
+  const regio = (a.regio && a.regio !== 'Heel Vlaanderen') ? a.regio : '';
+  const tools = a.wat !== 'doorverwijzen' ? wwTools() : [];
+  const orgs = wwOrgs();
+  const beleid = wwBeleid();
+
+  let groups = '';
+  if (tools.length) groups += `<div class="ww-result-group"><div class="ww-result-group-t"><span class="dot" style="background:var(--teal);"></span>Aanbevolen tools</div><div class="ww-mini">${tools.map(wwToolCard).join('')}</div></div>`;
+  if (orgs.length) groups += `<div class="ww-result-group"><div class="ww-result-group-t"><span class="dot" style="background:var(--violet);"></span>Organisaties${regio ? ` in ${regio}` : ''}</div><div class="ww-mini">${orgs.map(wwOrgCard).join('')}</div></div>`;
+  if (beleid.length) groups += `<div class="ww-result-group"><div class="ww-result-group-t"><span class="dot" style="background:var(--amber);"></span>Beleid &amp; kaders</div><div class="ww-mini">${beleid.map(wwBeleidCard).join('')}</div></div>`;
+  if (!groups) groups = `<div class="ww-empty">We vonden geen directe match. Bekijk gerust de volledige overzichten via de knoppen hieronder.</div>`;
+
+  const thKey = a.wat === 'seksualiteit' ? 'sek' : a.wat === 'gender' ? 'gen' : a.wat === 'beleid' ? 'bel' : '';
+  let ctas = [];
+  if (a.wat === 'taal') ctas.push(`<button class="ww-cta ww-cta-primary" onclick="gaPraktijk('taal')">Open de taalgids ${ICO_ARROW}</button>`);
+  if (a.wat === 'situatie') ctas.push(`<button class="ww-cta ww-cta-primary" onclick="gaPraktijk('casus')">Bekijk de casuïstiek ${ICO_ARROW}</button>`);
+  ctas.push(`<button class="ww-cta ${ctas.length ? 'ww-cta-ghost' : 'ww-cta-primary'}" onclick="gaTools('${thKey}','${a.wie}')">Alle tools bekijken</button>`);
+  ctas.push(`<button class="ww-cta ww-cta-ghost" onclick="gaOrgs('${regio}')">Alle organisaties</button>`);
+  if (a.wie === 'team' || a.wat === 'beleid') ctas.push(`<button class="ww-cta ww-cta-ghost" onclick="gaPraktijk('scan')">Doe de team-zelfscan</button>`);
+
+  return `
+    <div class="ww-result-badge">JOUW WEGWIJZER</div>
+    <div class="ww-result-title">Op maat samengesteld</div>
+    <div class="ww-result-sub">Voor ${WIE[a.wie] || 'jou'}, rond ${WAT[a.wat] || 'dit thema'}${regio ? ` in ${regio}` : ''}. Dit is een vertrekpunt — bekijk gerust ook de volledige overzichten.</div>
+    ${groups}
+    <div class="ww-cta-row">${ctas.join('')}</div>
+    <button class="ww-back" onclick="wwReset()" style="margin-top:24px;">${ICO_REFRESH} Opnieuw beginnen</button>
+  `;
+}
+
+// ══════════════ CASUÏSTIEK ══════════════
+const CASUS_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
+const CASUS = [
+  {
+    tag: 'Gender & identiteit', titel: 'Een cliënt vertelt je in vertrouwen dat hij zich geen jongen voelt.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Een cliënt die dit deelt, zet een grote stap en toont vertrouwen. Het gaat zelden om een impuls: vaak ging er een lang, stil proces aan vooraf. Jouw eerste reactie bepaalt mee of die deur openblijft of voorgoed dichtgaat.' },
+      { kop: 'Wat kan je doen?', tekst: 'Luister zonder te sturen of te minimaliseren, en bevestig het vertrouwen ("dank je dat je dit met mij deelt"). Leg niet meteen labels of oplossingen op. Vraag hoe de cliënt zelf aangesproken en benaderd wil worden, bvb. met welke naam of welk voornaamwoord, en respecteer dat. Ga na wat de cliënt nu nodig heeft: gehoord worden, info, of contact met lotgenoten.' },
+      { kop: 'Waar let je op?', tekst: 'Respecteer het tempo en de privacy: het is niet aan jou om dit verder te vertellen. Bespreek samen wie wat mag weten. Vermijd aannames over "zekerheid" of over een transitie — dat hoeft nu niet vast te liggen. Schakel bij twijfel een gespecialiseerde dienst in, voor de cliënt én voor jezelf.' },
+    ],
+    chips: [{ l: 'Transgender Infopunt', url: 'https://www.transgenderinfo.be' }, { l: 'Meer weten over transgender zijn', url: 'https://cavaria.be/tools-lgbti-handicap' }, { l: 'Naar de taalgids', go: 'taal' }],
+  },
+  {
+    tag: 'Seksualiteit & relaties', titel: 'Twee huisgenoten van hetzelfde geslacht worden verliefd op elkaar.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Verliefdheid tussen cliënten is in de eerste plaats iets moois en gewoon. Bij koppels van hetzelfde geslacht ontstaat soms extra terughoudendheid bij begeleiding of familie — terwijl het recht op relaties en intimiteit voor iedereen gelijk is.' },
+      { kop: 'Wat kan je doen?', tekst: 'Benader het zoals je elke prille relatie zou benaderen: met ruimte, respect en aandacht voor wederzijdse toestemming. Toets of beide personen het even graag willen en of ze begrijpen wat ze willen. Bied ondersteuning op maat — info over relaties en seksualiteit in toegankelijke taal kan helpen.' },
+      { kop: 'Waar let je op?', tekst: 'Behandel het koppel niet strenger dan een man-vrouwkoppel: dat zou een vorm van ongelijke behandeling zijn. Hou rekening met draagkracht en ontwikkelingsniveau, niet met het geslacht van de partner. Het Sensoa Vlaggensysteem helpt om gezond gedrag van grensoverschrijdend gedrag te onderscheiden, zonder te vertrekken vanuit een verbod.' },
+    ],
+    chips: [{ l: 'Sensoa Vlaggensysteem', url: 'https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag' }, { l: 'De Roze Pagina', url: 'https://www.cavaria.be/derozepagina' }, { l: 'allesoverseks.be', url: 'https://www.allesoverseks.be' }],
+  },
+  {
+    tag: 'Team & cultuur', titel: "Een collega maakt geregeld grappen over 'holebi's' in de leefgroep.",
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Ook "onschuldig" bedoelde grappen bepalen het klimaat. Voor een cliënt die worstelt met zijn identiteit is zo\'n opmerking een signaal: hier kan ik beter zwijgen. Stilte van de rest van het team wordt dan al snel als instemming gelezen.' },
+      { kop: 'Wat kan je doen?', tekst: 'Benoem het, liefst rustig en concreet, bvb. "ik merk dat zulke grappen hier vaak vallen — ik denk niet dat ze voor iedereen onschuldig overkomen." Maak het bespreekbaar in team of intervisie in plaats van enkel onder vier ogen, en koppel het aan de visie van de organisatie als die er is.' },
+      { kop: 'Waar let je op?', tekst: 'Het gaat niet om iemand wegzetten als "fout", maar om het effect op cliënten centraal te zetten. Handelingsverlegenheid is vaak de echte oorzaak: een gedeelde visie en vorming werken duurzamer dan een terechtwijzing alleen.' },
+    ],
+    chips: [{ l: 'Doe de team-zelfscan', go: 'scan' }, { l: 'Vorming via KliQ', url: 'https://www.kliqvzw.be' }, { l: 'Naar beleid & vorming', go: 'beleid' }],
+  },
+  {
+    tag: 'Netwerk & deontologie', titel: "De ouders van een cliënt willen niet dat hun zoon 'zo' is en vragen jou er niet op in te gaan.",
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Hier botsen twee dingen: de bezorgdheid (of het ongemak) van het netwerk en het zelfbeschikkingsrecht van de cliënt. Als begeleider sta je in de eerste plaats naast de cliënt, niet naast de wens om iets weg te duwen.' },
+      { kop: 'Wat kan je doen?', tekst: 'Erken de bezorgdheid van de ouders zonder de identiteit van de cliënt te ontkennen. Leg uit dat negeren of verbieden de cliënt niet "verandert", maar wel schaadt en het vertrouwen breekt. Zoek waar mogelijk naar dialoog, geef ouders correcte info en betrek desnoods een neutrale dienst.' },
+      { kop: 'Waar let je op?', tekst: 'Je bent gebonden aan het belang en de autonomie van de cliënt, en aan het discriminatieverbod. Je hoeft niet mee te gaan in een vraag die ingaat tegen de rechten van de cliënt. Bewaak tegelijk de relatie met het netwerk: kies voor verbinding, niet voor een loopgravenstrijd.' },
+    ],
+    chips: [{ l: 'Rechten & wetgeving', go: 'beleid' }, { l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'Naar de taalgids', go: 'taal' }],
+  },
+  {
+    tag: 'Gender & respect', titel: 'Een transgender cliënt wil voortaan met een andere naam aangesproken worden.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'De juiste naam en het juiste voornaamwoord gebruiken is een van de meest concrete vormen van respect. Telkens de oude naam gebruiken — deadnaming, ook per ongeluk — doet pijn en ondermijnt het opgebouwde vertrouwen.' },
+      { kop: 'Wat kan je doen?', tekst: 'Gebruik vanaf nu de naam en aanspreking die de cliënt wenst, ook onderling in het team en in de dagelijkse omgang. Maak praktische afspraken: hoe gaan we om met het dossier, etiketten, de brievenbus? Maak je een fout? Corrigeer kort, verontschuldig je zonder overdrijven en ga verder.' },
+      { kop: 'Waar let je op?', tekst: 'De officiële naamswijziging is wettelijk eenvoudiger geworden, maar respect hangt daar niet van af: je kan de gewenste naam meteen gebruiken. Bewaak de privacy rond de oude naam en bespreek met de cliënt wie wat hoeft te weten.' },
+    ],
+    chips: [{ l: 'Transgender Infopunt', url: 'https://www.transgenderinfo.be' }, { l: 'Transgenderwet (2017)', go: 'beleid' }, { l: 'Naar de taalgids', go: 'taal' }],
+  },
+  {
+    tag: 'Grenzen & consent', titel: 'Een cliënt stelt seksueel getint gedrag dat je doet twijfelen over de grens.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Seksueel gedrag bij cliënten is normaal — maar niet elk gedrag is oké. Het is niet altijd makkelijk in te schatten of iets gezond, experimenteel of grensoverschrijdend is, zeker bij een verstandelijke beperking. Vertrekken vanuit paniek of een verbod helpt niet.' },
+      { kop: 'Wat kan je doen?', tekst: 'Gebruik een gedeeld kader in plaats van je onderbuik. Het Sensoa Vlaggensysteem weegt gedrag op zes criteria (bvb. wederzijdse toestemming, vrijwilligheid en gelijkwaardigheid) en geeft een gepaste reactie via kleuren. Bespreek twijfelgevallen in team zodat je niet alleen oordeelt.' },
+      { kop: 'Waar let je op?', tekst: 'Vermijd dat de geaardheid of genderidentiteit van de cliënt je oordeel kleurt: weeg het gedrag, niet de persoon. Reageer proportioneel — een groene of gele vlag vraagt iets anders dan een rode. Leg afspraken en signalen vast in het cliëntdossier of beleid.' },
+    ],
+    chips: [{ l: 'Sensoa Vlaggensysteem', url: 'https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag' }, { l: 'Vlaggensysteem voor Volwassenen', url: 'https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek' }, { l: 'Naar beleid & vorming', go: 'beleid' }],
+  },
+];
+let casusOpen = null;
+function renderCasusChip(ch) {
+  if (ch.url) return `<a class="casus-chip" href="${ch.url}" target="_blank" rel="noopener noreferrer">${ch.l} ${ICO_EXT}</a>`;
+  return `<button class="casus-chip" onclick="casusGo('${ch.go}')">${ch.l}</button>`;
+}
+function renderCasus() {
+  document.getElementById('casus-list').innerHTML = CASUS.map((c, i) => `
+    <div class="casus ${casusOpen === i ? 'open' : ''}">
+      <button class="casus-head" onclick="toggleCasus(${i})" aria-expanded="${casusOpen === i ? 'true' : 'false'}">
+        <div class="casus-icon">${CASUS_ICON}</div>
+        <div class="casus-head-text">
+          <div class="casus-tag">${c.tag}</div>
+          <div class="casus-title">${c.titel}</div>
+        </div>
+        <svg class="casus-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="casus-body"><div class="casus-inner">
+        <div class="casus-divider"></div>
+        ${c.blokken.map((b, bi) => `<div class="casus-sub"><span class="num">${bi + 1}</span>${b.kop}</div><div class="casus-p">${b.tekst}</div>`).join('')}
+        ${c.chips && c.chips.length ? `<div class="casus-links">${c.chips.map(renderCasusChip).join('')}</div>` : ''}
+      </div></div>
+    </div>`).join('');
+}
+function toggleCasus(i) { casusOpen = (casusOpen === i ? null : i); renderCasus(); }
+function casusGo(go) {
+  if (go === 'taal' || go === 'scan') gaPraktijk(go);
+  else if (go === 'orgs') gaOrgs('');
+  else if (go === 'beleid') showPage('policy');
+  else if (go === 'hulp') openHelp();
+  else if (go === 'tools-sek') gaTools('sek', '');
+  else if (go === 'tools-gen') gaTools('gen', '');
+  else if (go === 'tools-bel') gaTools('bel', '');
+}
+
+// ══════════════ TAALGIDS ══════════════
+const TERM_CAT_COLOR = { 'Algemeen': 'teal', 'Oriëntatie': 'violet', 'Gender': 'amber', 'Liever vermijden': 'rose' };
+const TERM_CATS = ['Alle', 'Algemeen', 'Oriëntatie', 'Gender', 'Liever vermijden'];
+const TERMEN = [
+  { woord: 'LGBTQIA+', cat: 'Algemeen', def: 'Verzamelletterwoord voor lesbisch, gay (homo), biseksueel, transgender, queer, intersekse en aseksueel. De "+" staat voor alle identiteiten die niet in één letter passen.' },
+  { woord: 'Holebi', cat: 'Oriëntatie', def: 'Vlaamse samentrekking van homo, lesbisch en bi. Verwijst naar wie zich aangetrokken voelt tot hetzelfde geslacht of tot meerdere geslachten.' },
+  { woord: 'Lesbisch', cat: 'Oriëntatie', def: 'Een vrouw die zich romantisch en/of seksueel aangetrokken voelt tot vrouwen.' },
+  { woord: 'Homo / gay', cat: 'Oriëntatie', def: 'Iemand die zich aangetrokken voelt tot mensen van hetzelfde geslacht. "Gay" wordt breed gebruikt, "homo" vaak voor mannen.' },
+  { woord: 'Biseksueel', cat: 'Oriëntatie', def: 'Aangetrokken tot meer dan één geslacht. Dat hoeft niet 50/50 te zijn en verandert niet door wie iemand op dit moment datet.' },
+  { woord: 'Panseksueel', cat: 'Oriëntatie', def: 'Aangetrokken tot mensen ongeacht hun geslacht of genderidentiteit — de persoon zelf telt, niet het hokje.' },
+  { woord: 'Aseksueel', cat: 'Oriëntatie', def: 'Iemand die weinig tot geen seksuele aantrekking voelt. Dat zegt niets over of die persoon wel of geen relatie of romantiek wil.' },
+  { woord: 'Hetero', cat: 'Oriëntatie', def: 'Iemand die zich romantisch en/of seksueel aangetrokken voelt tot mensen van het andere geslacht.' },
+  { woord: 'Gender', cat: 'Gender', def: 'Het sociale en persoonlijke beleven van man-zijn, vrouw-zijn, beide of geen van beide. Ruimer dan het geslacht dat bij de geboorte werd toegekend.' },
+  { woord: 'Genderidentiteit', cat: 'Gender', def: 'Hoe iemand zichzelf vanbinnen ervaart: als man, vrouw, beide, geen van beide, of iets ertussen. Dat kan verschillen van wat anderen zien of verwachten.' },
+  { woord: 'Genderexpressie', cat: 'Gender', def: 'Hoe iemand gender naar buiten brengt: kleding, haar, stem, gedrag. Expressie zegt niet automatisch iets over iemands identiteit of geaardheid.' },
+  { woord: 'Cisgender', cat: 'Gender', def: 'Iemand wiens genderidentiteit overeenkomt met het geslacht dat bij de geboorte werd toegekend — het "tegenovergestelde" van transgender.' },
+  { woord: 'Transgender', cat: 'Gender', def: 'Een paraplubegrip voor iedereen wiens genderidentiteit niet (volledig) overeenkomt met het geboortegeslacht. Transgender zijn is geen psychische stoornis.', tip: 'Gebruik het als bijvoeglijk naamwoord: "een transgender persoon", niet "een transgender".' },
+  { woord: 'Non-binair', cat: 'Gender', def: 'Iemand die zich niet (enkel) man of vrouw voelt. Sommige non-binaire mensen gebruiken voornaamwoorden zoals "die/hen".' },
+  { woord: 'Genderfluïde', cat: 'Gender', def: 'Iemand bij wie het genderbeleven kan verschuiven in de tijd — soms meer mannelijk, soms meer vrouwelijk, soms ertussenin.' },
+  { woord: 'Intersekse', cat: 'Gender', def: 'Paraplubegrip voor mensen die geboren worden met lichaamskenmerken (chromosomen, hormonen, geslachtsorganen) die niet strikt in "man" of "vrouw" passen. Het gaat over het lichaam, niet over geaardheid.' },
+  { woord: 'Transitie', cat: 'Gender', def: 'Het proces waarin iemand stappen zet om zich te laten zien zoals die zich voelt. Dat kan sociaal (naam, kleding), juridisch en/of medisch zijn — en is voor iedereen anders.' },
+  { woord: 'Voornaamwoorden', cat: 'Gender', def: 'De woorden waarmee iemand benoemd wil worden, bvb. hij/hem, zij/haar of die/hen.', tip: 'Bij twijfel: vraag het gewoon, en gebruik wat de persoon aangeeft.' },
+  { woord: 'Queer', cat: 'Algemeen', def: 'Overkoepelende term voor wie zich niet (volledig) hetero of cisgender voelt. Ooit een scheldwoord, nu door velen met trots heropgeëist.', tip: 'Niet iedereen voelt zich er comfortabel bij — gebruik het niet als label voor iemand anders zonder dat te weten.' },
+  { woord: 'Coming-out', cat: 'Algemeen', def: 'Het moment of proces waarop iemand zelf vertelt over zijn geaardheid of genderidentiteit. Het is geen eenmalig iets: mensen komen vaak hun leven lang in nieuwe situaties uit de kast.' },
+  { woord: 'In de kast', cat: 'Algemeen', def: 'Wanneer iemand zijn geaardheid of genderidentiteit (nog) niet deelt met de omgeving. Dat kan een bewuste, veilige keuze zijn — respecteer dat tempo.' },
+  { woord: 'Heteronormativiteit', cat: 'Algemeen', def: 'De onuitgesproken aanname dat iedereen hetero en cisgender is, bvb. automatisch naar "een vriendin" vragen bij een man. Het maakt andere ervaringen onzichtbaar.' },
+  { woord: 'Affirmatief', cat: 'Algemeen', def: 'Een houding die de seksuele en genderidentiteit van iemand bevestigt als waardevol en normaal, in plaats van ze te negeren of enkel te "tolereren".' },
+  { woord: 'Ally / medestander', cat: 'Algemeen', def: 'Iemand die zelf niet LGBTQ+ is, maar zich wel inzet voor gelijke behandeling en mee opkomt tegen onrecht.' },
+  { woord: 'IDAHOBIT', cat: 'Algemeen', def: 'Internationale dag tegen holebifobie, transfobie en bifobie, elk jaar op 17 mei — de dag waarop de WHO homoseksualiteit schrapte als ziekte.' },
+  { woord: 'Regenboogvlag', cat: 'Algemeen', def: 'Het bekendste symbool van de LGBTQ+ gemeenschap. Naast de klassieke kleuren bestaan er varianten, bvb. de trans- en de progressieve regenboogvlag.' },
+  { woord: 'Deadnaming', cat: 'Liever vermijden', def: 'Iemand (bewust of per ongeluk) aanspreken met de naam van vóór de transitie. Doet pijn en ondermijnt vertrouwen.', tip: 'Gebruik altijd de naam die de persoon zelf aangeeft, ook in dossiers en onderling overleg.', tipType: 'warn' },
+  { woord: 'Misgenderen', cat: 'Liever vermijden', def: 'Iemand aanspreken of benoemen met het verkeerde geslacht of voornaamwoord.', tip: 'Maak je een fout? Corrigeer kort, verontschuldig je zonder drama en ga verder.', tipType: 'warn' },
+  { woord: '"Geslachtsverandering"', cat: 'Liever vermijden', def: 'Verouderde, te enge term: een transitie gaat over veel meer dan een operatie, en niet iedereen kiest medische stappen.', tip: 'Zeg liever "transitie" of "in transitie zijn".', tipType: 'warn' },
+  { woord: '"Levensstijl" of "keuze"', cat: 'Liever vermijden', def: 'Geaardheid en genderidentiteit zijn geen keuze, voorkeur of stijl.', tip: 'Vermijd formuleringen die suggereren dat het om een fase of een beslissing gaat.', tipType: 'warn' },
+  { woord: 'Hermafrodiet', cat: 'Liever vermijden', def: 'Verouderde en kwetsende term voor iemand met een intersekse variatie. Het woord komt uit de mythologie en de biologie en hoort niet thuis bij mensen.', tip: 'Zeg "intersekse persoon" of "iemand met een intersekse variatie".', tipType: 'warn' },
+  { woord: 'Homofiel', cat: 'Liever vermijden', def: 'Verouderde term voor een homoseksuele persoon. Klinkt voor velen klinisch of afstandelijk en wordt nauwelijks nog gebruikt.', tip: 'Zeg liever "homo", "gay" of "holebi".', tipType: 'warn' },
+];
+let termCat = 'Alle';
+function renderTermChips() {
+  document.getElementById('term-chips').innerHTML = TERM_CATS.map(c => `<button class="term-chip ${c === termCat ? 'active' : ''}" onclick="setTermCat('${c}')">${c}</button>`).join('');
+}
+function setTermCat(c) { termCat = c; renderTermChips(); renderTermen(); }
+function renderTermen() {
+  const q = document.getElementById('term-search').value.toLowerCase();
+  const res = TERMEN.filter(t => (termCat === 'Alle' || t.cat === termCat) && (!q || t.woord.toLowerCase().includes(q) || t.def.toLowerCase().includes(q)));
+  document.getElementById('term-count').textContent = `${res.length} begrip${res.length !== 1 ? 'pen' : ''}`;
+  document.getElementById('term-grid').innerHTML = res.length ? res.map(t => `
+    <div class="term-card">
+      <div class="term-top"><div class="term-word">${t.woord}</div>${badge(t.cat, TERM_CAT_COLOR[t.cat] || 'slate')}</div>
+      <div class="term-def">${t.def}</div>
+      ${t.tip ? `<div class="term-tip ${t.tipType === 'warn' ? 'warn' : ''}"><strong>${t.tipType === 'warn' ? 'Let op: ' : 'Tip: '}</strong>${t.tip}</div>` : ''}
+    </div>`).join('') : '<div class="empty">Geen begrippen gevonden. Probeer een ander woord.</div>';
+}
+
+// ══════════════ TEAM-ZELFSCAN ══════════════
+const SCAN_VRAGEN = [
+  { domein: 'Beleid', t: 'Onze organisatie heeft een expliciete, gedragen visie of beleid rond seksualiteit én genderdiversiteit.' },
+  { domein: 'Beleid', t: 'LGBTQ+-inclusie zit verweven in onthaal, kwaliteit en dagelijkse werking — niet enkel ad hoc als er iets gebeurt.' },
+  { domein: 'Taal', t: 'We gebruiken bewust inclusieve, niet-veronderstellende taal (bvb. niet automatisch naar "een vriendin" vragen bij een mannelijke cliënt).' },
+  { domein: 'Zichtbaarheid', t: 'Er zijn zichtbare signalen dat LGBTQ+ welkom is, bvb. via affiches, een regenboogsymbool of inclusieve formulieren.' },
+  { domein: 'Team', t: 'Begeleiders kregen vorming rond LGBTQ+ en kunnen er met cliënten over praten zonder ongemak.' },
+  { domein: 'Team', t: 'Stigmatiserende grappen of opmerkingen worden binnen het team benoemd en aangepakt.' },
+  { domein: 'Cliënt', t: 'Cliënten weten bij wie ze terechtkunnen met vragen over identiteit, relaties of gender.' },
+  { domein: 'Cliënt', t: 'We kennen en gebruiken toegankelijke tools, bvb. De Roze Pagina of het Sensoa Vlaggensysteem.' },
+  { domein: 'Netwerk', t: 'We verwijzen actief door naar gespecialiseerde diensten, bvb. Lumi, het Transgender Infopunt of Aditi.' },
+  { domein: 'Privacy', t: 'Informatie over iemands geaardheid of genderidentiteit behandelen we vertrouwelijk en respectvol.' },
+];
+const SCAN_DOMEIN_ADVIES = {
+  'Beleid': { t: 'Werk aan een expliciete visie', d: 'Een korte, gedragen visietekst rond seksualiteit én genderdiversiteit geeft begeleiders houvast. Tools zoals Grenswijs of de beleidsscans van Rutgers helpen je op weg.' },
+  'Taal': { t: 'Maak je taal inclusiever', d: 'Kleine aanpassingen — open vragen stellen, niet veronderstellen — maken een groot verschil. De taalgids hiernaast is een handig startpunt voor je team.' },
+  'Zichtbaarheid': { t: 'Maak inclusie zichtbaar', d: 'Zichtbare signalen (een regenboog, inclusieve formulieren) laten cliënten weten dat ze welkom zijn. Klein in moeite, groot in effect.' },
+  'Team': { t: 'Investeer in vorming', d: 'Veel ongemak is in feite handelingsverlegenheid. Vorming via bvb. KliQ of çavaria geeft begeleiders woorden en vertrouwen.' },
+  'Cliënt': { t: 'Versterk de cliëntondersteuning', d: 'Zorg dat cliënten een aanspreekpunt kennen en gebruik toegankelijke tools zoals De Roze Pagina en het Vlaggensysteem.' },
+  'Netwerk': { t: 'Bouw je doorverwijsnetwerk uit', d: 'Je hoeft niet alles zelf te kunnen. Leer de gespecialiseerde diensten kennen (Lumi, TIP, Aditi) en verwijs gericht door.' },
+  'Privacy': { t: 'Bewaak privacy en vertrouwen', d: 'Maak afspraken over wie wat mag weten over iemands geaardheid of genderidentiteit. Vertrouwelijkheid is de basis van een veilig klimaat.' },
+};
+let scanAntw = {};
+function renderScanVragen() {
+  document.getElementById('scan-questions').innerHTML = SCAN_VRAGEN.map((q, i) => `
+    <div class="scan-q">
+      <div class="scan-q-top">
+        <div class="scan-q-num">${i + 1}</div>
+        <div><div class="scan-q-domain">${q.domein}</div><div class="scan-q-text">${q.t}</div></div>
+      </div>
+      <div class="scan-opts">
+        ${['Niet', 'Deels', 'Goed'].map((lab, v) => `<button class="scan-opt ${scanAntw[i] === v ? 'sel' : ''}" onclick="scanKies(${i},${v})">${lab}</button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function scanKies(i, v) { scanAntw[i] = v; renderScanVragen(); updateScanHint(); }
+function updateScanHint() {
+  const n = Object.keys(scanAntw).length, tot = SCAN_VRAGEN.length;
+  document.getElementById('scan-hint').textContent = n < tot ? `${n}/${tot} beantwoord` : 'Klaar om te berekenen';
+}
+function berekenScan() {
+  const tot = SCAN_VRAGEN.length, beantwoord = Object.keys(scanAntw).length;
+  if (beantwoord < tot) { document.getElementById('scan-hint').textContent = `Beantwoord eerst alle vragen (${beantwoord}/${tot}).`; return; }
+  const score = Object.values(scanAntw).reduce((a, b) => a + b, 0);
+  let band, label, desc;
+  if (score <= 7) { band = 'start'; label = 'Aan de start'; desc = 'Er is een mooie basis om op te bouwen. Door inclusie expliciet te maken — in visie, taal en vorming — zet je grote stappen. Begin klein en concreet.'; }
+  else if (score <= 14) { band = 'mid'; label = 'Op weg'; desc = 'Er gebeurt al heel wat, maar de aanpak is nog niet overal verankerd. Focus op de punten die nog "deels" scoorden om van goodwill naar structureel beleid te gaan.'; }
+  else { band = 'strong'; label = 'Stevig verankerd'; desc = 'Inclusie zit stevig in jullie werking. Mooi. Blijf het levend houden via vorming, evaluatie en aandacht voor nieuwe cliënten en medewerkers.'; }
+
+  // Tekort per domein berekenen
+  const domMax = {}, domBehaald = {};
+  SCAN_VRAGEN.forEach((q, i) => { domMax[q.domein] = (domMax[q.domein] || 0) + 2; domBehaald[q.domein] = (domBehaald[q.domein] || 0) + (scanAntw[i] || 0); });
+  let tekorten = Object.keys(domMax).map(d => ({ d, gap: domMax[d] - domBehaald[d] })).filter(x => x.gap > 0).sort((a, b) => b.gap - a.gap).slice(0, 3);
+  let items;
+  if (tekorten.length) items = tekorten.map(x => SCAN_DOMEIN_ADVIES[x.d]);
+  else items = [{ t: 'Blijf het levend houden', d: 'Jullie scoren sterk op alle domeinen. Hou de aandacht vast bij nieuwe medewerkers, nieuwe cliënten en evoluerende noden.' }];
+
+  const bandClass = band === 'start' ? 'scan-band-start' : band === 'mid' ? 'scan-band-mid' : 'scan-band-strong';
+  document.getElementById('scan-result').innerHTML = `
+    <div class="scan-result">
+      <div class="scan-score-card ${bandClass}">
+        <div class="scan-score-n">${score}<small>/20</small></div>
+        <div class="scan-band-label">${label}</div>
+        <div class="scan-band-desc">${desc}</div>
+      </div>
+      <div class="scan-advice-t">Waar liggen kansen?</div>
+      <div class="scan-advice">
+        ${items.map(it => `<div class="scan-advice-item"><div class="ai-dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div><div class="scan-advice-item-body"><strong>${it.t}.</strong> ${it.d}</div></div>`).join('')}
+      </div>
+      <div class="ww-cta-row" style="margin-top:20px;">
+        <button class="ww-cta ww-cta-primary" onclick="gaPraktijk('taal')">Naar de taalgids</button>
+        <button class="ww-cta ww-cta-ghost" onclick="showPage('policy')">Beleid &amp; vorming</button>
+        <button class="ww-cta ww-cta-ghost" onclick="resetScan()">Scan opnieuw</button>
+      </div>
+    </div>`;
+  document.getElementById('scan-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function resetScan() {
+  scanAntw = {}; renderScanVragen(); document.getElementById('scan-result').innerHTML = '';
+  updateScanHint();
+  document.getElementById('seg-scan').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ══════════════ WETGEVINGSTIJDLIJN ══════════════
+const TIJDLIJN = [
+  { jaar: '1957', cat: 'science', titel: 'Evelyn Hooker ontkracht "homoseksualiteit = ziekte"', desc: 'De Amerikaanse psychologe Evelyn Hooker laat zien dat experts in blinde tests geen verschil zien tussen homoseksuele en heteroseksuele mannen zonder psychiatrische diagnose. Haar studie ondergraaft het idee dat homoseksualiteit een stoornis is en legt de wetenschappelijke basis voor de latere schrapping uit de DSM. <a href="https://www.apa.org/monitor/2011/02/myth-buster" target="_blank" rel="noopener noreferrer">Lees meer over haar werk →</a>' },
+  { jaar: '1969', cat: 'move', titel: 'De Stonewall-rellen', desc: 'Een politie-inval in de New Yorkse bar Stonewall Inn loopt uit op dagenlange protesten. Het geldt als het symbolische startpunt van de moderne LGBTQ+-beweging en als de aanleiding voor de allereerste Pride-optochten, een jaar later.' },
+  { jaar: '1973', cat: 'science', titel: 'Homoseksualiteit geschrapt uit de DSM', desc: 'De American Psychiatric Association haalt homoseksualiteit als stoornis uit haar handboek (DSM). Een wetenschappelijk kantelpunt dat voortbouwt op onder meer het werk van Hooker: holebi-zijn is geen ziekte.' },
+  { jaar: '1985', cat: 'law', titel: 'België schrapt artikel 372bis', desc: 'Dit artikel legde sinds 1965 een hogere meerderjarigheidsleeftijd op voor homoseksuele handelingen dan voor heteroseksuele. De afschaffing maakt komaf met dit wettelijke onderscheid en was lange tijd het voornaamste strijdpunt van de holebibeweging.' },
+  { jaar: '1990', cat: 'science', titel: 'WHO schrapt homoseksualiteit (17 mei)', desc: 'De Wereldgezondheidsorganisatie verwijdert homoseksualiteit uit haar ziekteclassificatie. Die datum, 17 mei, leeft voort als IDAHOBIT — de internationale dag tegen holebi- en transfobie.' },
+  { jaar: '2003', cat: 'law', titel: 'Openstelling van het huwelijk in België', desc: 'België wordt het tweede land ter wereld waar koppels van hetzelfde geslacht kunnen huwen. In 2006 volgt het recht op adoptie.' },
+  { jaar: '2006', cat: 'law', titel: 'Yogyakarta-beginselen', desc: 'Een internationale set principes die mensenrechten toepast op seksuele oriëntatie en genderidentiteit. Een veelgebruikte referentie, ook bij latere Belgische wetgeving.' },
+  { jaar: '2007', cat: 'law', titel: 'Antidiscriminatiewet & Genderwet', desc: 'België verbiedt discriminatie op grond van onder meer seksuele geaardheid, beperking en geslacht — ook in de zorg. Unia en het Instituut voor de gelijkheid van vrouwen en mannen zien toe op de naleving.' },
+  { jaar: '2014', cat: 'law', titel: 'Genderwet uitgebreid', desc: 'De bescherming wordt expliciet uitgebreid naar genderidentiteit en genderexpressie, waardoor ook trans en intersekse personen duidelijker beschermd zijn.' },
+  { jaar: '2017', cat: 'law', titel: 'Vernieuwde Transgenderwet', desc: 'De geregistreerde voornaam en het geslacht wijzigen kan voortaan op eenvoudig verzoek, zonder medische voorwaarden zoals sterilisatie. Een belangrijke stap voor zelfbeschikking.' },
+  { jaar: '2019', cat: 'science', titel: 'ICD-11: genderincongruentie geen stoornis', desc: 'De WHO verplaatst "genderincongruentie" uit het hoofdstuk van de psychische stoornissen. Transgender zijn wordt zo ook internationaal gedepathologiseerd.' },
+  { jaar: '2025', cat: 'law', titel: 'Vlaams Gelijkekansenplan 2025–2029', desc: 'Een geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een beperking als LGBTI+ personen, en expliciet voor het kruispunt daartussen.' },
+];
+let tlOpen = null;
+function renderTijdlijn() {
+  document.getElementById('tl').innerHTML = TIJDLIJN.map((m, i) => `
+    <div class="tl-item tl-cat-${m.cat} ${tlOpen === i ? 'open' : ''}">
+      <div class="tl-dot"></div>
+      <button class="tl-card" onclick="toggleTl(${i})" aria-expanded="${tlOpen === i ? 'true' : 'false'}">
+        <div class="tl-head">
+          <div class="tl-year">${m.jaar}</div>
+          <div class="tl-title">${m.titel}</div>
+          <svg class="tl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="tl-desc-wrap"><div class="tl-desc">${m.desc}</div></div>
+      </button>
+    </div>`).join('');
+}
+function toggleTl(i) { tlOpen = (tlOpen === i ? null : i); renderTijdlijn(); }
+
+// ── Initialiseren ──────────────────────────────────────────────────────────────
+renderHelp();
+renderWegwijzer();
+renderCasus();
+renderTermChips();
+renderTermen();
+renderScanVragen();
+updateScanHint();
+renderTijdlijn();
 </script>
 </body>
 </html>
