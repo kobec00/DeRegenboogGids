@@ -230,6 +230,24 @@
     h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 800; color: var(--slate-900); margin-bottom: 20px; }
     .page-intro { color: var(--slate-500); font-size: 16px; line-height: 1.65; margin-bottom: 36px; }
 
+    /* Subtiele inline spronglink naar de tijdlijn onderaan de beleidspagina */
+    .jump-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-weight: 600; color: var(--teal); cursor: pointer;
+      text-decoration: underline; text-decoration-color: rgba(20,160,150,0.3);
+      text-underline-offset: 3px; text-decoration-thickness: 1.5px;
+      transition: text-decoration-color .2s ease, color .2s ease;
+      white-space: nowrap;
+    }
+    .jump-link:hover { text-decoration-color: var(--teal); }
+    .jump-link svg { transition: transform .2s ease; flex-shrink: 0; }
+    .jump-link:hover svg { transform: translateY(2px); }
+    .jump-link:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 3px; }
+    body.dark .jump-link { color: #3ed6b8; text-decoration-color: rgba(60,210,180,0.35); }
+    body.dark .jump-link:hover { text-decoration-color: #3ed6b8; }
+    body.a11y .jump-link { color: #0a4a42 !important; text-decoration-color: #0a4a42 !important; }
+
+
     /* ── CARD — liquid glass ── */
     .card {
       background: rgba(255,255,255,0.62);
@@ -551,9 +569,12 @@
     .about-logo-stage { perspective: 750px; }
     .about-logo {
       width: 104px; height: 104px; flex-shrink: 0;
-      transform: rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
-      transition: transform .25s ease-out;
+      transform: translateZ(0) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
+      transition: transform .12s linear;
       will-change: transform;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     .about-logo-float { width: 100%; height: 100%; animation: logoFloat 5.5s ease-in-out infinite; }
     .about-logo-surface {
@@ -686,26 +707,28 @@
     }
     /* Compacte gekleurde pil met fijne glasrand en lichtglans */
     .fab {
-      position: relative; overflow: hidden;
-      display: inline-flex; align-items: center; gap: 9px;
-      border-radius: 13px; padding: 8px 13px; cursor: pointer;
-      font-family: var(--font-sans); font-weight: 650; font-size: 12.5px; color: #fff;
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 12px; padding: 7px 12px; cursor: pointer;
+      font-family: var(--font-sans); font-weight: 650; font-size: 12px; color: #fff;
       border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px) saturate(1.3); -webkit-backdrop-filter: blur(10px) saturate(1.3);
       box-shadow: 0 4px 14px rgba(15,23,42,0.16), 0 1px 0 rgba(255,255,255,0.25) inset;
       transition: transform .2s cubic-bezier(.34,1.3,.5,1), box-shadow .2s, filter .2s;
     }
     /* Subtiele lichtglans bovenaan voor de glas-vibe */
     .fab::before {
       content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.18), transparent);
+      border-radius: inherit;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.18), transparent 90%);
       pointer-events: none;
     }
     .fab:hover { transform: translateY(-2px); box-shadow: 0 9px 22px rgba(15,23,42,0.24), 0 1px 0 rgba(255,255,255,0.3) inset; filter: brightness(1.06); }
     .fab:active { transform: translateY(0) scale(0.97); }
     .fab svg { flex-shrink: 0; }
-    .help-fab { background: var(--rose); }
-    .dark-fab { background: #232a3d; }
-    .a11y-fab { background: var(--teal-dark); }
+    .help-fab { background: rgba(190,18,60,0.86); }
+    .dark-fab { background: rgba(35,42,61,0.84); }
+    .a11y-fab { background: rgba(10,74,66,0.85); }
 
     /* Slanke toggle */
     .fab-switch {
@@ -744,10 +767,11 @@
 
     /* Trigger-knop (mobiel) */
     .fab-trigger {
-      display: none; position: relative; overflow: hidden;
-      width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
+      display: none; position: relative;
+      width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
       align-items: center; justify-content: center; color: #fff;
-      background: linear-gradient(140deg, var(--teal-light), var(--teal-dark));
+      background: linear-gradient(140deg, rgba(26,179,148,0.92), rgba(10,74,66,0.92));
+      backdrop-filter: blur(10px) saturate(1.3); -webkit-backdrop-filter: blur(10px) saturate(1.3);
       border: 1px solid rgba(255,255,255,0.28);
       box-shadow: 0 5px 18px rgba(13,123,106,0.4), 0 1px 0 rgba(255,255,255,0.28) inset;
       transition: transform .3s cubic-bezier(.34,1.5,.5,1), box-shadow .2s;
@@ -764,7 +788,7 @@
       .fab-trigger { display: inline-flex; }
       .fab .fab-label { display: none; }
       /* Kleine ronde gekleurde bubbels */
-      .fab { padding: 0; width: 44px; height: 44px; justify-content: center; gap: 0; border-radius: 50%; }
+      .fab { padding: 0; width: 42px; height: 42px; justify-content: center; gap: 0; border-radius: 50%; }
       .help-fab .fab-pulse { position: absolute; top: 8px; right: 8px; }
       /* Toggle wordt een statusstipje in de hoek */
       .fab-switch {
@@ -2164,12 +2188,7 @@
   <!-- POLICY -->
   <section class="page" id="page-policy">
     <h1>Beleid &amp; Vorming</h1>
-    <p class="page-intro">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie.</p>
-
-    <button class="cta-btn" style="margin-top:0; margin-bottom:28px;" onclick="document.getElementById('tijdlijn').scrollIntoView({behavior:'smooth', block:'start'})">
-      Bekijk de mijlpalen-tijdlijn
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-    </button>
+    <p class="page-intro">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie. Benieuwd hoe die rechten zich doorheen de jaren ontwikkelden? <span class="jump-link" role="button" tabindex="0" onclick="document.getElementById('tijdlijn').scrollIntoView({behavior:'smooth', block:'start'})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Bekijk de mijlpalen-tijdlijn<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></span></p>
 
     <div class="alert-box">
       <div class="alert-emoji">⚡</div>
@@ -2441,6 +2460,14 @@
         <span class="doneer-body">
           <span class="doneer-naam">Fonds HIV Ontrafelen <span class="doneer-tag">hiv-onderzoek</span></span>
           <span class="doneer-desc">Vlaams onderzoeksfonds (UZ Gent) dat wetenschappelijk onderzoek naar de genezing van hiv financiert. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://www.lumi.be/ik-wil-helpen/geef-een-gift" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--teal-bg);color:var(--teal);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Lumi <span class="doneer-tag">infolijn</span></span>
+          <span class="doneer-desc">De gratis en anonieme onthaal- en infolijn van çavaria voor vragen over gender, geslacht en seksuele oriëntatie. Ook voor begeleiders en naasten.</span>
         </span>
         <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
       </a>
@@ -2748,11 +2775,13 @@ function toggleDark() {
   if (!stage || !logo) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const MAX = 16;
-  stage.addEventListener('pointermove', (e) => {
+  let lastX = 0, lastY = 0, queued = false;
+  const apply = () => {
+    queued = false;
     const r = logo.getBoundingClientRect();
     if (!r.width) return;
-    let dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
-    let dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+    let dx = (lastX - (r.left + r.width / 2)) / (r.width / 2);
+    let dy = (lastY - (r.top + r.height / 2)) / (r.height / 2);
     dx = Math.max(-1.6, Math.min(1.6, dx));
     dy = Math.max(-1.6, Math.min(1.6, dy));
     logo.style.setProperty('--rx', (dx * MAX).toFixed(2) + 'deg');
@@ -2760,6 +2789,10 @@ function toggleDark() {
     logo.style.setProperty('--mx', ((dx * 0.5 + 0.5) * 100).toFixed(1) + '%');
     logo.style.setProperty('--my', ((dy * 0.5 + 0.5) * 100).toFixed(1) + '%');
     logo.classList.add('is-hover');
+  };
+  stage.addEventListener('pointermove', (e) => {
+    lastX = e.clientX; lastY = e.clientY;
+    if (!queued) { queued = true; requestAnimationFrame(apply); }
   });
   stage.addEventListener('pointerleave', () => {
     logo.style.setProperty('--rx', '0deg');
@@ -3204,7 +3237,7 @@ function wwAnimeerResultaat() {
 const CASUS_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
 const CASUS = [
   {
-    tag: 'Gender & identiteit', titel: 'Een cliënt vertelt je in vertrouwen dat hij zich geen jongen voelt.',
+    tag: 'Gender & identiteit', titel: 'Een cliënt vertelt je in vertrouwen dat die zich geen jongen voelt.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Een cliënt die dit deelt, zet een grote stap en toont vertrouwen. Het gaat zelden om een impuls: vaak ging er een lang, stil proces aan vooraf. Jouw eerste reactie bepaalt mee of die deur openblijft of voorgoed dichtgaat.' },
       { kop: 'Wat kan je doen?', tekst: 'Luister zonder te sturen of te minimaliseren, en bevestig het vertrouwen ("dank je dat je dit met mij deelt"). Leg niet meteen labels of oplossingen op. Vraag hoe de cliënt zelf aangesproken en benaderd wil worden, bvb. met welke naam of welk voornaamwoord, en respecteer dat. Ga na wat de cliënt nu nodig heeft: gehoord worden, info, of contact met lotgenoten.' },
@@ -3224,7 +3257,7 @@ const CASUS = [
   {
     tag: 'Team & cultuur', titel: "Een collega maakt geregeld grappen over 'holebi's' in de leefgroep.",
     blokken: [
-      { kop: 'Wat speelt er?', tekst: 'Ook "onschuldig" bedoelde grappen bepalen het klimaat. Voor een cliënt die worstelt met zijn identiteit is zo\'n opmerking een signaal: hier kan ik beter zwijgen. Stilte van de rest van het team wordt dan al snel als instemming gelezen.' },
+      { kop: 'Wat speelt er?', tekst: 'Ook "onschuldig" bedoelde grappen bepalen het klimaat. Voor een cliënt die worstelt met hun identiteit is zo\'n opmerking een signaal: hier kan ik beter zwijgen. Stilte van de rest van het team wordt dan al snel als instemming gelezen.' },
       { kop: 'Wat kan je doen?', tekst: 'Benoem het, liefst rustig en concreet, bvb. "ik merk dat zulke grappen hier vaak vallen — ik denk niet dat ze voor iedereen onschuldig overkomen." Maak het bespreekbaar in team of intervisie in plaats van enkel onder vier ogen, en koppel het aan de visie van de organisatie als die er is.' },
       { kop: 'Waar let je op?', tekst: 'Het gaat niet om iemand wegzetten als "fout", maar om het effect op cliënten centraal te zetten. Handelingsverlegenheid is vaak de echte oorzaak: een gedeelde visie en vorming werken duurzamer dan een terechtwijzing alleen.' },
     ],
@@ -3240,11 +3273,11 @@ const CASUS = [
     chips: [{ l: 'Rechten & wetgeving', go: 'beleid' }, { l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
   {
-    tag: 'Gender & respect', titel: 'Een transgender cliënt wil voortaan met een andere naam aangesproken worden.',
+    tag: 'Gender & respect', titel: 'Een transgender cliënte wil voortaan met een andere naam aangesproken worden.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'De juiste naam en het juiste voornaamwoord gebruiken is een van de meest concrete vormen van respect. Telkens de oude naam gebruiken — deadnaming, ook per ongeluk — doet pijn en ondermijnt het opgebouwde vertrouwen.' },
-      { kop: 'Wat kan je doen?', tekst: 'Gebruik vanaf nu de naam en aanspreking die de cliënt wenst, ook onderling in het team en in de dagelijkse omgang. Maak praktische afspraken: hoe gaan we om met het dossier, etiketten, de brievenbus? Maak je een fout? Corrigeer kort, verontschuldig je zonder overdrijven en ga verder.' },
-      { kop: 'Waar let je op?', tekst: 'De officiële naamswijziging is wettelijk eenvoudiger geworden, maar respect hangt daar niet van af: je kan de gewenste naam meteen gebruiken. Bewaak de privacy rond de oude naam en bespreek met de cliënt wie wat hoeft te weten.' },
+      { kop: 'Wat kan je doen?', tekst: 'Gebruik vanaf nu de naam en aanspreking die zij wenst, ook onderling in het team en in de dagelijkse omgang. Maak praktische afspraken: hoe gaan we om met het dossier, etiketten, de brievenbus? Maak je een fout? Corrigeer kort, verontschuldig je zonder overdrijven en ga verder.' },
+      { kop: 'Waar let je op?', tekst: 'De officiële naamswijziging is wettelijk eenvoudiger geworden, maar respect hangt daar niet van af: je kan de gewenste naam meteen gebruiken. Bewaak de privacy rond de oude naam en bespreek met haar wie wat hoeft te weten.' },
     ],
     chips: [{ l: 'Transgender Infopunt', url: 'https://www.transgenderinfo.be' }, { l: 'Transgenderwet (2017)', go: 'beleid' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
@@ -3256,6 +3289,42 @@ const CASUS = [
       { kop: 'Waar let je op?', tekst: 'Vermijd dat de geaardheid of genderidentiteit van de cliënt je oordeel kleurt: weeg het gedrag, niet de persoon. Reageer proportioneel — een groene of gele vlag vraagt iets anders dan een rode. Leg afspraken en signalen vast in het cliëntdossier of beleid.' },
     ],
     chips: [{ l: 'Sensoa Vlaggensysteem', url: 'https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag' }, { l: 'Vlaggensysteem voor Volwassenen', url: 'https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek' }, { l: 'Naar beleid & vorming', go: 'beleid' }],
+  },
+  {
+    tag: 'Identiteit & lichaam', titel: 'Een intersekse cliënt voelt zich onzeker over het eigen lichaam en weet niet bij wie die terechtkan.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Sommige mensen worden geboren met lichaamskenmerken die niet eenduidig "mannelijk" of "vrouwelijk" zijn: dat noemen we intersekse. Het is geen ziekte en geen keuze, maar een natuurlijke variatie. In de praktijk merk je het vaak niet aan grote vragen, maar aan kleine signalen: een cliënt die zich ongemakkelijk voelt bij lichamelijke zorg, die opvalt of vermijdt in gedeelde doucheruimtes, of die zich afvraagt waarom die "anders" is dan de anderen. Vaak werd er thuis of in eerdere voorzieningen met stilte over omgegaan.' },
+      { kop: 'Wat kan je doen?', tekst: 'Zorg eerst voor gewone, praktische veiligheid: privacy bij wassen en aankleden, en respect voor schaamtegevoelens, net zoals bij elke cliënt. Beantwoord vragen eerlijk en in eenvoudige taal en stel gerust dat er niets "mis" is met hun lichaam. Vraag de cliënt hoe die zichzelf ziet en hoe die aangesproken wil worden, en respecteer dat. Maak duidelijk dat die bij jou of een vast aanspreekpunt terechtkan, zodat die er niet alleen mee blijft zitten.' },
+      { kop: 'Waar let je op?', tekst: 'Behandel het lichaam van de cliënt niet als een geheim of een probleem dat "opgelost" moet worden, want dat versterkt net de schaamte. Praat er niet over met collega\'s of het netwerk zonder dat het nodig is en zonder afstemming: medische info hierover is strikt vertrouwelijk. Heeft de cliënt medische vragen of klachten? Verwijs dan via de gewone zorgkanalen door naar een arts, en schakel bij twijfel een gespecialiseerde dienst in voor jezelf én voor hen.' },
+    ],
+    chips: [{ l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'çavaria', url: 'https://www.cavaria.be' }, { l: 'Naar de taalgids', go: 'taal' }],
+  },
+  {
+    tag: 'Relaties & autonomie', titel: 'Begeleiding of familie maakt zich zorgen omdat een cliënt nooit een lief lijkt te willen.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Er leeft vaak een stille aanname dat iedereen een relatie en seks hoort te willen. Wie daar geen interesse in heeft, wordt al snel als "een probleem" gezien. Maar weinig of geen romantische of seksuele aantrekking voelen is een geldige variatie: aseksualiteit. Het hoeft niet gerepareerd te worden.' },
+      { kop: 'Wat kan je doen?', tekst: 'Onderzoek eerst of er echt een zorg is, of vooral een verwachting van de omgeving. Vraag de cliënt zelf, zonder te sturen, hoe die zich voelt en wat die wil. Geef ruimte voor het antwoord "ik hoef dat niet" en behandel dat als een volwaardige keuze. Onderscheid een vrije keuze van een drempel die wél ondersteuning vraagt, bvb. onzekerheid of een nare ervaring.' },
+      { kop: 'Waar let je op?', tekst: 'Duw geen relatie of seksualiteit op als de cliënt daar niet om vraagt: dat is geen goede zorg maar een vorm van druk. Tegelijk: geen interesse tonen mag nooit een excuus zijn om het thema seksualiteit helemaal te vermijden. Blijf beschikbaar voor vragen, op het tempo van de cliënt.' },
+    ],
+    chips: [{ l: 'De Roze Pagina', url: 'https://www.cavaria.be/derozepagina' }, { l: 'Naar de taalgids', go: 'taal' }, { l: 'Doe de team-zelfscan', go: 'scan' }],
+  },
+  {
+    tag: 'Netwerk & cultuur', titel: 'Een cliënt zit klem tussen het eigen geloof of cultuur en de eigen geaardheid.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Geloof, cultuur en familie zijn voor veel cliënten een bron van houvast en verbondenheid. Wanneer de eigen geaardheid of genderidentiteit daarmee lijkt te botsen, ontstaat een pijnlijk innerlijk conflict: kiezen tussen wie ik ben en waar ik bij hoor. Dat kan zwaar wegen op het welzijn.' },
+      { kop: 'Wat kan je doen?', tekst: 'Erken beide kanten zonder partij te kiezen tegen de identiteit of het geloof van de cliënt. Vermijd om geloof of cultuur weg te zetten als "het probleem". Help de cliënt zoeken naar wat voor hen klopt, op hun tempo, en wijs op het bestaan van mensen en groepen die geloof en LGBTQ+-zijn wél samenbrengen. Soms is enkel gehoord en niet veroordeeld worden al veel.' },
+      { kop: 'Waar let je op?', tekst: 'Het is niet aan jou om voor de cliënt te beslissen wat die met het eigen geloof of de eigen coming-out doet: bewaak hun autonomie. Wees alert voor signalen van uitsluiting of druk vanuit het netwerk, en schat de veiligheid in. Schakel bij een vastgelopen of onveilige situatie een gespecialiseerde dienst in.' },
+    ],
+    chips: [{ l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'çavaria', url: 'https://www.cavaria.be' }, { l: 'Netwerk & organisaties', go: 'orgs' }],
+  },
+  {
+    tag: 'Zelfaanvaarding & welzijn', titel: 'Een cliënt aanvaardt de eigen geaardheid niet en vindt dat er iets mis is met hen.',
+    blokken: [
+      { kop: 'Wat speelt er?', tekst: 'Wat een cliënt over zichzelf zegt ("dit is niet natuurlijk", "er is iets mis met mij") is vaak niet hun eigen overtuiging, maar een echo van wat de omgeving hen jarenlang vertelde. Dat heet geïnternaliseerde stigma. Het doet pijn en kan leiden tot schaamte, somberheid of een laag zelfbeeld.' },
+      { kop: 'Wat kan je doen?', tekst: 'Spreek de pijn aan, niet de "fout": laat merken dat er niets mis is met de cliënt en dat hun gevoelens normaal zijn. Ga niet mee in het idee dat die moet veranderen. Geef in eenvoudige taal correcte info, toon positieve voorbeelden en wijs op lotgenotencontact. Soms helpt de boodschap dat heel veel mensen zich net zo voelen en dat het beter wordt.' },
+      { kop: 'Waar let je op?', tekst: 'Ga nooit mee in een vraag naar "genezing" of conversietherapie: die praktijken werken niet, richten zware psychische schade aan en zijn in België sinds 2023 wettelijk verboden. Wees alert voor signalen van somberheid of zelfbeschadiging en schakel tijdig professionele hulp in. Jij hoeft dit niet alleen te dragen: verwijs gericht door.' },
+    ],
+    chips: [{ l: 'Verbod conversietherapie', url: 'https://www.transgenderinfo.be/nl/nieuws/regering-verbiedt-conversietherapie-om-lgbti-personen-te-genezen' }, { l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'De Roze Pagina', url: 'https://www.cavaria.be/derozepagina' }],
   },
 ];
 let casusOpen = null;
@@ -3466,7 +3535,8 @@ function berekenScan() {
         ${items.map(it => `<div class="scan-advice-item"><div class="ai-dot"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div><div class="scan-advice-item-body"><strong>${it.t}.</strong> ${it.d}</div></div>`).join('')}
       </div>
       <div class="ww-cta-row" style="margin-top:20px;">
-        <button class="ww-cta ww-cta-primary" onclick="deelScan(${pct}, '${label.replace(/'/g, "\\'")}')">Resultaat delen of opslaan</button>
+        <button class="ww-cta ww-cta-primary" onclick="downloadScan(${pct}, '${label.replace(/'/g, "\\'")}')">Download resultaat (.txt)</button>
+        <button class="ww-cta ww-cta-ghost" onclick="printScan()">Afdrukken</button>
         <button class="ww-cta ww-cta-ghost" onclick="gaPraktijk('taal')">Naar de taalgids</button>
         <button class="ww-cta ww-cta-ghost" onclick="showPage('policy')">Beleid &amp; vorming</button>
         <button class="ww-cta ww-cta-ghost" onclick="resetScan()">Scan opnieuw</button>
@@ -3515,26 +3585,80 @@ function resetScan() {
   updateScanHint();
   document.getElementById('seg-scan').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-function deelScan(pct, label) {
-  const tekst = `Onze team-zelfscan op De Regenbooggids: ${pct}% — "${label}". Doe de scan zelf op https://deregenbooggids.be`;
-  if (navigator.share) {
-    navigator.share({
-      title: 'Team-zelfscan · De Regenbooggids',
-      text: tekst,
-      url: 'https://deregenbooggids.be'
-    }).catch(() => {});
-    return;
+function bouwScanRapport(pct, label) {
+  const labels = ['Niet', 'Deels', 'Goed'];
+  const datum = new Date().toLocaleDateString('nl-BE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Score per domein opnieuw berekenen voor het rapport
+  const domMax = {}, domBehaald = {}, domVolgorde = [];
+  SCAN_VRAGEN.forEach((q, i) => {
+    if (!(q.domein in domMax)) { domMax[q.domein] = 0; domBehaald[q.domein] = 0; domVolgorde.push(q.domein); }
+    domMax[q.domein] += 2; domBehaald[q.domein] += (scanAntw[i] || 0);
+  });
+
+  const lijn = '═'.repeat(58);
+  let r = '';
+  r += lijn + '\n';
+  r += 'TEAM-ZELFSCAN · DE REGENBOOGGIDS\n';
+  r += 'LGBTQ+-inclusie in de begeleiding\n';
+  r += lijn + '\n\n';
+  r += 'Datum: ' + datum + '\n';
+  r += 'Totaalscore: ' + pct + '% — ' + label + '\n\n';
+
+  r += 'SCORE PER DOMEIN\n';
+  r += '-'.repeat(58) + '\n';
+  domVolgorde.forEach(d => {
+    const p = Math.round((domBehaald[d] / domMax[d]) * 100);
+    r += '  ' + (d + ':').padEnd(16) + String(p).padStart(3) + '%   (' + domBehaald[d] + '/' + domMax[d] + ')\n';
+  });
+  r += '\n';
+
+  r += 'ANTWOORDEN PER VRAAG\n';
+  r += '-'.repeat(58) + '\n';
+  SCAN_VRAGEN.forEach((q, i) => {
+    const a = (i in scanAntw) ? labels[scanAntw[i]] : '—';
+    r += '  ' + String(i + 1).padStart(2) + '. [' + a.padEnd(5) + '] ' + q.domein + '\n';
+    r += '      ' + q.t + '\n\n';
+  });
+
+  // Drie grootste tekorten → adviezen, zelfde logica als in beeld
+  const tekorten = domVolgorde
+    .map(d => ({ d, gap: domMax[d] - domBehaald[d] }))
+    .filter(x => x.gap > 0).sort((a, b) => b.gap - a.gap).slice(0, 3);
+  if (tekorten.length) {
+    r += 'WAAR LIGGEN KANSEN?\n';
+    r += '-'.repeat(58) + '\n';
+    tekorten.forEach(x => {
+      const adv = SCAN_DOMEIN_ADVIES[x.d];
+      if (adv) { r += '  • ' + adv.t + '\n    ' + adv.d + '\n\n'; }
+    });
   }
-  const klaar = () => {
-    const hint = document.getElementById('scan-hint');
-    if (hint) { hint.textContent = 'Samenvatting gekopieerd. Tip: gebruik Ctrl/Cmd+P om op te slaan als PDF.'; }
-    setTimeout(() => window.print(), 400);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(tekst).then(klaar).catch(() => window.print());
-  } else {
-    window.print();
-  }
+
+  r += lijn + '\n';
+  r += 'Team-zelfscan via De Regenbooggids (deregenbooggids.be).\n';
+  r += 'Dit is een reflectie-instrument, geen audit.\n';
+  r += lijn + '\n';
+  return r;
+}
+function downloadScan(pct, label) {
+  const rapport = bouwScanRapport(pct, label);
+  const datumKort = new Date().toISOString().slice(0, 10);
+  const blob = new Blob([rapport], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'team-zelfscan-regenbooggids-' + datumKort + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const hint = document.getElementById('scan-hint');
+  if (hint) { hint.textContent = 'Resultaat gedownload als tekstbestand.'; }
+}
+function printScan() {
+  const hint = document.getElementById('scan-hint');
+  if (hint) { hint.textContent = 'Tip: in het printvenster kan je ook "Opslaan als PDF" kiezen.'; }
+  setTimeout(() => window.print(), 300);
 }
 
 // ══════════════ TEST JEZELF (QUIZ) ══════════════
