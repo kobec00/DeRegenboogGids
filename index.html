@@ -681,40 +681,111 @@
     /* ── FLOATING TOEGANKELIJKHEIDSKNOP ── */
     /* ── FLOATING KNOPPEN (stapel rechtsonder) ── */
     .fab-stack {
-      position: fixed; right: 18px; bottom: 18px; z-index: 200;
-      display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+      position: fixed; right: 20px; bottom: 20px; z-index: 200;
+      display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
     }
+    /* Compacte gekleurde pil met fijne glasrand en lichtglans */
     .fab {
-      display: inline-flex; align-items: center; gap: 10px;
-      color: #fff; border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.7);
-      padding: 10px 16px; cursor: pointer; font-family: var(--font-sans);
-      font-weight: 700; font-size: 14px;
-      box-shadow: 0 6px 22px rgba(0,0,0,0.30);
-      transition: transform .15s, box-shadow .2s;
+      position: relative; overflow: hidden;
+      display: inline-flex; align-items: center; gap: 9px;
+      border-radius: 13px; padding: 8px 13px; cursor: pointer;
+      font-family: var(--font-sans); font-weight: 650; font-size: 12.5px; color: #fff;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 4px 14px rgba(15,23,42,0.16), 0 1px 0 rgba(255,255,255,0.25) inset;
+      transition: transform .2s cubic-bezier(.34,1.3,.5,1), box-shadow .2s, filter .2s;
     }
-    .fab:hover { transform: translateY(-1px); }
+    /* Subtiele lichtglans bovenaan voor de glas-vibe */
+    .fab::before {
+      content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.18), transparent);
+      pointer-events: none;
+    }
+    .fab:hover { transform: translateY(-2px); box-shadow: 0 9px 22px rgba(15,23,42,0.24), 0 1px 0 rgba(255,255,255,0.3) inset; filter: brightness(1.06); }
+    .fab:active { transform: translateY(0) scale(0.97); }
     .fab svg { flex-shrink: 0; }
-    .a11y-fab { background: var(--teal-dark); box-shadow: 0 6px 22px rgba(10,74,66,0.35); }
-    .dark-fab { background: #1e2433; border-color: rgba(255,255,255,0.45); box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
+    .help-fab { background: var(--rose); }
+    .dark-fab { background: #232a3d; }
+    .a11y-fab { background: var(--teal-dark); }
+
+    /* Slanke toggle */
     .fab-switch {
-      width: 38px; height: 22px; border-radius: 999px;
-      background: rgba(255,255,255,0.30); position: relative; transition: background .2s;
-      flex-shrink: 0;
+      width: 30px; height: 17px; border-radius: 999px; flex-shrink: 0;
+      background: rgba(0,0,0,0.28); position: relative; transition: background .25s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
     }
     .fab-switch::after {
       content: ''; position: absolute; top: 2px; left: 2px;
-      width: 18px; height: 18px; border-radius: 50%; background: #fff;
-      transition: transform .2s;
+      width: 13px; height: 13px; border-radius: 50%; background: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      transition: transform .26s cubic-bezier(.34,1.4,.5,1);
     }
-    body.a11y .a11y-fab .fab-switch { background: var(--teal-light); }
-    body.a11y .a11y-fab .fab-switch::after { transform: translateX(16px); }
+    .help-fab .fab-pulse {
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.95); flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.6); animation: helpPulse 2s ease-in-out infinite;
+    }
     body.dark .dark-fab .fab-switch { background: #8b7bff; }
-    body.dark .dark-fab .fab-switch::after { transform: translateX(16px); }
+    body.dark .dark-fab .fab-switch::after { transform: translateX(13px); }
+    body.a11y .a11y-fab .fab-switch { background: var(--teal-light); }
+    body.a11y .fab-trigger-ic { animation: none !important; }
+    body.a11y .a11y-fab .fab-switch::after { transform: translateX(13px); }
+
+    /* Dark mode: iets diepere tinten, fijnere rand */
+    body.dark .fab { border-color: rgba(255,255,255,0.12); box-shadow: 0 4px 16px rgba(0,0,0,0.34), 0 1px 0 rgba(255,255,255,0.08) inset; }
+    body.dark .help-fab { background: #a8324a; }
+    body.dark .dark-fab { background: #2c3346; }
+    body.dark .a11y-fab { background: #0e5c50; }
+
+    /* a11y: solide hoog contrast, witte rand */
+    body.a11y .fab { border: 2px solid #fff !important; box-shadow: 0 4px 14px rgba(0,0,0,0.3) !important; }
+    body.a11y .fab::before { display: none; }
+    body.a11y .help-fab { background: #be1e3a !important; }
+    body.a11y .dark-fab { background: #1a1e2d !important; }
+    body.a11y .a11y-fab { background: #0a4a42 !important; }
+
+    /* Trigger-knop (mobiel) */
+    .fab-trigger {
+      display: none; position: relative; overflow: hidden;
+      width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
+      align-items: center; justify-content: center; color: #fff;
+      background: linear-gradient(140deg, var(--teal-light), var(--teal-dark));
+      border: 1px solid rgba(255,255,255,0.28);
+      box-shadow: 0 5px 18px rgba(13,123,106,0.4), 0 1px 0 rgba(255,255,255,0.28) inset;
+      transition: transform .3s cubic-bezier(.34,1.5,.5,1), box-shadow .2s;
+    }
+    .fab-trigger:active { transform: scale(0.9); }
+    .fab-trigger-ic, .fab-trigger-close { position: absolute; transition: opacity .25s, transform .4s cubic-bezier(.34,1.4,.5,1); }
+    .fab-trigger-ic { animation: fabSpin 20s linear infinite; }
+    .fab-trigger-close { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+    @keyframes fabSpin { to { transform: rotate(360deg); } }
+    body.a11y .fab-trigger { background: #0a4a42 !important; border: 2px solid #fff !important; }
+
     @media (max-width: 640px) {
+      .fab-stack { right: 16px; bottom: 16px; gap: 9px; flex-direction: column-reverse; }
+      .fab-trigger { display: inline-flex; }
       .fab .fab-label { display: none; }
-      .fab-stack { right: 12px; bottom: 12px; }
-      .fab { padding: 10px 12px; }
+      /* Kleine ronde gekleurde bubbels */
+      .fab { padding: 0; width: 44px; height: 44px; justify-content: center; gap: 0; border-radius: 50%; }
+      .help-fab .fab-pulse { position: absolute; top: 8px; right: 8px; }
+      /* Toggle wordt een statusstipje in de hoek */
+      .fab-switch {
+        position: absolute; top: 7px; right: 7px;
+        width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); box-shadow: none;
+      }
+      .fab-switch::after { display: none; }
+      body.dark .dark-fab .fab-switch { background: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.9); }
+      body.a11y .a11y-fab .fab-switch { background: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.9); }
+      /* Ingeklapt → enkel de trigger */
+      .fab-stack .fab {
+        opacity: 0; transform: translateY(14px) scale(0.5); pointer-events: none;
+        transition: opacity .26s ease, transform .38s cubic-bezier(.34,1.5,.5,1);
+      }
+      .fab-stack.open .fab { opacity: 1; transform: none; pointer-events: auto; }
+      .fab-stack.open .fab:nth-child(2) { transition-delay: .03s; }
+      .fab-stack.open .fab:nth-child(3) { transition-delay: .08s; }
+      .fab-stack.open .fab:nth-child(4) { transition-delay: .13s; }
+      .fab-stack.open .fab-trigger { box-shadow: 0 8px 22px rgba(13,123,106,0.5), 0 1px 0 rgba(255,255,255,0.3) inset; }
+      .fab-stack.open .fab-trigger-ic { opacity: 0; transform: rotate(90deg) scale(0.6); animation: none; }
+      .fab-stack.open .fab-trigger-close { opacity: 1; transform: rotate(0) scale(1); }
     }
 
     /* ── TOEGANKELIJKE MODUS: hoog contrast, geen glas, grotere tekst ── */
@@ -1640,6 +1711,35 @@
       border-top: 1px solid rgba(15,23,42,0.07); text-align: center;
     }
     .help-foot strong { color: var(--rose); }
+
+    /* Steun-kaart op de Over-pagina */
+    .steun-card { position: relative; overflow: hidden; }
+    .steun-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #e85d8a, #f4a44a, #f7d44a, #5bbf7a, #4ab8d4, #7b6fd4); opacity: 0.8; }
+    .steun-btn {
+      display: inline-flex; align-items: center; gap: 9px; cursor: pointer;
+      background: linear-gradient(135deg, #be123c, #e11d48); color: #fff; border: none;
+      border-radius: 12px; padding: 12px 20px; font-weight: 800; font-size: 14.5px; font-family: var(--font-sans);
+      box-shadow: 0 4px 16px rgba(190,18,60,0.28); transition: transform .15s, box-shadow .2s;
+    }
+    .steun-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(190,18,60,0.36); }
+    .steun-btn svg { fill: rgba(255,255,255,0.18); }
+
+    /* Doneer-modal */
+    .doneer-modal { max-width: 540px; }
+    .doneer-head { background: linear-gradient(135deg, #9f1239, #be123c); }
+    .doneer-line {
+      display: flex; gap: 14px; align-items: center; text-decoration: none;
+      background: rgba(255,255,255,0.7); border: 1px solid rgba(15,23,42,0.07); border-radius: 14px;
+      padding: 15px 16px; transition: transform .15s, box-shadow .2s, border-color .2s, background .2s;
+    }
+    .doneer-line:hover { transform: translateY(-2px); background: #fff; border-color: rgba(190,18,60,0.3); box-shadow: 0 10px 26px rgba(190,18,60,0.12); }
+    .doneer-ic { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .doneer-body { flex: 1; min-width: 0; }
+    .doneer-naam { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 800; font-size: 15px; color: var(--slate-900); margin-bottom: 3px; }
+    .doneer-tag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--rose); background: rgba(190,18,60,0.1); padding: 2px 8px; border-radius: 999px; }
+    .doneer-desc { display: block; font-size: 13px; color: #475569; line-height: 1.5; }
+    .doneer-arrow { color: var(--slate-300); flex-shrink: 0; transition: color .2s, transform .2s; }
+    .doneer-line:hover .doneer-arrow { color: var(--rose); transform: translate(2px, -2px); }
     @media (max-width: 520px) {
       .help-line { flex-wrap: wrap; }
       .help-line-actions { width: 100%; justify-content: flex-start; margin-top: 4px; }
@@ -1753,6 +1853,11 @@
     body.dark .help-line-name { color: #f0f3f8; }
     body.dark .help-line-desc { color: #99a1b0; }
     body.dark .fun-body { color: #cbd3df; }
+    body.dark .doneer-line { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.09); }
+    body.dark .doneer-line:hover { background: rgba(255,255,255,0.1); }
+    body.dark .doneer-naam { color: #f0f3f8; }
+    body.dark .doneer-desc { color: #99a1b0; }
+    body.dark .doneer-tag { background: rgba(225,29,72,0.2); color: #fda4af; }
     body.dark .help-chat { background: rgba(255,255,255,0.08); color: #d7f5ee; border-color: rgba(62,214,184,0.3); }
     body.dark .help-chat:hover { background: rgba(255,255,255,0.13); }
     body.dark .help-foot { color: #99a1b0; border-color: rgba(255,255,255,0.08); }
@@ -2150,6 +2255,12 @@
         </div>
       </div>
     </div>
+    <div style="text-align:center; margin-top:32px;">
+      <button class="steun-btn" onclick="openDoneer()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        Steun een organisatie
+      </button>
+    </div>
   </section>
   <!-- WEGWIJZER -->
   <section class="page" id="page-wegwijzer">
@@ -2240,7 +2351,11 @@
 </footer>
 
 <!-- ── FLOATING KNOPPEN: donkere modus + toegankelijke modus ── -->
-<div class="fab-stack">
+<div class="fab-stack" id="fab-stack">
+  <button class="fab-trigger" id="fab-trigger" onclick="toggleFabs()" aria-expanded="false" aria-controls="fab-stack" aria-label="Snelle instellingen openen">
+    <svg class="fab-trigger-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <svg class="fab-trigger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <button class="fab help-fab" id="help-fab" onclick="openHelp()" aria-haspopup="dialog" aria-label="Snelle hulp en crisislijnen openen">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
     <span class="fab-label">Hulp nodig?</span>
@@ -2288,6 +2403,51 @@
       <div class="help-modal-title" id="fun-title"></div>
     </div>
     <div class="fun-body" id="fun-body"></div>
+  </div>
+</div>
+
+<div class="help-overlay" id="doneer-overlay" role="dialog" aria-modal="true" aria-labelledby="doneer-title" aria-hidden="true">
+  <div class="help-modal doneer-modal">
+    <div class="help-modal-head doneer-head">
+      <button class="help-close" onclick="closeDoneer()" aria-label="Sluiten">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="fun-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        STEUN HET WERKVELD
+      </div>
+      <div class="help-modal-title" id="doneer-title">Doneren aan een organisatie</div>
+      <div class="help-modal-sub">Onderstaande knoppen brengen je rechtstreeks naar de officiële donatiepagina van elke organisatie.</div>
+    </div>
+    <div class="help-list">
+      <a class="doneer-line" href="https://www.cavaria.be/steun" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--teal-bg);color:var(--teal);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">çavaria <span class="doneer-tag">LGBTI+</span></span>
+          <span class="doneer-desc">Vlaamse belangenverdediger van holebi-, trans- en intersekse personen. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://www.weljong.be/donate" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--violet-bg);color:var(--violet);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Wel Jong <span class="doneer-tag">LGBTQ+ jongeren</span></span>
+          <span class="doneer-desc">De grootste organisatie voor LGBTQ+ jongeren in Vlaanderen en Brussel. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://hivontrafelen.be/doe-een-gift/" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--amber-bg);color:var(--amber);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v8L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45L14 10V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Fonds HIV Ontrafelen <span class="doneer-tag">hiv-onderzoek</span></span>
+          <span class="doneer-desc">Vlaams onderzoeksfonds (UZ Gent) dat wetenschappelijk onderzoek naar de genezing van hiv financiert. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+    <div class="help-foot">
+      Tip: giften van 40 euro of meer per jaar leveren bij deze Vlaamse organisaties een fiscaal attest op. Controleer de voorwaarden steeds op hun eigen pagina.
+    </div>
   </div>
 </div>
 
@@ -2349,21 +2509,19 @@ const BELEID = [
   { titel:"Antidiscriminatiewet (2007)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van onder meer seksuele geaardheid, beperking en gezondheidstoestand, ook in de zorg. Unia ziet toe op de naleving.", url:"https://www.unia.be" },
   { titel:"Genderwet (2007, uitgebreid 2014/2020)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Verbiedt discriminatie op grond van geslacht, en sinds 2014 ook expliciet genderidentiteit en genderexpressie. Beschermt trans en intersekse cliënten.", url:"https://igvm-iefh.belgium.be/nl" },
   { titel:"Transgenderwet (2017)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Maakt het mogelijk om de geregistreerde voornaam en het geslacht te wijzigen op eenvoudig verzoek, zonder medische voorwaarde. Relevant bij naam- en registratievragen van trans cliënten.", url:"https://igvm-iefh.belgium.be/nl/themas/transgender" },
-  { titel:"Openstelling van het huwelijk (2003)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"België was in 2003 het tweede land ter wereld waar koppels van hetzelfde geslacht konden huwen; adoptie volgde in 2006. Cliënten hebben gelijke relatierechten.", url:"" },
-  { titel:"Yogyakarta-beginselen (2006)", groep:"Rechten & wetgeving", type:"Juridisch kader", beschrijving:"Toepassing van internationale mensenrechten op seksuele oriëntatie en genderidentiteit. Mensenrechtenreferentie, ook aangehaald bij de Belgische transgenderwet.", url:"https://yogyakartaprinciples.org" },
   // ── Vlaams zorgbeleid ──
   { titel:"VAPH: bespreekbaarheid seksualiteit & kwaliteit", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Het Vlaams Agentschap voor Personen met een Handicap verwacht dat voorzieningen seksualiteit bespreekbaar maken en een veilig, kwaliteitsvol klimaat bieden. Vergunde aanbieders worden geïnspecteerd door Zorginspectie.", url:"https://www.vaph.be" },
   { titel:"Vlaams Horizontaal Gelijkekansenbeleidsplan 2025-2029", groep:"Vlaams zorgbeleid", type:"Beleidskader", beschrijving:"Geïntegreerd Vlaams actieplan met aandacht voor zowel mensen met een beperking als LGBTI+ personen, inclusief acties rond kruispuntdenken en inclusie.", url:"https://www.vlaanderen.be/cjm/nl/horizontaal-beleid/gelijkekansenbeleid" },
   // ── Wetenschappelijke onderbouwing ──
-  { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apa.org" },
-  { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int" },
+  { titel:"DSM: schrapping van homoseksualiteit (APA, 1973)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De American Psychiatric Association schrapte in 1973 homoseksualiteit als stoornis uit de DSM. Wetenschappelijk fundament tegen stigma: holebi-zijn is geen ziekte.", url:"https://www.apaf.org/library-archives/galleries/lgbtq-leaders/history-of-dsm-and-homosexuality/" },
+  { titel:"WHO/ICD: declassificatie homoseksualiteit (1990)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"De Wereldgezondheidsorganisatie schrapte in 1990 homoseksualiteit als stoornis. ICD-11 verving 'transseksualisme' door 'genderincongruentie', niet langer een psychische stoornis. 17 mei is sindsdien IDAHOBIT.", url:"https://www.who.int/europe/news/item/17-05-2019-moving-one-step-closer-to-better-health-and-rights-for-transgender-people" },
   { titel:"FRA: EU LGBTIQ Survey III (2024)", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Het EU-Grondrechtenagentschap brengt discriminatie van LGBTIQ-personen in kaart. Analyses tonen verhoogde drempels voor LGBTI+ personen met een beperking, onder meer in de gezondheidszorg.", url:"https://fra.europa.eu" },
-  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { titel:"Intersectionaliteit & dubbele kwetsbaarheid", groep:"Wetenschappelijke onderbouwing", type:"Wetenschappelijk kader", beschrijving:"Onderzoek toont aan dat LGBTQ+ personen met een verstandelijke beperking een dubbele minderheidsstresspositie innemen. Dit vraagt een intersectionele benadering in beleid en begeleiding.", url:"https://www.cavaria.be/kruispuntdenken-een-solidaire-en-inclusieve-beweging" },
   // ── Praktijk & vorming ──
-  { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", groep:"Praktijk & vorming", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be" },
-  { titel:"Affirmatieve zorgbenadering", groep:"Praktijk & vorming", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal, in plaats van neutraal of vermijdend.", url:"https://aditivzw.be" },
-  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", groep:"Praktijk & vorming", type:"Nascholing", beschrijving:"çavaria en KliQ bieden vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://www.kliqvzw.be" },
-  { titel:"Handelingsverlegenheid bespreekbaar maken", groep:"Praktijk & vorming", type:"Teamtool", beschrijving:"Praktische handvatten voor teamreflectie en intervisie over onzekerheid bij begeleiders rond LGBTQ+-thema's. Sluit aan bij nascholingsnoden.", url:"https://www.kennispleingehandicaptensector.nl" },
+  { titel:"Seksueel gezondheidsbeleid in zorgvoorzieningen", groep:"Praktijk & vorming", type:"Good Practice", beschrijving:"Richtlijnen voor het ontwikkelen van een expliciete visietekst en beleid rond seksualiteit en genderdiversiteit in residentiële zorgorganisaties.", url:"https://www.sensoa.be/beleid-uitwerken-rond-seksueel-gedrag" },
+  { titel:"Affirmatieve zorgbenadering", groep:"Praktijk & vorming", type:"Praktijkkader", beschrijving:"Een affirmatieve aanpak erkent en bevestigt de seksuele en genderidentiteit van cliënten als waardevol en normaal. çavaria's project 'Op het kruispunt' biedt tools en visie specifiek voor LGBTI+ personen met een handicap.", url:"https://www.cavaria.be/op-het-kruispunt-voor-lgbti-personen-met-een-handicap" },
+  { titel:"Vorming: LGBTQ+-inclusieve begeleiding", groep:"Praktijk & vorming", type:"Nascholing", beschrijving:"çavaria en KliQ bieden vormingen aan voor zorgprofessionals over seksuele en genderdiversiteit, afgestemd op de zorgsector.", url:"https://vorming.cavaria.be/kliq-vorming-en-begeleiding-rond-gender-en-seksuele-diversiteit" },
+  { titel:"Handelingsverlegenheid bespreekbaar maken", groep:"Praktijk & vorming", type:"Teamtool", beschrijving:"Door kennis op te doen over LGBTQ+ personen en hun noden ervaren begeleiders minder handelingsverlegenheid. KliQ voorziet vorming voor de welzijns- en zorgsector die hierop inzet.", url:"https://kliqvzw.be/wat-doen-we/vormingen/welzijn" },
 ];
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
@@ -2483,10 +2641,10 @@ renderOrgs();
 // ── RENDER POLICY (gegroepeerd per categorie) ─────────────────────────────────
 
 const BELEID_GROEPEN = [
+  { naam:"Praktijk & vorming", intro:"Concrete kaders, good practices en nascholing voor in het team." },
   { naam:"Rechten & wetgeving", intro:"Wat cliënten wettelijk mogen verwachten, en waartegen ze beschermd zijn." },
   { naam:"Vlaams zorgbeleid", intro:"Wat voorzieningen en begeleiders vanuit het zorgkader moeten waarmaken." },
   { naam:"Wetenschappelijke onderbouwing", intro:"De feiten en cijfers achter een affirmatieve, niet-pathologiserende benadering." },
-  { naam:"Praktijk & vorming", intro:"Concrete kaders, good practices en nascholing voor in het team." },
 ];
 
 document.getElementById('policy-list').innerHTML = BELEID_GROEPEN.map(groep => {
@@ -2551,6 +2709,20 @@ function toggleA11y() {
     document.getElementById('dark-fab').setAttribute('aria-pressed', 'false');
   }
 }
+
+function toggleFabs() {
+  const stack = document.getElementById('fab-stack');
+  const open = stack.classList.toggle('open');
+  document.getElementById('fab-trigger').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+// Tik buiten de stack: sluit het uitgeklapte menu (enkel relevant op mobiel)
+document.addEventListener('click', e => {
+  const stack = document.getElementById('fab-stack');
+  if (stack.classList.contains('open') && !stack.contains(e.target)) {
+    stack.classList.remove('open');
+    document.getElementById('fab-trigger').setAttribute('aria-expanded', 'false');
+  }
+});
 
 function toggleDark() {
   const apply = () => {
@@ -2735,6 +2907,23 @@ function closeFunFact() {
 }
 document.getElementById('fun-overlay').addEventListener('click', e => { if (e.target.id === 'fun-overlay') closeFunFact(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('fun-overlay').classList.contains('open')) closeFunFact(); });
+
+let doneerReturnFocus = null;
+function openDoneer() {
+  const ov = document.getElementById('doneer-overlay');
+  ov.classList.add('open'); ov.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  doneerReturnFocus = document.activeElement;
+  const c = ov.querySelector('.help-close'); if (c) c.focus();
+}
+function closeDoneer() {
+  const ov = document.getElementById('doneer-overlay');
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (doneerReturnFocus && doneerReturnFocus.focus) doneerReturnFocus.focus();
+}
+document.getElementById('doneer-overlay').addEventListener('click', e => { if (e.target.id === 'doneer-overlay') closeDoneer(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('doneer-overlay').classList.contains('open')) closeDoneer(); });
 
 // ══════════════ PRAKTIJK: subnavigatie ══════════════
 function showPraktijk(tab) {
