@@ -1,0 +1,35 @@
+---
+layout: default
+title: "Organisaties & hulplijnen — De Regenbooggids"
+description: "Vind contactorganisaties en hulplijnen rond LGBTQ+ en genderdiversiteit in de Vlaamse zorg, per regio en type."
+permalink: /organisaties/
+---
+    <h1>Organisaties &amp; Contacten</h1>
+    <p class="page-intro">Verenigingen, steunpunten en diensten voor LGBTQ+ personen met een beperking en hun begeleiders. Filter op regio of type.</p>
+
+    <div class="filter-bar">
+      <div class="filter-label" style="color:var(--violet);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter
+      </div>
+      <input type="text" id="org-search" placeholder="Zoek op naam of beschrijving…" oninput="renderOrgs()" />
+      <select id="org-regio" onchange="renderOrgs()">
+        <option>Alle regio's</option>
+        <option>Heel Vlaanderen</option>
+        <option>Antwerpen</option>
+        <option>Gent (Oost-Vlaanderen)</option>
+        <option>Leuven (Vlaams-Brabant)</option>
+        <option>West-Vlaanderen</option>
+        <option>Limburg</option>
+        <option>Brussel</option>
+      </select>
+      <select id="org-type" onchange="renderOrgs()">
+        <option>Alle types</option>
+        <option>Begeleiding &amp; Advies</option>
+        <option>Ontmoeting &amp; Activiteiten</option>
+        <option>Info &amp; Ondersteuning</option>
+        <option>Anonieme steun</option>
+      </select>
+    </div>
+    <div class="result-count" id="org-count"></div>
+    <div class="org-grid" id="orgs-list"></div>

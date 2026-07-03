@@ -1,0 +1,75 @@
+---
+layout: default
+title: "Praktijk — De Regenbooggids"
+description: "Vier praktijkinstrumenten voor de begeleiding: casuïstiek, taalgids, team-zelfscan en zelftest rond LGBTQ+ en genderdiversiteit."
+permalink: /praktijk/
+---
+    <div class="section-kop">
+      <div class="section-kop-icon" style="background:var(--violet-bg);color:var(--violet);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      </div>
+      <h1 style="margin-bottom:0;">Praktijk</h1>
+    </div>
+    <p class="page-intro">Vier instrumenten voor in de begeleiding: concrete praktijksituaties met handvatten, een taalgids met de juiste woorden, een zelfscan voor je team of voorziening, en een korte zelftest om je eigen reflexen te checken.</p>
+
+    <div class="seg" role="tablist" aria-label="Praktijkinstrumenten">
+      <button class="seg-btn active" id="seg-casus" role="tab" aria-selected="true" onclick="showPraktijk('casus')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Casuïstiek
+      </button>
+      <button class="seg-btn" id="seg-taal" role="tab" aria-selected="false" onclick="showPraktijk('taal')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Taalgids
+      </button>
+      <button class="seg-btn" id="seg-scan" role="tab" aria-selected="false" onclick="showPraktijk('scan')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Team-zelfscan
+      </button>
+      <button class="seg-btn" id="seg-quiz" role="tab" aria-selected="false" onclick="showPraktijk('quiz')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg>
+        Test jezelf
+      </button>
+    </div>
+
+    <!-- Panel: Casuïstiek -->
+    <div class="seg-panel active" id="panel-casus" role="tabpanel" aria-labelledby="seg-casus">
+      <p class="page-intro" style="margin-bottom:22px; font-size:15px;">Herkenbare situaties uit de leefgroep, met telkens een korte duiding en concrete handvatten. Vouw een situatie open om verder te lezen.</p>
+      <div class="casus-list" id="casus-list"></div>
+    </div>
+
+    <!-- Panel: Taalgids -->
+    <div class="seg-panel" id="panel-taal" role="tabpanel" aria-labelledby="seg-taal">
+      <p class="page-intro" style="margin-bottom:22px; font-size:15px;">De juiste woorden maken een gesprek veiliger. Een beknopt naslagwerk met begrippen rond seksuele en genderdiversiteit, in toegankelijke taal.</p>
+      <div class="filter-bar">
+        <div class="filter-label" style="color:var(--teal);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Zoek
+        </div>
+        <input type="text" id="term-search" placeholder="Zoek een woord of betekenis…" oninput="renderTermen()" />
+      </div>
+      <div class="term-chips" id="term-chips"></div>
+      <div class="result-count" id="term-count"></div>
+      <div class="term-grid" id="term-grid"></div>
+    </div>
+
+    <!-- Panel: Team-zelfscan -->
+    <div class="seg-panel" id="panel-scan" role="tabpanel" aria-labelledby="seg-scan">
+      <div class="scan-intro-card">
+        <p><strong>Even vooraf:</strong> dit is een reflectie-instrument, geen audit of examen. Beantwoord de stellingen samen met je team en gebruik de uitkomst als startpunt voor een gesprek over waar je staat en waar groei mogelijk is.</p>
+      </div>
+      <div id="scan-questions"></div>
+      <div class="scan-actions">
+        <button class="scan-btn scan-btn-go" onclick="berekenScan()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          Toon resultaat
+        </button>
+        <button class="scan-btn scan-btn-reset" onclick="resetScan()">Opnieuw</button>
+        <span class="scan-hint" id="scan-hint"></span>
+      </div>
+      <div id="scan-result"></div>
+    </div>
+
+    <!-- Panel: Test jezelf (quiz) -->
+    <div class="seg-panel" id="panel-quiz" role="tabpanel" aria-labelledby="seg-quiz">
+      <div id="quiz-shell"><!-- JS rendert hier start, vragen of resultaat --></div>
+    </div>

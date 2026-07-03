@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page.title }}</title>
+  <meta name="description" content="{{ page.description }}" />
+  <meta name="author" content="Kobe Cornelis" />
+  <meta name="theme-color" content="#0d7b6a" />
+  <!-- Social preview (Open Graph + Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ page.title }}" />
+  <meta property="og:description" content="{{ page.description }}" />
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+  <meta property="og:locale" content="nl_BE" />
+  <meta property="og:site_name" content="De Regenbooggids" />
+  <meta property="og:image" content="{{ site.url }}/og-image.png" />
+  <meta property="og:image:secure_url" content="{{ site.url }}/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="De Regenbooggids — LGBTQ+ en genderdiversiteit in de zorg voor mensen met een verstandelijke beperking." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ page.title }}" />
+  <meta name="twitter:description" content="{{ page.description }}" />
+  <meta name="twitter:image" content="{{ site.url }}/og-image.png" />
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+  <!-- Structured data (schema.org) voor betere vindbaarheid in Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "{{ site.url }}/#website",
+        "url": "{{ site.url }}/",
+        "name": "De Regenbooggids",
+        "description": "Praktische hub voor begeleiders en organisaties in de Vlaamse zorg: tools, methodieken, contactorganisaties en beleid rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking.",
+        "inLanguage": "nl-BE",
+        "author": { "@id": "{{ site.url }}/#author" },
+        "publisher": { "@id": "{{ site.url }}/#author" }
+      },
+      {
+        "@type": "Person",
+        "@id": "{{ site.url }}/#author",
+        "name": "Kobe Cornelis",
+        "url": "https://kobecornelis.com",
+        "email": "kobe.cornelis4@gmail.com",
+        "sameAs": ["https://www.linkedin.com/in/kobecornelis/"]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "{{ site.url }}{{ page.url }}#webpage",
+        "url": "{{ site.url }}{{ page.url }}",
+        "name": "{{ page.title }}",
+        "isPartOf": { "@id": "{{ site.url }}/#website" },
+        "about": [
+          { "@type": "Thing", "name": "LGBTQ+ in de zorg" },
+          { "@type": "Thing", "name": "Genderdiversiteit" },
+          { "@type": "Thing", "name": "Verstandelijke beperking" },
+          { "@type": "Thing", "name": "Inclusieve begeleiding" }
+        ],
+        "inLanguage": "nl-BE"
+      }
+    ]
+  }
+  </script>
+  <!-- Favicon: regenboog-merkmark (base64 SVG = werkt overal, ook Safari/Firefox) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0idGciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGQ3YjZhIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iIzBiNWY1NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwYTRhNDIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdsIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjMwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxNSIgZmlsbD0idXJsKCN0ZykiLz4KICA8Zz4KICAgIDxwYXRoIGQ9Ik0gNi4wMCA0MSBBIDI2LjAwIDI2LjAwIDAgMCAxIDU4LjAwIDQxIiBmaWxsPSJub25lIiBzdHJva2U9IiNlZTZmOWMiIHN0cm9rZS13aWR0aD0iMy4wNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNIDkuMDUgNDEgQSAyMi45NSAyMi45NSAwIDAgMSA1NC45NSA0MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjRhNDRhIiBzdHJva2Utd2lkdGg9IjMuMDUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPHBhdGggZD0iTSAxMi4xMCA0MSBBIDE5LjkwIDE5LjkwIDAgMCAxIDUxLjkwIDQxIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWQyM2YiIHN0cm9rZS13aWR0aD0iMy4wNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNIDE1LjE1IDQxIEEgMTYuODUgMTYuODUgMCAwIDEgNDguODUgNDEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzViYmY3YSIgc3Ryb2tlLXdpZHRoPSIzLjA1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICAgIDxwYXRoIGQ9Ik0gMTguMjAgNDEgQSAxMy44MCAxMy44MCAwIDAgMSA0NS44MCA0MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDZiM2Q2IiBzdHJva2Utd2lkdGg9IjMuMDUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPHBhdGggZD0iTSAyMS4yNSA0MSBBIDEwLjc1IDEwLjc1IDAgMCAxIDQyLjc1IDQxIiBmaWxsPSJub25lIiBzdHJva2U9IiM3YjZmZDQiIHN0cm9rZS13aWR0aD0iMy4wNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPC9nPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iNDEiIHI9IjIuNCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSI2MCIgaGVpZ2h0PSIyOCIgcng9IjE1IiBmaWxsPSJ1cmwoI2dsKSIvPgo8L3N2Zz4=" />
+  <!-- iOS home-scherm icoon -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div id="topbar">
+  <div id="topbar-inner">
+    <a id="logo" href="/" aria-label="De Regenbooggids, naar startpagina">
+      <div id="logo-icon">
+        <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+      </div>
+      <span>De Regenbooggids</span>
+    </a>
+    <nav>
+      <a href="/" class="{% if page.url == '/' %}active{% endif %}" id="nav-home">Home</a>
+      <a href="/tools/" class="{% if page.url == '/tools/' %}active{% endif %}" id="nav-tools">Tools</a>
+      <a href="/organisaties/" class="{% if page.url == '/organisaties/' %}active{% endif %}" id="nav-orgs">Organisaties</a>
+      <a href="/praktijk/" class="{% if page.url == '/praktijk/' %}active{% endif %}" id="nav-praktijk">Praktijk</a>
+      <a href="/beleid/" class="{% if page.url == '/beleid/' %}active{% endif %}" id="nav-policy">Beleid</a>
+      <a href="/over/" class="{% if page.url == '/over/' %}active{% endif %}" id="nav-about">Over</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="toggleNav()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<main>
+{{ content }}
+</main>
+
+<footer>
+  <p>DeRegenbooggids.be &nbsp;·&nbsp; Graduaatsproef UCLL Sociale School Heverlee &nbsp;·&nbsp; Kobe Cornelis, 2025–2026 &nbsp;·&nbsp; Niet commercieel</p>
+  <p style="margin-top:6px; font-size:12px; opacity:0.8;">Laatst bijgewerkt: juni 2026 &nbsp;·&nbsp; Controleer steeds de actuele info bij de bron.</p>
+</footer>
+
+<!-- ── FLOATING KNOPPEN: donkere modus + toegankelijke modus ── -->
+<div class="fab-stack" id="fab-stack">
+  <button class="fab-trigger" id="fab-trigger" onclick="toggleFabs()" aria-expanded="false" aria-controls="fab-stack" aria-label="Snelle instellingen openen">
+    <svg class="fab-trigger-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <svg class="fab-trigger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="fab help-fab" id="help-fab" onclick="openHelp()" aria-haspopup="dialog" aria-label="Snelle hulp en crisislijnen openen">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span class="fab-label">Hulp nodig?</span>
+    <span class="fab-pulse" aria-hidden="true"></span>
+  </button>
+  <button class="fab dark-fab" id="dark-fab" onclick="toggleDark()" aria-pressed="false" aria-label="Donkere modus aan- of uitzetten">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <span class="fab-label">Donkere modus</span>
+    <span class="fab-switch" aria-hidden="true"></span>
+  </button>
+  <button class="fab a11y-fab" id="a11y-fab" onclick="toggleA11y()" aria-pressed="false" aria-label="Toegankelijke modus aan- of uitzetten">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="1.6" fill="currentColor" stroke="none"/><path d="M5 8h14"/><path d="M9 8v5l-2 7"/><path d="M15 8v5l2 7"/></svg>
+    <span class="fab-label">Toegankelijke modus</span>
+    <span class="fab-switch" aria-hidden="true"></span>
+  </button>
+</div>
+
+<!-- ── SNELLE HULP: modal met crisis- en hulplijnen ── -->
+<div class="help-overlay" id="help-overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" aria-hidden="true">
+  <div class="help-modal">
+    <div class="help-modal-head">
+      <button class="help-close" onclick="closeHelp()" aria-label="Sluiten">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="help-modal-title" id="help-title">Je staat er niet alleen voor</div>
+      <div class="help-modal-sub">Gratis en anoniem. Voor jezelf, voor een cliënt of voor een naaste — bij elke lijn kan je bellen of chatten.</div>
+    </div>
+    <div class="help-list" id="help-list"><!-- JS rendert de hulplijnen --></div>
+    <div class="help-foot">
+      <strong>Acuut levensgevaar of nood?</strong> Bel meteen de hulpdiensten op <a href="tel:112" style="color:inherit;font-weight:800;">112</a> of de huisarts van wacht op <a href="tel:1733" style="color:inherit;font-weight:800;">1733</a>.
+    </div>
+  </div>
+</div>
+
+<div class="help-overlay" id="fun-overlay" role="dialog" aria-modal="true" aria-labelledby="fun-title" aria-hidden="true">
+  <div class="help-modal fun-modal">
+    <div class="help-modal-head">
+      <button class="help-close" onclick="closeFunFact()" aria-label="Sluiten">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="fun-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 5.6L19.5 9l-4.4 3.4L16.7 18 12 14.7 7.3 18l1.6-5.6L4.5 9l5.8-1.4z"/></svg>
+        FUN FACT
+      </div>
+      <div class="help-modal-title" id="fun-title"></div>
+    </div>
+    <div class="fun-body" id="fun-body"></div>
+  </div>
+</div>
+
+<div class="help-overlay" id="doneer-overlay" role="dialog" aria-modal="true" aria-labelledby="doneer-title" aria-hidden="true">
+  <div class="help-modal doneer-modal">
+    <div class="help-modal-head doneer-head">
+      <button class="help-close" onclick="closeDoneer()" aria-label="Sluiten">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="fun-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        STEUN HET WERKVELD
+      </div>
+      <div class="help-modal-title" id="doneer-title">Doneren aan een organisatie</div>
+      <div class="help-modal-sub">Onderstaande knoppen brengen je rechtstreeks naar de officiële donatiepagina van elke organisatie.</div>
+    </div>
+    <div class="help-list">
+      <a class="doneer-line" href="https://www.cavaria.be/steun" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--teal-bg);color:var(--teal);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">çavaria <span class="doneer-tag">LGBTI+</span></span>
+          <span class="doneer-desc">Vlaamse belangenverdediger van holebi-, trans- en intersekse personen. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://www.weljong.be/donate" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--violet-bg);color:var(--violet);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Wel Jong <span class="doneer-tag">LGBTQ+ jongeren</span></span>
+          <span class="doneer-desc">De grootste organisatie voor LGBTQ+ jongeren in Vlaanderen en Brussel. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://hivontrafelen.be/doe-een-gift/" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--amber-bg);color:var(--amber);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v8L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45L14 10V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Fonds HIV Ontrafelen <span class="doneer-tag">hiv-onderzoek</span></span>
+          <span class="doneer-desc">Vlaams onderzoeksfonds (UZ Gent) dat wetenschappelijk onderzoek naar de genezing van hiv financiert. Fiscaal attest vanaf 40 euro.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="doneer-line" href="https://www.lumi.be/ik-wil-helpen/geef-een-gift" target="_blank" rel="noopener noreferrer">
+        <span class="doneer-ic" style="background:var(--teal-bg);color:var(--teal);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="doneer-body">
+          <span class="doneer-naam">Lumi <span class="doneer-tag">infolijn</span></span>
+          <span class="doneer-desc">De gratis en anonieme onthaal- en infolijn van çavaria voor vragen over gender, geslacht en seksuele oriëntatie. Ook voor begeleiders en naasten.</span>
+        </span>
+        <span class="doneer-arrow"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+    <div class="help-foot">
+      Tip: giften van 40 euro of meer per jaar leveren bij deze Vlaamse organisaties een fiscaal attest op. Controleer de voorwaarden steeds op hun eigen pagina.
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
