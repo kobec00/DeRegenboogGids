@@ -1,0 +1,31 @@
+---
+layout: default
+title: "Tools & instrumenten — De Regenbooggids"
+description: "Praktische tools en instrumenten voor begeleiders en organisaties rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking, gefilterd op thema en doelgroep."
+permalink: /tools/
+---
+    <h1>Tools &amp; Methodieken</h1>
+    <p class="page-intro">Praktische instrumenten voor begeleiders, teams en organisaties. Gefilterd op thema en doelgroep.</p>
+
+    <div class="filter-bar">
+      <div class="filter-label" style="color:var(--teal);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter
+      </div>
+      <input type="text" id="tool-search" placeholder="Zoek op naam of beschrijving…" oninput="renderTools()" />
+      <select id="tool-thema" onchange="renderTools()">
+        <option>Alle thema's</option>
+        <option>Seksualiteit &amp; Identiteit</option>
+        <option>Gender &amp; Trans</option>
+        <option>Beleid &amp; Organisatie</option>
+      </select>
+      <select id="tool-doelgroep" onchange="renderTools()">
+        <option>Alle doelgroepen</option>
+        <option>Begeleiders</option>
+        <option>Cliënten</option>
+        <option>Cliënten &amp; Begeleiders</option>
+        <option>Organisaties</option>
+      </select>
+    </div>
+    <div class="result-count" id="tool-count"></div>
+    <div class="card-grid-list" id="tools-list"></div>
