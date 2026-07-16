@@ -74,6 +74,17 @@
   <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body>
+<!-- Herstel de eerder gekozen modus (donker/toegankelijk) vóór render, zodat de
+     keuze behouden blijft over pagina's heen en er geen lichte flits optreedt. -->
+<script>
+  (function () {
+    try {
+      var m = localStorage.getItem('rg-modus');
+      if (m === 'dark') document.body.classList.add('dark');
+      else if (m === 'a11y') document.body.classList.add('a11y');
+    } catch (e) {}
+  })();
+</script>
 
 <!-- ── TOPBAR ── -->
 <div id="topbar">

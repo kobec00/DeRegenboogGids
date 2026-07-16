@@ -250,6 +250,21 @@ function toggleNav() {
 
 const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Bewaar de gekozen modus zodat die behouden blijft bij het navigeren naar een
+// andere pagina (elke pagina is een aparte HTML-load). Donker en toegankelijk
+// sluiten elkaar uit, dus één sleutel met waarde 'dark', 'a11y' of niets volstaat.
+function bewaarModus() {
+  try {
+    if (document.body.classList.contains('dark')) {
+      localStorage.setItem('rg-modus', 'dark');
+    } else if (document.body.classList.contains('a11y')) {
+      localStorage.setItem('rg-modus', 'a11y');
+    } else {
+      localStorage.removeItem('rg-modus');
+    }
+  } catch (e) { /* privémodus of storage uit: modus blijft binnen deze sessie werken */ }
+}
+
 function toggleA11y() {
   const on = document.body.classList.toggle('a11y');
   document.getElementById('a11y-fab').setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -258,6 +273,7 @@ function toggleA11y() {
     document.body.classList.remove('dark');
     document.getElementById('dark-fab').setAttribute('aria-pressed', 'false');
   }
+  bewaarModus();
 }
 
 function toggleFabs() {
@@ -282,6 +298,7 @@ function toggleDark() {
       document.body.classList.remove('a11y');
       document.getElementById('a11y-fab').setAttribute('aria-pressed', 'false');
     }
+    bewaarModus();
   };
   if (document.startViewTransition && !prefersReduced()) {
     document.startViewTransition(apply);     // vloeiende crossfade van de hele pagina
@@ -289,6 +306,16 @@ function toggleDark() {
     apply();
   }
 }
+
+// Bij het laden van de pagina staat de opgeslagen modus al op de body (gezet door
+// het inline script in de layout, vóór render — geen flits). Zet de aria-pressed
+// van de fab-knoppen gelijk aan die toestand voor schermlezers en de 'aan'-stijl.
+(function syncModusKnoppen() {
+  const darkBtn = document.getElementById('dark-fab');
+  const a11yBtn = document.getElementById('a11y-fab');
+  if (darkBtn) darkBtn.setAttribute('aria-pressed', document.body.classList.contains('dark') ? 'true' : 'false');
+  if (a11yBtn) a11yBtn.setAttribute('aria-pressed', document.body.classList.contains('a11y') ? 'true' : 'false');
+})();
 
 // ── OVER-LOGO: 3D-kanteling en glow volgen de cursor ──────────────────────────
 
