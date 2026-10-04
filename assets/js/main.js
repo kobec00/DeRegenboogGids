@@ -421,11 +421,11 @@ const HELP_ICONS = {
   star: '<path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/>',
 };
 const HULPLIJNEN = [
-  { naam: 'Zelfmoordlijn 1813', desc: 'Bij gedachten aan zelfdoding — voor jezelf of voor iemand anders. Dag en nacht.', tel: '1813', chat: 'https://www.zelfmoord1813.be/ik-heb-hulp-nodig', kleur: 'rose', icon: 'heart' },
-  { naam: 'Tele-Onthaal', desc: 'Een luisterend oor bij elke zorg of crisis, 24 uur op 24.', tel: '106', chat: 'https://www.tele-onthaal.be', kleur: 'teal', icon: 'chat' },
-  { naam: 'Lumi', desc: 'De LGBTI+ infolijn van çavaria: gender, geaardheid, coming-out. Ook voor begeleiders en naasten. Telefoon en chat op vaste avonden (uren op lumi.be), mailen kan altijd.', tel: '0800 99 533', chat: 'https://lumi.be', kleur: 'violet', icon: 'rainbow' },
+  { naam: 'Zelfmoordlijn 1813', desc: 'Bij gedachten aan zelfdoding — voor jezelf of voor iemand anders. Telefoon dag en nacht; chat elke dag 17-00u (wo vanaf 12u).', tel: '1813', chat: 'https://www.zelfmoord1813.be/ik-heb-hulp-nodig', kleur: 'rose', icon: 'heart' },
+  { naam: 'Tele-Onthaal', desc: 'Een luisterend oor bij elke zorg of crisis. Telefoon 24 uur op 24; chat elke dag 18-23u (wo en zo vanaf 15u).', tel: '106', chat: 'https://www.tele-onthaal.be', kleur: 'teal', icon: 'chat' },
+  { naam: 'Lumi', desc: 'De LGBTI+ infolijn van çavaria: gender, geaardheid, coming-out. Ook voor begeleiders en naasten. Telefoon ma 18.30-21.30u; chat ma, wo en do 18.30-21.30u; mailen kan altijd.', tel: '0800 99 533', chat: 'https://lumi.be', kleur: 'violet', icon: 'rainbow' },
   { naam: '1712', desc: 'Bij geweld, misbruik of grensoverschrijdend gedrag. Gratis en discreet. Telefoon op werkdagen 9-18u; chat ma-do 13-17u en 18-22u, vr 13-17u.', tel: '1712', chat: 'https://www.1712.be', kleur: 'amber', icon: 'shield' },
-  { naam: 'Awel', desc: 'Voor kinderen en jongeren met een vraag, verhaal of probleem. Telefoon 16-22u (wo en za vanaf 14u), chat 18-22u; niet op zon- en feestdagen.', tel: '102', chat: 'https://www.awel.be', kleur: 'teal', icon: 'star' },
+  { naam: 'Awel', desc: 'Voor kinderen en jongeren met een vraag, verhaal of probleem. Telefoon ma-za 16-22u (wo en za vanaf 14u); chat ma-za 18-22u; niet op zon- en feestdagen.', tel: '102', chat: 'https://www.awel.be', kleur: 'teal', icon: 'star' },
 ];
 function renderHelp() {
   const C = { rose: ['rgba(255,228,230,0.7)', 'var(--rose)'], teal: ['var(--teal-bg)', 'var(--teal)'], violet: ['var(--violet-bg)', 'var(--violet)'], amber: ['var(--amber-bg)', 'var(--amber)'] };
