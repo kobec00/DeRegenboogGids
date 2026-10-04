@@ -1489,88 +1489,279 @@ function quizToonVraag(i) {
   detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ══════════════ WETGEVINGSTIJDLIJN ══════════════
-const TIJDLIJN = [
-  { jaar: '1957', cat: 'science', titel: 'Evelyn Hooker ontkracht "homoseksualiteit = ziekte"', desc: 'De Amerikaanse psychologe Evelyn Hooker laat zien dat experts in blinde tests geen verschil zien tussen homoseksuele en heteroseksuele mannen zonder psychiatrische diagnose. Haar studie ondergraaft het idee dat homoseksualiteit een stoornis is en legt de wetenschappelijke basis voor de latere schrapping uit de DSM. <a href="https://www.apa.org/monitor/2011/02/myth-buster" target="_blank" rel="noopener noreferrer">Lees meer over haar werk →</a>' },
-  { jaar: '1969', cat: 'move', titel: 'De Stonewall-rellen', desc: 'Een politie-inval in de New Yorkse bar Stonewall Inn loopt uit op dagenlange protesten. Het geldt als het symbolische startpunt van de moderne LGBTQ+-beweging en als de aanleiding voor de allereerste Pride-optochten, een jaar later.' },
-  { jaar: '1973', cat: 'science', titel: 'Homoseksualiteit geschrapt uit de DSM', desc: 'De American Psychiatric Association haalt homoseksualiteit als stoornis uit haar handboek (DSM). Een wetenschappelijk kantelpunt dat voortbouwt op onder meer het werk van Hooker: holebi-zijn is geen ziekte.' },
-  { jaar: '1985', cat: 'law', titel: 'België schrapt artikel 372bis', desc: 'Dit artikel legde sinds 1965 een hogere meerderjarigheidsleeftijd op voor homoseksuele handelingen dan voor heteroseksuele. De afschaffing maakt komaf met dit wettelijke onderscheid en was lange tijd het voornaamste strijdpunt van de holebibeweging.' },
-  { jaar: '1990', cat: 'science', titel: 'WHO schrapt homoseksualiteit (17 mei)', desc: 'De Wereldgezondheidsorganisatie verwijdert homoseksualiteit uit haar ziekteclassificatie. Die datum, 17 mei, leeft voort als IDAHOBIT — de internationale dag tegen holebi- en transfobie.' },
-  { jaar: '2003', cat: 'law', titel: 'Openstelling van het huwelijk in België', desc: 'België wordt het tweede land ter wereld waar koppels van hetzelfde geslacht kunnen huwen. In 2006 volgt het recht op adoptie.' },
-  { jaar: '2006', cat: 'law', titel: 'Yogyakarta-beginselen', desc: 'Een internationale set principes die mensenrechten toepast op seksuele oriëntatie en genderidentiteit. Een veelgebruikte referentie, ook bij latere Belgische wetgeving.' },
-  { jaar: '2007', cat: 'law', titel: 'Antidiscriminatiewet & Genderwet', desc: 'België verbiedt discriminatie op grond van onder meer seksuele geaardheid, beperking en geslacht — ook in de zorg. Unia en het Instituut voor de gelijkheid van vrouwen en mannen zien toe op de naleving.' },
-  { jaar: '2014', cat: 'law', titel: 'Genderwet uitgebreid', desc: 'De bescherming wordt expliciet uitgebreid naar genderidentiteit en genderexpressie, waardoor ook trans personen duidelijker beschermd zijn.' },
-  { jaar: '2017', cat: 'law', titel: 'Vernieuwde Transgenderwet', desc: 'De geregistreerde voornaam en het geslacht wijzigen kan voortaan op eenvoudig verzoek, zonder medische voorwaarden zoals sterilisatie. Een belangrijke stap voor zelfbeschikking.' },
-  { jaar: '2019', cat: 'science', titel: 'ICD-11: genderincongruentie geen stoornis', desc: 'De WHO verplaatst "genderincongruentie" uit het hoofdstuk van de psychische stoornissen. Transgender zijn wordt zo ook internationaal gedepathologiseerd.' },
-  { jaar: '2020', cat: 'law', titel: 'Genderwet: ook geslachtskenmerken beschermd', desc: 'Een nieuwe wijziging voegt onder meer geslachtskenmerken toe aan de Genderwet, naast bijvoorbeeld borstvoeding, adoptie, medisch begeleide voortplanting en meeouderschap. Zo zijn ook intersekse personen expliciet beschermd tegen discriminatie.' },
-  { jaar: '2025', cat: 'law', titel: 'Horizontaal Gelijkekansenbeleidsplan 2025–2029', desc: 'Een geïntegreerd Vlaams actieplan dat gelijke kansen als rode draad door alle beleidsdomeinen wil trekken, met bijzondere aandacht voor onder meer mensen met een handicap en LGBTI+ personen.' },
+// ══════════════ MIJLPALEN-TIJDLIJN ══════════════
+// Twee fases: van pathologisering naar depathologisering. Items met type 'weetje'
+// zijn géén mijlpaal: ze krijgen een eigen bolletje (bliksem), kaartstijl en
+// schermlezertekst. 'jaar2' toont een tweede jaartal (bv. 1897 / 1919).
+const TL_LINK = (url, txt) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${txt}</a>`;
+const TL_BRON = {
+  drescher15: TL_LINK('https://doi.org/10.3390/bs5040565', 'Drescher (2015)'),
+  drescher10: TL_LINK('https://doi.org/10.1007/s10508-009-9531-5', 'Drescher (2010)'),
+  mhg:        TL_LINK('https://magnus-hirschfeld.de/ausstellungen/institute/', 'Magnus-Hirschfeld-Gesellschaft (z.d.)'),
+  ushmm:      TL_LINK('https://encyclopedia.ushmm.org/narrative/64484/en', 'United States Holocaust Memorial Museum (z.d.)'),
+};
+const TL_FASES = [
+  { nr: 1, titel: 'Pathologisering en vroeg verzet', periode: '1897–1952', kort: '1897–1952', tekst: 'Lang werd homoseksualiteit gezien als zonde, misdrijf of ziekte. Die visie steunde minder op onderzoek dan op de heersende normen van die tijd. Toch waren er ook toen al stemmen die ertegenin gingen.' },
+  { nr: 2, titel: 'Depathologisering en erkenning', periode: '1957–nu', kort: '1957–nu', tekst: 'Vanaf de jaren \'50 toont onderzoek aan dat de ziektevisie niet klopt. Wat volgt is een lange weg van schrapping uit de diagnostische handboeken naar wettelijke erkenning.' },
 ];
-let tlOpen = null;
-function renderTijdlijn() {
-  if (!document.getElementById('tl')) return;
-  document.getElementById('tl').innerHTML = TIJDLIJN.map((m, i) => `
-    <div class="tl-item tl-cat-${m.cat} ${tlOpen === i ? 'open' : ''}">
-      <div class="tl-dot"></div>
-      <div class="tl-card" role="button" tabindex="0" onclick="toggleTl(${i})" onkeydown="tlKey(event, ${i})" aria-expanded="${tlOpen === i ? 'true' : 'false'}">
-        <div class="tl-head">
-          <div class="tl-year">${m.jaar}</div>
-          <div class="tl-title">${m.titel}</div>
-          <svg class="tl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="tl-desc-wrap"><div class="tl-desc">${m.desc}</div></div>
-      </div>
-    </div>`).join('');
-}
-function toggleTl(i) {
-  tlOpen = (tlOpen === i ? null : i);
-  document.querySelectorAll('#tl .tl-item').forEach((it, idx) => {
-    const open = idx === tlOpen;
-    it.classList.toggle('open', open);
-    const card = it.querySelector('.tl-card');
-    if (card) card.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-}
-function tlKey(e, i) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTl(i); } }
+const TIJDLIJN = [
+  // ── Fase 1 · Pathologisering en vroeg verzet ──
+  { fase: 1, jaar: '1897', jaar2: '1919', cat: 'science', titel: 'Magnus Hirschfeld: wetenschap als tegenstem', desc: 'Eind 19e eeuw ging de medische wereld homoseksualiteit steeds vaker zien als een ziekte in plaats van een zonde of misdrijf, onder meer onder invloed van psychiater Richard von Krafft-Ebing (1886). Arts Magnus Hirschfeld ging daartegenin. In 1897 richtte hij in Berlijn het <em>Wissenschaftlich-humanitäres Komitee</em> op, de eerste organisatie die opkwam voor de rechten van homoseksuelen. In 1919 opende hij het <em>Institut für Sexualwissenschaft</em>, het eerste instituut ter wereld dat seksualiteit en gender wetenschappelijk onderzocht. Het instituut deed ook pionierswerk in de begeleiding van trans personen. Zijn motto: "Door wetenschap naar gerechtigheid."', bron: `${TL_BRON.mhg}; ${TL_BRON.ushmm}; ${TL_BRON.drescher15} voor Krafft-Ebing` },
+  { fase: 1, jaar: '1933', cat: 'move', titel: 'Plundering van het instituut', desc: 'In mei 1933 werd het instituut van Hirschfeld geplunderd door nazistudenten en de SA, en moest het de deuren sluiten. Een groot deel van de bibliotheek en archieven ging verloren bij de Berlijnse boekverbranding. Decennia aan wetenschappelijk werk rond seksualiteit en gender verdwenen zo in één klap. Het toont hoe politiek kennis kan uitwissen.', bron: `${TL_BRON.ushmm}; ${TL_BRON.mhg}` },
+  { fase: 1, jaar: '1935', type: 'weetje', cat: 'weetje', titel: 'De brief van Freud', desc: 'In 1935 schreef Sigmund Freud een brief aan een Amerikaanse moeder die hulp zocht voor haar homoseksuele zoon. Hij schreef dat homoseksualiteit geen reden tot schaamte is en niet als ziekte beschouwd kan worden. Ironisch genoeg gingen veel psychoanalytici na hem net de andere richting uit: zij zagen homoseksualiteit als een ontwikkelingsstoornis die behandeld moest worden. Die visie lag mee aan de basis van de latere opname in de DSM.', bron: `${TL_BRON.drescher15}; Freud (1951)` },
+  { fase: 1, jaar: '1948', jaar2: '1953', cat: 'science', titel: 'De Kinsey-rapporten', desc: 'Bioloog Alfred Kinsey en zijn team publiceerden grootschalig onderzoek naar het seksuele gedrag van mannen (1948) en vrouwen (1953). Ze toonden aan dat homoseksuele ervaringen veel vaker voorkomen dan toen gedacht werd, en dat seksualiteit eerder een continuüm is dan een strikte tweedeling. Daarmee kwam het beeld van homoseksualiteit als zeldzame afwijking onder druk te staan.', bron: TL_BRON.drescher15 },
+  { fase: 1, jaar: '1952', cat: 'science', titel: 'Homoseksualiteit in de DSM-I', desc: 'De American Psychiatric Association neemt homoseksualiteit op in de eerste editie van de DSM, als vorm van "sociopathische persoonlijkheidsstoornis". Die classificatie steunde vooral op psychoanalytische theorie en op observaties bij mensen die in therapie of in de gevangenis zaten. Er was geen empirisch onderzoek bij homoseksuele personen buiten die klinische context. Heersende maatschappelijke en morele opvattingen bepaalden zo mee wat als "wetenschappelijk" gold.', bron: `American Psychiatric Association (1952); ${TL_BRON.drescher15}` },
+  // ── Fase 2 · Depathologisering en erkenning ──
+  { fase: 2, jaar: '1957', cat: 'science', titel: 'Evelyn Hooker ontkracht "homoseksualiteit = ziekte"', desc: 'De Amerikaanse psychologe Evelyn Hooker laat zien dat experts in blinde tests geen verschil zien tussen homoseksuele en heteroseksuele mannen zonder psychiatrische diagnose. Hooker was de eerste die homoseksuele mannen buiten een klinische context onderzocht. Daarmee stelde ze rechtstreeks de basis van de DSM-I-classificatie in vraag. Haar studie ondergraaft het idee dat homoseksualiteit een stoornis is en legt de wetenschappelijke basis voor de latere schrapping uit de DSM. <a href="https://www.apa.org/monitor/2011/02/myth-buster" target="_blank" rel="noopener noreferrer">Lees meer over haar werk →</a>', bron: `Hooker (1957); ${TL_BRON.drescher15}` },
+  { fase: 2, jaar: '1968', cat: 'science', titel: 'DSM-II: homoseksualiteit als "seksuele deviatie"', desc: 'In de tweede editie van de DSM verhuist homoseksualiteit naar de categorie "seksuele deviaties", naast onder meer fetisjisme en exhibitionisme. De ziektevisie blijft zo officieel overeind, ondanks het onderzoek van onder meer Kinsey en Hooker.', bron: `American Psychiatric Association (1968); ${TL_BRON.drescher15}` },
+  { fase: 2, jaar: '1969', cat: 'move', titel: 'De Stonewall-rellen', desc: 'Een politie-inval in de New Yorkse bar Stonewall Inn loopt uit op dagenlange protesten. Het geldt als het symbolische startpunt van de moderne LGBTQ+-beweging en als de aanleiding voor de allereerste Pride-optochten, een jaar later.' },
+  { fase: 2, jaar: '1973', cat: 'science', titel: 'Homoseksualiteit geschrapt uit de DSM', desc: 'De American Psychiatric Association haalt homoseksualiteit als stoornis uit haar handboek (DSM). Een wetenschappelijk kantelpunt dat voortbouwt op onder meer het werk van Hooker: holebi-zijn is geen ziekte.', bron: TL_BRON.drescher15 },
+  { fase: 2, jaar: '1980', cat: 'science', titel: 'DSM-III: genderidentiteit wordt een diagnose', desc: 'De DSM-III neemt voor het eerst diagnoses op rond genderidentiteit, zoals "transseksualisme" en "genderidentiteitsstoornis in de kindertijd". Kort nadat homoseksualiteit uit het handboek verdween, wordt trans zijn dus net wél als psychische stoornis geclassificeerd. Ook homoseksualiteit is nog niet helemaal weg: de restcategorie "ego-dystone homoseksualiteit" verdwijnt pas in 1987.', bron: `${TL_BRON.drescher10}; ${TL_BRON.drescher15}` },
+  { fase: 2, jaar: '1985', cat: 'law', titel: 'België schrapt artikel 372bis', desc: 'Dit artikel legde sinds 1965 een hogere meerderjarigheidsleeftijd op voor homoseksuele handelingen dan voor heteroseksuele. De afschaffing maakt komaf met dit wettelijke onderscheid en was lange tijd het voornaamste strijdpunt van de holebibeweging.' },
+  { fase: 2, jaar: '1990', cat: 'science', titel: 'WHO schrapt homoseksualiteit (17 mei)', desc: 'De Wereldgezondheidsorganisatie verwijdert homoseksualiteit uit haar internationale ziekteclassificatie (ICD). Die datum, 17 mei, leeft voort als IDAHOBIT — de internationale dag tegen holebi- en transfobie.' },
+  { fase: 2, jaar: '2003', cat: 'law', titel: 'Openstelling van het huwelijk in België', desc: 'België wordt het tweede land ter wereld waar koppels van hetzelfde geslacht kunnen huwen. In 2006 volgt het recht op adoptie.' },
+  { fase: 2, jaar: '2006', cat: 'law', titel: 'Yogyakarta-beginselen', desc: 'Een internationale set principes die mensenrechten toepast op seksuele oriëntatie en genderidentiteit. Een veelgebruikte referentie, ook bij latere Belgische wetgeving.' },
+  { fase: 2, jaar: '2007', cat: 'law', titel: 'Antidiscriminatiewet & Genderwet', desc: 'België verbiedt discriminatie op grond van onder meer seksuele geaardheid, beperking en geslacht — ook in de zorg. Unia en het Instituut voor de gelijkheid van vrouwen en mannen zien toe op de naleving.' },
+  { fase: 2, jaar: '2013', cat: 'science', titel: 'DSM-5: van "genderidentiteitsstoornis" naar "genderdysforie"', desc: 'In de DSM-5 wordt "genderidentiteitsstoornis" vervangen door "genderdysforie". Niet de genderidentiteit zelf staat nog centraal, maar de psychische nood die iemand kan ervaren wanneer het ervaren gender en het bij de geboorte toegewezen geslacht niet overeenstemmen. De diagnose blijft wel bestaan, onder meer omdat ze in veel landen toegang geeft tot transgenderzorg.', bron: 'American Psychiatric Association (2013)' },
+  { fase: 2, jaar: '2014', cat: 'law', titel: 'Genderwet uitgebreid', desc: 'De bescherming wordt expliciet uitgebreid naar genderidentiteit en genderexpressie, waardoor ook trans personen duidelijker beschermd zijn.' },
+  { fase: 2, jaar: '2017', cat: 'law', titel: 'Vernieuwde Transgenderwet', desc: 'De geregistreerde voornaam en het geslacht wijzigen kan voortaan op eenvoudig verzoek, zonder medische voorwaarden zoals sterilisatie. Een belangrijke stap voor zelfbeschikking.' },
+  { fase: 2, jaar: '2019', jaar2: '2022', cat: 'science', titel: 'ICD-11: genderincongruentie geen stoornis', desc: 'De WHO verplaatst "genderincongruentie" uit het hoofdstuk van de psychische stoornissen naar een nieuw hoofdstuk over seksuele gezondheid. De ICD-11 werd in 2019 aangenomen en is van kracht sinds 2022. Transgender zijn wordt zo ook internationaal gedepathologiseerd.' },
+  { fase: 2, jaar: '2020', cat: 'law', titel: 'Genderwet: ook geslachtskenmerken beschermd', desc: 'Een nieuwe wijziging voegt onder meer geslachtskenmerken toe aan de Genderwet, naast bijvoorbeeld borstvoeding, adoptie, medisch begeleide voortplanting en meeouderschap. Zo zijn ook intersekse personen expliciet beschermd tegen discriminatie.' },
+  { fase: 2, jaar: '2025', cat: 'law', titel: 'Horizontaal Gelijkekansenbeleidsplan 2025–2029', desc: 'Een geïntegreerd Vlaams actieplan dat gelijke kansen als rode draad door alle beleidsdomeinen wil trekken, met bijzondere aandacht voor onder meer mensen met een handicap en LGBTI+ personen.' },
+];
 
-// Gestaggerde entree + rail-tekenen wanneer de tijdlijn in beeld scrollt.
-let tlScrollBound = false;
-function revealTimeline() {
+const TL_ZAP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>';
+const TL_CHEV = '<svg class="tl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';
+// Jaarteller in de HUD: vier rollende cijferkolommen (decoratief, aria-hidden)
+const TL_ODO = '<span class="tl-odo" aria-hidden="true">' + [0, 1, 2, 3].map(() =>
+  `<span class="tl-odo-col"><span class="tl-odo-strip">${[...'0123456789'].map(d => `<span>${d}</span>`).join('')}</span></span>`).join('') + '</span>';
+
+let tlOpen = null;
+function tlItemHTML(m, i) {
+  const weetje = m.type === 'weetje';
+  const open = tlOpen === i;
+  return `
+    <li class="tl-item tl-cat-${m.cat}${weetje ? ' tl-weetje' : ''}${open ? ' open' : ''}" data-i="${i}" data-jaar="${m.jaar}">
+      <div class="tl-dot" aria-hidden="true">${weetje ? TL_ZAP : ''}</div>
+      <div class="tl-card" onclick="tlCardClick(event, ${i})">
+        ${weetje ? `<div class="tl-weetje-label" aria-hidden="true">${TL_ZAP}WIST JE DAT?</div>` : ''}
+        <button type="button" class="tl-head" aria-expanded="${open}" aria-controls="tl-desc-${i}">
+          ${weetje ? `<span class="tl-sr">Weetje, geen mijlpaal: </span>` : ''}
+          <span class="tl-year">${m.jaar}${m.jaar2 ? `<small>/ ${m.jaar2}</small>` : ''}</span>
+          <span class="tl-title">${m.titel}</span>
+          ${TL_CHEV}
+        </button>
+        <div class="tl-desc-wrap" id="tl-desc-${i}">
+          <div class="tl-desc-inner">
+            <div class="tl-desc">${m.desc}${m.bron ? `<div class="tl-src"><span>Bron</span>${m.bron}</div>` : ''}</div>
+          </div>
+        </div>
+      </div>
+    </li>`;
+}
+
+function renderTijdlijn() {
   const tl = document.getElementById('tl');
   if (!tl) return;
-  // Bij reduced-motion: alles meteen tonen, geen animatie, geen verbergen.
-  if (prefersReduced()) return;
-  tl.classList.add('tl-anim'); // verbergt items + rail tot ze onthuld worden
-  const items = [...tl.querySelectorAll('.tl-item')];
-  function check() {
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    if (!tl.classList.contains('tl-rail-in') && tl.getBoundingClientRect().top < vh - 20) {
-      tl.classList.add('tl-rail-in');
+  const hud = `
+    <div class="tl-hud" role="navigation" aria-label="Fases van de tijdlijn">
+      <div class="tl-hud-chips">${TL_FASES.map(f => `
+        <button type="button" class="tl-hud-chip tl-hud-chip-${f.nr}" data-fase="${f.nr}" onclick="tlJump(${f.nr})">
+          <span class="tl-hud-n" aria-hidden="true">${f.nr}</span>
+          <span class="tl-hud-t">Fase ${f.nr}<em>${f.kort}</em></span>
+        </button>`).join('')}
+      </div>
+      <div class="tl-hud-now" aria-hidden="true"><span class="tl-hud-lbl">JAAR</span>${TL_ODO}</div>
+      <div class="tl-hud-bar" aria-hidden="true"><span></span></div>
+    </div>`;
+  const fases = TL_FASES.map(f => `
+    <section class="tl-phase tl-phase-${f.nr}" aria-labelledby="tl-fase-${f.nr}-t">
+      <div class="tl-rail" aria-hidden="true"><div class="tl-fill"></div></div>
+      <div class="tl-phase-head" id="tl-fase-${f.nr}">
+        <div class="tl-phase-marker" aria-hidden="true"><span>${f.nr}</span></div>
+        <div class="tl-phase-card" data-nr="${f.nr}">
+          <div class="tl-phase-eyebrow">FASE ${f.nr} · ${f.periode.toUpperCase()}</div>
+          <h3 class="tl-phase-title" id="tl-fase-${f.nr}-t">${f.titel}</h3>
+          <p class="tl-phase-text">${f.tekst}</p>
+        </div>
+      </div>
+      <ol class="tl-list">${TIJDLIJN.map((m, i) => m.fase === f.nr ? tlItemHTML(m, i) : '').join('')}</ol>
+      ${f.nr === TL_FASES.length ? `
+      <div class="tl-end"><span class="tl-end-dot" aria-hidden="true"></span><span class="tl-end-txt"><b>NU</b>Het verhaal schrijft zich verder.</span></div>` : ''}
+    </section>`).join('');
+  tl.innerHTML = `${hud}<div class="tl-track">${fases}<div class="tl-comet" aria-hidden="true"></div></div>`;
+}
+
+function toggleTl(i) {
+  tlOpen = (tlOpen === i ? null : i);
+  document.querySelectorAll('#tl .tl-item').forEach(it => {
+    const open = Number(it.dataset.i) === tlOpen;
+    it.classList.toggle('open', open);
+    const head = it.querySelector('.tl-head');
+    if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+}
+// Klik op de kaart: links gewoon laten werken, en in een open uitleg tekst kunnen
+// selecteren zonder dat de kaart dichtklapt. De knop zelf (en Enter/Spatie) toggelt altijd.
+function tlCardClick(e, i) {
+  if (e.target.closest('a')) return;
+  if (e.target.closest('.tl-desc-wrap') && tlOpen === i) return;
+  toggleTl(i);
+}
+function tlJump(nr) {
+  const el = document.getElementById('tl-fase-' + nr);
+  if (el) el.scrollIntoView({ behavior: prefersReduced() ? 'auto' : 'smooth', block: 'start' });
+}
+
+// ── Beweging: onthullen, rail laten vollopen, komeet + jaarteller volgen de scroll ──
+// De "leeslijn" ligt op 55% van de viewport: alles erboven is "al gepasseerd"
+// (bolletje gevuld), de rail kleurt tot daar in en de komeet rijdt op die hoogte mee.
+function initTijdlijnMotion() {
+  const tl = document.getElementById('tl');
+  if (!tl) return;
+  const track  = tl.querySelector('.tl-track');
+  const phases = [...tl.querySelectorAll('.tl-phase')];
+  const items  = [...tl.querySelectorAll('.tl-item')];
+  const comet  = tl.querySelector('.tl-comet');
+  const chips  = [...tl.querySelectorAll('.tl-hud-chip')];
+  const bar    = tl.querySelector('.tl-hud-bar span');
+  const strips = [...tl.querySelectorAll('.tl-odo-strip')];
+  const endDot = tl.querySelector('.tl-end-dot');
+  const reduced = prefersReduced();
+  const nu = new Date().getFullYear();
+
+  // 1. Onthullen bij binnenscrollen (zonder JS of bij reduced-motion blijft alles zichtbaar)
+  if (!reduced && 'IntersectionObserver' in window) {
+    tl.classList.add('tl-anim');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('tl-in');
+        io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    tl.querySelectorAll('.tl-item, .tl-phase-head, .tl-end').forEach(el => io.observe(el));
+  }
+
+  // 2. Geometrie meten (documentcoördinaten); opnieuw bij resize of open-/dichtklappen
+  let geo = null;
+  const docY = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 + window.scrollY; };
+  function measure() {
+    const sy = window.scrollY;
+    geo = {
+      trackTop: track.getBoundingClientRect().top + sy,
+      rails: phases.map(p => {
+        const rail = p.querySelector('.tl-rail');
+        const r = rail.getBoundingClientRect();
+        return { top: r.top + sy, h: r.height, fill: rail.querySelector('.tl-fill'), phase: p };
+      }),
+      pts: items.map(it => ({ y: docY(it.querySelector('.tl-dot')), jaar: parseInt(it.dataset.jaar, 10), el: it })),
+      endY: endDot ? docY(endDot) : 0,
+    };
+    // HUD-balk: tot waar loopt fase 1 (grijs), vanaf waar de regenboog
+    if (geo.rails.length > 1) {
+      const total = geo.endY - geo.rails[0].top;
+      const split = total > 0 ? (geo.rails[1].top - geo.rails[0].top) / total : 0.3;
+      tl.style.setProperty('--tl-split', (split * 100).toFixed(1) + '%');
     }
-    let stagger = 0;
-    items.forEach((it) => {
-      if (it.dataset.tlq) return;
-      if (it.getBoundingClientRect().top < vh - 40) {
-        it.dataset.tlq = '1';
-        setTimeout(() => it.classList.add('tl-in'), stagger * 75);
-        stagger++;
-      }
+  }
+
+  let lastYear = null, lastCat = null, lastPhase = null;
+  function setYear(y) {
+    if (y === lastYear) return;
+    lastYear = y;
+    String(y).padStart(4, '0').split('').forEach((d, k) => {
+      if (strips[k]) strips[k].style.transform = `translateY(${-d * 10}%)`;
     });
-    if (items.every(it => it.dataset.tlq)) {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+  }
+
+  function update() {
+    ticking = false;
+    if (!geo) measure();
+    const readY = window.scrollY + window.innerHeight * 0.55;
+    const start = geo.rails[0].top, end = geo.endY;
+
+    // rails vullen tot de leeslijn
+    geo.rails.forEach(r => {
+      const f = reduced ? r.h : Math.max(0, Math.min(r.h, readY - r.top));
+      r.fill.style.clipPath = `inset(-14px -14px ${(r.h - f).toFixed(1)}px -14px)`;
+    });
+
+    // bolletjes boven de leeslijn: gepasseerd
+    let cur = null;
+    geo.pts.forEach(p => {
+      const lit = reduced || p.y <= readY;
+      if (p.y <= readY) cur = p;
+      if (p.el.classList.contains('tl-lit') !== lit) p.el.classList.toggle('tl-lit', lit);
+    });
+    if (endDot) endDot.classList.toggle('tl-lit', reduced || end <= readY);
+
+    // komeet rijdt op de leeslijn mee en neemt de kleur van het laatst gepasseerde item aan
+    const y = Math.max(start, Math.min(end, readY));
+    comet.style.transform = `translate3d(0, ${(y - geo.trackTop).toFixed(1)}px, 0)`;
+    comet.classList.toggle('on', readY > start - 30 && readY < end + 60);
+    const cat = cur ? cur.el.className.match(/tl-cat-(\w+)/)[1] : 'start';
+    if (cat !== lastCat) {
+      comet.classList.remove('tl-cat-' + lastCat);
+      comet.classList.add('tl-cat-' + cat);
+      lastCat = cat;
     }
+
+    // jaarteller: lineair tussen de jaartallen van twee opeenvolgende bolletjes
+    const pts = geo.pts.concat(endDot ? [{ y: end, jaar: nu }] : []);
+    let year = pts[0].jaar;
+    for (let k = 0; k < pts.length; k++) {
+      if (readY >= pts[k].y) year = pts[k].jaar;
+      if (k < pts.length - 1 && readY >= pts[k].y && readY < pts[k + 1].y) {
+        const t = (readY - pts[k].y) / (pts[k + 1].y - pts[k].y);
+        year = Math.round(pts[k].jaar + t * (pts[k + 1].jaar - pts[k].jaar));
+        break;
+      }
+    }
+    setYear(year);
+
+    // actieve fase in de HUD (+ fasekleur voor komeet en balk)
+    let phase = 1;
+    geo.rails.forEach((r, k) => { if (readY >= r.top) phase = k + 1; });
+    if (phase !== lastPhase) {
+      chips.forEach(c => {
+        const on = Number(c.dataset.fase) === phase;
+        c.classList.toggle('active', on);
+        if (on) c.setAttribute('aria-current', 'step'); else c.removeAttribute('aria-current');
+      });
+      tl.dataset.fase = phase;
+      lastPhase = phase;
+    }
+    const prog = Math.max(0, Math.min(1, (readY - start) / (end - start)));
+    if (bar) bar.style.clipPath = `inset(0 ${((1 - prog) * 100).toFixed(2)}% 0 0)`;
   }
+
   let ticking = false;
-  function onScroll() {
-    if (ticking) return; ticking = true;
-    requestAnimationFrame(() => { check(); ticking = false; });
+  function schedule() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
   }
-  if (!tlScrollBound) {
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    tlScrollBound = true;
+  function remeasure() { geo = null; schedule(); }
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', remeasure);
+  // Open-/dichtklappen (en lettertypes die laden) veranderen de hoogte: elke frame bijmeten
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(track);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+
+  // 3. Spotlight die de cursor volgt over de kaarten (enkel met muis)
+  if (!reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    tl.addEventListener('pointermove', e => {
+      const card = e.target.closest('.tl-card');
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
   }
-  check(); // meteen controleren voor het geval de tijdlijn al in beeld staat
+
+  update();
 }
 
 // ── Initialiseren ──────────────────────────────────────────────────────────────
@@ -1582,4 +1773,4 @@ renderTermen();
 renderScanVragen();
 updateScanHint();
 renderTijdlijn();
-revealTimeline();
+initTijdlijnMotion();
