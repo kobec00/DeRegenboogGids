@@ -1596,7 +1596,7 @@ function tlItemHTML(m, i) {
             <li class="tl-item${wj ? ' tl-weetje' : ''}" id="tijdlijn-${m.jaar}" data-i="${i}" data-jaar="${m.jaar}">
               <span class="tl-dot" aria-hidden="true">${wj ? tlZap(11) : ''}</span>
               <button type="button" class="tl-row" aria-expanded="false" aria-controls="tl-more-${i}">
-                ${wj ? `<span class="tl-wj-label" aria-hidden="true">${tlZap(12)}Wist je dat?</span><span class="tl-sr">Weetje, geen mijlpaal: </span>` : ''}
+                ${wj ? `<span class="tl-wj-label">${tlZap(12)}Wist je dat?</span><span class="tl-sr"> Weetje, geen mijlpaal: </span>` : ''}
                 <span class="tl-year">${m.jaar}${m.jaar2 ? `<small><span aria-hidden="true">/ </span><span class="tl-sr">en </span>${m.jaar2}</small>` : ''}</span>
                 <span class="tl-title"><span class="tl-title-t">${m.titel}</span></span>
                 ${tlChev(16)}
@@ -1623,18 +1623,18 @@ function tlPanelHTML(f) {
     : `<div class="tl-panel-foot">
             <button type="button" class="tl-next" data-goto="${volgende.nr}">
               <span class="tl-next-badge" aria-hidden="true">${volgende.nr}</span>
-              <span class="tl-next-card"><span class="tl-next-k">Verder</span><span class="tl-next-t">Fase ${volgende.nr} · ${volgende.titel}</span><span class="tl-next-arrow" aria-hidden="true">${TL_RIGHT}</span></span>
+              <span class="tl-next-card"><span class="tl-next-k">Verder · Fase ${volgende.nr}</span><span class="tl-next-t">${volgende.titel}</span><span class="tl-next-arrow" aria-hidden="true">${TL_RIGHT}</span></span>
             </button>
             ${terug}
           </div>`;
   return `
-    <div class="tl-panel tl-p${f.nr}" id="tl-panel-${f.nr}" data-fase="${f.nr}" role="region" aria-labelledby="tl-ch-${f.nr}" hidden="until-found">
-      <div class="tl-panel-body">
+    <div class="tl-panel tl-p${f.nr}" id="tl-panel-${f.nr}" data-fase="${f.nr}" hidden="until-found">
+      <div class="tl-panel-body" role="region" aria-labelledby="tl-ch-${f.nr}">
         <p class="tl-panel-title" aria-hidden="true"><span class="tl-panel-eb">Fase ${f.nr} · ${tlPeriode(f)}</span>${f.titel}</p>
         <p class="tl-panel-intro">${f.tekst}</p>
         <div class="tl-track">
           <div class="tl-rail" aria-hidden="true"><span class="tl-fill"></span>${laatste ? '' : '<span class="tl-rail-tail"></span>'}</div>
-          <ol class="tl-list" aria-label="Tijdlijn fase ${f.nr}, ${f.start} tot ${f.eind ?? 'nu'}">${TIJDLIJN.map((m, i) => m.fase === f.nr ? tlItemHTML(m, i) : '').join('')}
+          <ol class="tl-list" role="list" aria-label="Tijdlijn fase ${f.nr}, ${f.start} tot ${f.eind ?? 'nu'}">${TIJDLIJN.map((m, i) => m.fase === f.nr ? tlItemHTML(m, i) : '').join('')}
           </ol>
           ${voet}
         </div>
@@ -1650,7 +1650,7 @@ function renderTijdlijn() {
   tl.innerHTML = `
     <div class="tl-shell">
       <div class="tl-chooser"><span class="tl-thumb" aria-hidden="true"></span>${TL_FASES.map(tlChooserHTML).join('')}</div>
-      <div class="tl-pin"><div class="tl-pill tl-p1" aria-hidden="true" title="Terug naar het overzicht"><span class="tl-pill-badge">1</span><span class="tl-pill-lbl">Fase 1</span>${tlOdoHTML()}</div></div>
+      <div class="tl-pin"><div class="tl-pill tl-p1" aria-hidden="true" title="Naar het begin van de tijdlijn"><span class="tl-pill-badge">1</span><span class="tl-pill-lbl">Fase 1</span>${tlOdoHTML()}</div></div>
       <div class="tl-stage">${TL_FASES.map(tlPanelHTML).join('')}</div>
     </div>`;
 }
@@ -1687,8 +1687,8 @@ function tlWriteHash(h) {
 function tlNoTransition(el, fn) {
   el.classList.add('tl-snap');
   fn();
-  void el.offsetHeight;
-  requestAnimationFrame(() => el.classList.remove('tl-snap'));
+  void el.offsetHeight; // stijlen vastleggen zonder transition…
+  el.classList.remove('tl-snap'); // …zodat er daarna niets meer na-animeert
 }
 
 function tlOdo(el) {
@@ -1840,14 +1840,21 @@ function initTijdlijn() {
       const p = P[f.nr];
       p.body.classList.remove('is-leaving');
       p.panel.inert = false;
-      if (f.nr === nr) p.panel.removeAttribute('hidden');
-      else if (p.panel.getAttribute('hidden') !== 'until-found') p.panel.setAttribute('hidden', 'until-found');
+      if (f.nr === nr) { p.panel.removeAttribute('hidden'); return; }
+      if (p.panel.getAttribute('hidden') !== 'until-found') p.panel.setAttribute('hidden', 'until-found');
+      // anders blijven niet-onthulde rijen op opacity 0 als het paneel later instant opengaat
+      p.panel.classList.remove('tl-anim', 'tl-drawn');
+      [...p.items, p.end, p.foot].forEach(el => el && el.classList.remove('tl-in'));
     });
   }
   // Animeer enkel het zichtbare deel van de hoogte; wat onder de vouw valt, springt.
   function stageAnimate(nr, o = {}) {
-    if (o.instant || tlInstant()) { applyState(nr); afterLayout(); return; }
     const tok = ++S.stageTok;
+    if (o.instant || tlInstant()) {
+      stage.classList.remove('is-sizing');
+      stage.style.height = ''; stage.style.transitionDuration = '';
+      applyState(nr); afterLayout(); return;
+    }
     const vis = r => Math.min(r.height, Math.max(0, window.innerHeight - r.top + 40));
     const from = vis(stage.getBoundingClientRect());
     stage.classList.remove('is-sizing');
@@ -1898,6 +1905,11 @@ function initTijdlijn() {
     const tok = ++S.phaseTok;
     const prev = S.open, closing = prev ? P[prev] : null, opening = nr ? P[nr] : null;
     const instant = opt.instant || tlInstant();
+    // Eerst beslissen of we naar de kiezer scrollen, vóór er iets in de DOM verandert. Zo ja:
+    // het paneel meteen op volle hoogte zetten, anders is de pagina (de tijdlijn staat
+    // onderaan) tijdelijk te kort en klemt de browser de scroll vast.
+    const cr0 = opt.scroll && nr && !prev ? chooser.getBoundingClientRect() : null;
+    const jump = !!(cr0 && (cr0.top < stickPx() || cr0.bottom > window.innerHeight * 0.7));
     if (S.item !== null) { closeItem(S.item, true); S.item = null; }
     if (closing) closing.items.forEach(li => li.classList.remove('is-past', 'is-current'));
 
@@ -1913,10 +1925,11 @@ function initTijdlijn() {
     } else {
       shell.removeAttribute('data-open');
     }
+    S.open = nr;
+    if (jump) { applyState(nr); ensureRoom(); }
     if (narrow.matches && !prev !== !nr && !instant) {
       chooser.classList.remove('is-morph'); void chooser.offsetWidth; chooser.classList.add('is-morph');
     }
-    S.open = nr;
 
     // Focus mag niet achterblijven in een paneel dat verdwijnt
     const act = document.activeElement;
@@ -1932,13 +1945,16 @@ function initTijdlijn() {
         reveal(opening);
       });
     } else {
-      stageAnimate(nr, { closing: !nr, instant });
+      stageAnimate(nr, { closing: !nr, instant: instant || jump });
       if (opening && !instant) reveal(opening);
     }
 
     // Scroll-engine en jaarteller voor de nieuwe fase
     S.geo = null; S.pillOn = false; S.pillWoken = false;
-    pill.classList.remove('is-on');
+    // bij een wissel meteen weg (anders flitst de nieuwe inhoud even over de paneeltitel)
+    if (opening && prev) tlNoTransition(pill, () => pill.classList.remove('is-on'));
+    else pill.classList.remove('is-on');
+    if (!nr) ensureRoom();
     if (opening) {
       pill.classList.toggle('tl-p1', nr === 1);
       pill.classList.toggle('tl-p2', nr === 2);
@@ -1950,10 +1966,26 @@ function initTijdlijn() {
     schedule();
 
     if (opt.hash) tlWriteHash(nr ? 'tijdlijn-fase-' + nr : null);
-    if (opt.scroll && nr) {
+    if (jump) toChooser(true);
+    else if (opt.scroll && nr && prev) {
       const cr = chooser.getBoundingClientRect();
       if (cr.top < stickPx() || cr.bottom > window.innerHeight * 0.7) toChooser(true);
     }
+  }
+
+  // De tijdlijn is de laatste sectie van de pagina. Zolang een fase open is, zorgen we
+  // voor genoeg scrollruimte eronder: zo kan de kiezer helemaal onder de topbalk
+  // verdwijnen (en verschijnt het pilletje met de jaarteller), ook bij een korte fase.
+  const section = tl.closest('.tl-section') || tl;
+  function ensureRoom() {
+    const cur = parseFloat(section.style.paddingBottom) || 0;
+    let extra = 0;
+    if (S.open && !P[S.open].panel.hasAttribute('hidden')) {
+      const docH = document.documentElement.scrollHeight - cur;
+      const want = chooser.getBoundingClientRect().bottom + window.scrollY - stickPx() + window.innerHeight + 2;
+      extra = Math.max(0, Math.ceil(want - docH));
+    }
+    if (Math.abs(extra - cur) > 1) section.style.paddingBottom = extra ? extra + 'px' : '';
   }
 
   // ── Items ──
@@ -2023,10 +2055,11 @@ function initTijdlijn() {
     openItem(li, o.instant);
     S.item = i;
     if (o.hash !== false) tlWriteHash('tijdlijn-' + li.dataset.jaar);
-    if (o.instant || tlInstant()) { afterLayout(); return; }
+    if (o.instant || tlInstant()) { afterLayout(); if (!o.instant) ensureVisible(li); return; }
+    const tok = S.itemTok[i];
     tlAfter(li.querySelector('.tl-more'), 'grid-template-rows', 450, () => {
       afterLayout();
-      if (!S.userGesture) ensureVisible(li);
+      if (S.itemTok[i] === tok && !S.userGesture) ensureVisible(li);
     });
   }
 
@@ -2059,31 +2092,44 @@ function initTijdlijn() {
   // ── Scroll-engine: rail, bolletjes en jaarteller volgen de leeslijn ──
   function measure() {
     const p = P[S.open];
+    ensureRoom();
     const sy = window.scrollY;
     const ctr = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 + sy; };
     // eerst alles lezen…
     const stick = stickPx(), pillH = pill.offsetHeight;
     const readFrac = window.innerWidth < 640 ? 0.6 : 0.55;
     const trackTop = p.track.getBoundingClientRect().top + sy;
-    const pts = p.items.map(li => ({ y: ctr(li.querySelector('.tl-dot')), jaar: +li.dataset.jaar, li, wj: li.classList.contains('tl-weetje') }));
+    const pts = p.items.map(li => {
+      const y = ctr(li.querySelector('.tl-dot'));
+      // y2: onderkant van een open item; zolang je daarin leest, blijft de teller op dat jaar
+      const y2 = li.classList.contains('is-open') ? Math.max(y, li.getBoundingClientRect().bottom + sy) : y;
+      return { y, y2, jaar: +li.dataset.jaar, li, wj: li.classList.contains('tl-weetje') };
+    });
     const endY = p.endDot ? ctr(p.endDot) : pts[pts.length - 1].y;
     const badge = p.nextBadge ? { y: ctr(p.nextBadge), h: p.nextBadge.offsetHeight } : null;
     const chooserBottom = chooser.getBoundingClientRect().bottom + sy;
     const panelEnd = p.body.getBoundingClientRect().bottom + sy - 24;
+    const maxS = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     // …dan pas schrijven
     const railTop = pts[0].y, railH = Math.max(1, endY - railTop);
     p.rail.style.top = (railTop - trackTop) + 'px';
     p.rail.style.height = railH + 'px';
     if (p.tail && badge) p.tail.style.height = Math.max(0, badge.y - badge.h / 2 - endY - 3) + 'px';
     if (p.nr === 2) pts.forEach(pt => { if (!pt.wj) pt.li.style.setProperty('--c', tlRainbow((pt.y - railTop) / railH)); });
-    S.geo = { p, pts, railTop, railH, endY, start: p.f.start, endYear: tlEind(p.f), stick, pillH, readFrac, chooserBottom, panelEnd };
+    S.geo = { p, pts, railTop, railH, endY, start: p.f.start, endYear: tlEind(p.f), stick, pillH, readFrac, chooserBottom, panelEnd, maxS };
   }
   function update() {
     S.ticking = false;
     if (!S.open || P[S.open].panel.hasAttribute('hidden')) return;
     if (!S.geo) measure();
     const g = S.geo, inst = tlInstant();
-    const sy = window.scrollY, readY = sy + window.innerHeight * g.readFrac;
+    const sy = window.scrollY, vh = window.innerHeight;
+    // Leeslijn op 55–60% van het scherm. Onderaan de pagina is er te weinig scrollruimte om
+    // de laatste mijlpalen te bereiken: daar loopt de leeslijn geleidelijk in, zodat het
+    // einde precies op de maximale scroll bereikt wordt.
+    const need = Math.max(0, g.endY + 2 - (g.maxS + vh * g.readFrac));
+    const ramp = Math.max(1, Math.min(vh * 0.6, g.maxS - (g.railTop - vh * g.readFrac)));
+    const readY = sy + vh * g.readFrac + need * Math.max(0, Math.min(1, 1 - (g.maxS - sy) / ramp));
     const f = inst ? g.railH : Math.max(0, Math.min(g.railH, readY - g.railTop));
     g.p.fill.style.clipPath = `inset(0 0 ${(g.railH - f).toFixed(1)}px 0)`;
 
@@ -2105,12 +2151,17 @@ function initTijdlijn() {
     }
 
     // jaartal tussen twee bolletjes lineair interpoleren
-    const pts = g.p.end ? g.pts.concat([{ y: g.endY, jaar: g.endYear }]) : g.pts;
+    // (floor: het volgende jaartal verschijnt pas als dat bolletje ook echt bereikt is)
+    const pts = g.p.end ? g.pts.concat([{ y: g.endY, y2: g.endY, jaar: g.endYear }]) : g.pts;
     let year = g.start;
     if (readY >= pts[pts.length - 1].y) year = g.endYear;
     else for (let k = 0; k < pts.length - 1; k++) {
       const a = pts[k], b = pts[k + 1];
-      if (readY >= a.y && readY < b.y) { year = Math.round(a.jaar + (readY - a.y) / (b.y - a.y) * (b.jaar - a.jaar)); break; }
+      if (readY >= a.y && readY < b.y) {
+        const a2 = Math.min(a.y2, b.y);
+        year = readY < a2 ? a.jaar : Math.floor(a.jaar + (readY - a2) / (b.y - a2) * (b.jaar - a.jaar));
+        break;
+      }
     }
 
     // pilletje: enkel zichtbaar terwijl je in een open fase leest
@@ -2186,16 +2237,22 @@ function initTijdlijn() {
     const t = e.target;
     if (t.classList.contains('tl-more-in')) {
       introFinish();
-      toggleItem(+t.closest('.tl-item').dataset.i, { open: true, instant: true, compensate: false, hash: false });
+      toggleItem(+t.closest('.tl-item').dataset.i, { open: true, instant: true, compensate: false });
     } else if (t.classList.contains('tl-panel')) {
       introFinish();
-      setPhase(+t.dataset.fase, { instant: true, scroll: false, hash: false });
+      setPhase(+t.dataset.fase, { instant: true, scroll: false });
     }
   });
 
   // ── Deeplinks: #tijdlijn-fase-2 of #tijdlijn-1973 ──
+  // Eén keer per pagina: zodra de bezoeker zelf iets doet, niet meer terugspringen naar
+  // het deeplinkdoel (lettertypes en 'load' kunnen laat binnenkomen).
+  let deepHold = true;
+  ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(t =>
+    window.addEventListener(t, () => { deepHold = false; }, { once: true, passive: true, capture: true }));
   function fromHash(initial) {
-    const h = decodeURIComponent(location.hash.slice(1));
+    let h;
+    try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
     let m, y = null;
     if ((m = /^tijdlijn-fase-(\d)$/.exec(h)) && P[+m[1]]) {
       introFinish();
@@ -2211,7 +2268,7 @@ function initTijdlijn() {
     if (!y) return;
     tlScrollTo(y(), false);
     if (initial) {
-      const nogEens = () => { if (!S.userGesture) tlScrollTo(y(), false); };
+      const nogEens = () => { if (deepHold) tlScrollTo(y(), false); };
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(nogEens);
       window.addEventListener('load', nogEens, { once: true });
     }
