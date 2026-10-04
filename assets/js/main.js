@@ -1935,7 +1935,10 @@ function initTijdlijn() {
       shell.removeAttribute('data-open');
     }
     S.open = nr;
-    if (jump) { applyState(nr); ensureRoom(); }
+    // Op smalle schermen klapt de kiezer bij het openen in tot een compacte schakelaar: ook
+    // dan eerst het paneel tonen, anders wordt de pagina even korter en springt ze.
+    const prefill = jump || (!!nr && !prev && !instant && narrow.matches);
+    if (prefill) { applyState(nr); ensureRoom(); }
     if (narrow.matches && !prev !== !nr && !instant) {
       chooser.classList.remove('is-morph'); void chooser.offsetWidth; chooser.classList.add('is-morph');
     }
@@ -1954,7 +1957,7 @@ function initTijdlijn() {
         reveal(opening);
       });
     } else {
-      stageAnimate(nr, { closing: !nr, instant: instant || jump });
+      stageAnimate(nr, { closing: !nr, instant: instant || prefill });
       if (opening && !instant) reveal(opening);
     }
 
