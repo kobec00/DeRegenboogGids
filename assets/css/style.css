@@ -24,7 +24,8 @@
       --font-mono:   'DM Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    /* scroll-padding: focus en ankers belanden nooit onder de plakkende topbalk */
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
 
     /* ── ACHTERGROND: zachte mesh gradient als basis ── */
     body {
@@ -1495,7 +1496,7 @@
        Kleur enkel waar ze iets betekent: steengrijs (fase 1), regenboog (fase 2),
        amber voor het weetje. Let op: geen overflow op .tl-shell of een voorouder,
        anders werkt de sticky .tl-pin niet. */
-    .tl-section { margin-top: 56px; scroll-margin-top: 76px; }
+    .tl-section { margin-top: 56px; scroll-margin-top: 12px; }
     .tl-divider {
       height: 1px; border: none; margin: 0 0 38px;
       background: linear-gradient(90deg, transparent, rgba(15,23,42,0.13) 18%, rgba(15,23,42,0.13) 82%, transparent);
@@ -1561,7 +1562,7 @@
     }
     .tl-thumb.is-snap { transition: opacity .25s ease; }
     .tl-shell[data-open] .tl-thumb { opacity: 1; }
-    .tl-ch-h { margin: 0; font: inherit; display: flex; min-width: 0; scroll-margin-top: 79px; }
+    .tl-ch-h { margin: 0; font: inherit; display: flex; min-width: 0; scroll-margin-top: 15px; }
     .tl-ch {
       position: relative; z-index: 1; flex: 1; min-width: 0;
       display: flex; flex-direction: column; width: 100%; padding: 20px 22px 18px;
@@ -1570,8 +1571,9 @@
       transition: background .2s ease;
     }
     .tl-ch:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-radius: 16px; }
-    .tl-ch { scroll-margin-top: 79px; }
-    .tl-row, .tl-next, .tl-back, .tl-desc a { scroll-margin-top: 131px; }
+    /* bovenop de 64px scroll-padding van html: ruimte voor het jaarpilletje */
+    .tl-ch { scroll-margin-top: 15px; }
+    .tl-row, .tl-next, .tl-back, .tl-desc a { scroll-margin-top: 67px; }
     .tl-ch-eb {
       display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
       font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
@@ -1695,7 +1697,7 @@
     }
 
     /* ── Rijen ── */
-    .tl-item { position: relative; border-radius: 14px; scroll-margin-top: 131px; transition: background .25s ease, box-shadow .3s ease; }
+    .tl-item { position: relative; border-radius: 14px; scroll-margin-top: 67px; transition: background .25s ease, box-shadow .3s ease; }
     .tl-item + .tl-item::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
       background: var(--tl-hair); transition: opacity .2s ease;
@@ -1911,8 +1913,8 @@
       .tl-pill .tl-odo { font-size: 19px; }
       .tl-next-badge { width: 26px; height: 26px; left: calc(var(--rx) - var(--tp) - 13px); font-size: 13px; }
       .tl-next-arrow { width: 28px; height: 28px; }
-      .tl-ch-h, .tl-ch { scroll-margin-top: 75px; }
-      .tl-item, .tl-row, .tl-next, .tl-back, .tl-desc a { scroll-margin-top: 119px; }
+      .tl-ch-h, .tl-ch { scroll-margin-top: 11px; }
+      .tl-item, .tl-row, .tl-next, .tl-back, .tl-desc a { scroll-margin-top: 55px; }
     }
     @media (max-width: 480px) {
       .tl-row {
@@ -1942,7 +1944,7 @@
       .tl-item.is-past .tl-dot { background: CanvasText; }
       .tl-weetje, .tl-weetje .tl-dot { border: 2px dashed CanvasText; }
       .tl-weetje.is-past .tl-dot { background: Canvas; }
-      .tl-ch[aria-expanded="true"] { outline: 2px solid Highlight; outline-offset: 0; }
+      .tl-ch[aria-expanded="true"] { outline: 4px double Highlight; outline-offset: 0; }
       .tl-ch[aria-expanded]:focus-visible { outline: 3px dashed CanvasText; outline-offset: 4px; }
     }
     @media print {
@@ -1960,6 +1962,8 @@
       }
       .tl-weetje { margin-left: 0; }
       .tl-weetje .tl-desc { padding-left: 14px !important; }
+      .tl-item.is-open { box-shadow: none !important; outline: none !important; }
+      .tl-item.is-open:not(.tl-weetje) { background: none !important; }
     }
 
     /* ══════════════ SNELLE HULP — FAB + modal ══════════════ */
@@ -2164,7 +2168,7 @@
       --tl-surface: rgba(255,255,255,0.045); --tl-surface-line: rgba(255,255,255,0.09); --tl-hair: rgba(255,255,255,0.08);
       --tl-thumb: rgba(255,255,255,0.09); --tl-open: rgba(255,255,255,0.06); --tl-pill: rgba(22,28,38,0.94);
       --tl-dot-bg: #11161f; --tl-halo: rgba(17,22,31,0.9);
-      --tl-strong: #f0f3f8; --tl-text: #c3cad5; --tl-mute: #a7afbd; --tl-soft: #6b7383;
+      --tl-strong: #f0f3f8; --tl-text: #c3cad5; --tl-mute: #a7afbd; --tl-soft: #7a8292;
       --tl-link: #3ed6b8; --tl-underline: rgba(240,243,248,0.35);
       --tl-wj-bg: rgba(245,200,90,0.08); --tl-wj-line: rgba(245,200,90,0.45); --tl-wj-ink: #f3cf7f;
       --tl-wj-mark: #f5cd72; --tl-wj-dot: #221d10; --tl-wj-dot-lit: #3a2f12;

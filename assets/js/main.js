@@ -1674,6 +1674,7 @@ function tlAfter(el, prop, ms, cb) {
 // html { scroll-behavior: smooth } maakt van elke scrollTo een glijbeweging. Voor sprongen
 // en compensatie zetten we dat even uit.
 function tlScrollTo(y, smooth) {
+  tlScrollTo.t = performance.now(); // de scroll-engine weet zo dat dit geen scroll van de bezoeker is
   if (smooth && !tlInstant()) { window.scrollTo({ top: y, behavior: 'smooth' }); return; }
   const h = document.documentElement, prev = h.style.scrollBehavior;
   h.style.scrollBehavior = 'auto';
@@ -1856,7 +1857,15 @@ function initTijdlijn() {
       applyState(nr); afterLayout(); return;
     }
     const vis = r => Math.min(r.height, Math.max(0, window.innerHeight - r.top + 40));
-    const from = vis(stage.getBoundingClientRect());
+    const r0 = stage.getBoundingClientRect();
+    let from = vis(r0);
+    if (o.closing) {
+      // Onderaan de pagina klemt de browser de scroll zodra de pagina korter wordt. Wat anders
+      // in één klap zou verdwijnen (ook de extra ruimte van ensureRoom) animeert dan mee.
+      const below = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      const pad = parseFloat(section.style.paddingBottom) || 0;
+      from = Math.min(r0.height + pad, Math.max(from, r0.height + pad - below));
+    }
     stage.classList.remove('is-sizing');
     stage.style.height = '';
     let to = 0;
@@ -1950,7 +1959,7 @@ function initTijdlijn() {
     }
 
     // Scroll-engine en jaarteller voor de nieuwe fase
-    S.geo = null; S.pillOn = false; S.pillWoken = false;
+    S.geo = null; S.pillOn = false; S.pillWoken = false; S.hold = null;
     // bij een wissel meteen weg (anders flitst de nieuwe inhoud even over de paneeltitel)
     if (opening && prev) tlNoTransition(pill, () => pill.classList.remove('is-on'));
     else pill.classList.remove('is-on');
@@ -1981,11 +1990,18 @@ function initTijdlijn() {
     const cur = parseFloat(section.style.paddingBottom) || 0;
     let extra = 0;
     if (S.open && !P[S.open].panel.hasAttribute('hidden')) {
-      const docH = document.documentElement.scrollHeight - cur;
-      const want = chooser.getBoundingClientRect().bottom + window.scrollY - stickPx() + window.innerHeight + 2;
-      extra = Math.max(0, Math.ceil(want - docH));
+      const p = P[S.open], ch = chooser.getBoundingClientRect();
+      // Past de hele fase (met dichte items) al onder de kiezer op het scherm? Dan geen extra
+      // ruimte: anders blijft er op grote schermen een lege band boven de footer.
+      const li = S.item !== null ? itemEl(S.item) : null;
+      const more = li && p.panel.contains(li) ? li.querySelector('.tl-more').getBoundingClientRect().height : 0;
+      if (p.body.getBoundingClientRect().bottom - more - ch.top > window.innerHeight - stickPx()) {
+        const docH = document.documentElement.scrollHeight - cur;
+        const want = ch.bottom + window.scrollY - stickPx() + window.innerHeight + 2;
+        extra = Math.max(0, Math.ceil(want - docH));
+      }
     }
-    if (Math.abs(extra - cur) > 1) section.style.paddingBottom = extra ? extra + 'px' : '';
+    if (extra !== cur && (!extra || Math.abs(extra - cur) > 1)) section.style.paddingBottom = extra ? extra + 'px' : '';
   }
 
   // ── Items ──
@@ -2129,7 +2145,28 @@ function initTijdlijn() {
     // einde precies op de maximale scroll bereikt wordt.
     const need = Math.max(0, g.endY + 2 - (g.maxS + vh * g.readFrac));
     const ramp = Math.max(1, Math.min(vh * 0.6, g.maxS - (g.railTop - vh * g.readFrac)));
-    const readY = sy + vh * g.readFrac + need * Math.max(0, Math.min(1, 1 - (g.maxS - sy) / ramp));
+    let readY = sy + vh * g.readFrac + need * Math.max(0, Math.min(1, 1 - (g.maxS - sy) / ramp));
+    // Een open item dat je leest, is "nu": ring, rail en teller staan op dat jaar. Staat het
+    // lager op het scherm, dan trekt het de leeslijn naar zich toe. Scrol je verder, dan laat
+    // het vloeiend los: naargelang je het voorbij bent én naargelang de scrollruimte die nog
+    // rest, zodat onderaan de pagina het einde altijd bereikt wordt.
+    const op = g.pts.find(pt => pt.li.classList.contains('is-open'));
+    if (!op) S.hold = null;
+    else {
+      // anker: waar het item openging, of waar onze eigen scroll (deeplink, in beeld brengen) het zette
+      if (!S.hold || S.hold.li !== op.li || performance.now() - (tlScrollTo.t || 0) < 1000) S.hold = { li: op.li, sy };
+      const clamp01 = v => Math.max(0, Math.min(1, v));
+      const L = readY - sy, top = op.y - sy, bot = op.y2 - sy;
+      if (top > L) {
+        readY = sy + L + (top - L) * clamp01((vh * 0.9 - top) / (vh * 0.15));
+      } else if (bot < L) {
+        const T = g.stick + g.pillH + 40;
+        const voorbij = clamp01(1 - (T - bot) / (vh * 0.35));
+        const ruimte = g.maxS - S.hold.sy;
+        const rest = ruimte > 1 ? clamp01((g.maxS - sy) / ruimte) : 1;
+        readY += (op.y2 - readY) * Math.min(voorbij, rest);
+      }
+    }
     const f = inst ? g.railH : Math.max(0, Math.min(g.railH, readY - g.railTop));
     g.p.fill.style.clipPath = `inset(0 0 ${(g.railH - f).toFixed(1)}px 0)`;
 
@@ -2240,7 +2277,10 @@ function initTijdlijn() {
       toggleItem(+t.closest('.tl-item').dataset.i, { open: true, instant: true, compensate: false });
     } else if (t.classList.contains('tl-panel')) {
       introFinish();
-      setPhase(+t.dataset.fase, { instant: true, scroll: false });
+      // Bij navigatie naar #tijdlijn-2017 vuurt dit vóór hashchange: dan de hash laten staan
+      let doel = null;
+      try { doel = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* kapotte hash */ }
+      setPhase(+t.dataset.fase, { instant: true, scroll: false, hash: !(doel && t.contains(doel)) });
     }
   });
 
@@ -2256,13 +2296,13 @@ function initTijdlijn() {
     let m, y = null;
     if ((m = /^tijdlijn-fase-(\d)$/.exec(h)) && P[+m[1]]) {
       introFinish();
-      setPhase(+m[1], { instant: true, scroll: false, hash: false });
+      tlNoTransition(shell, () => setPhase(+m[1], { instant: true, scroll: false, hash: false }));
       y = () => chooserDocTop() - stickPx() - 4;
     } else if ((m = /^tijdlijn-(\d{4})$/.exec(h))) {
       const li = document.getElementById(h);
       if (!li || !tl.contains(li)) return;
       introFinish();
-      toggleItem(+li.dataset.i, { open: true, instant: true, compensate: false, hash: false });
+      tlNoTransition(shell, () => toggleItem(+li.dataset.i, { open: true, instant: true, compensate: false, hash: false }));
       y = () => li.getBoundingClientRect().top + window.scrollY - Math.max(0.3 * window.innerHeight, stickPx() + pill.offsetHeight + 16);
     }
     if (!y) return;
