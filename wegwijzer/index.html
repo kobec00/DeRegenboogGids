@@ -3,8 +3,13 @@ layout: default
 title: "Wegwijzer — De Regenbooggids"
 description: "Beantwoord drie korte vragen en ontvang een selectie op maat van tools, organisaties en kaders."
 permalink: /wegwijzer/
+bodyclass: page-wegwijzer
 ---
-    <div class="ww-shell" id="ww-shell"><!-- JS rendert hier de stappen of resultaten --></div>
-    <div style="text-align:center; margin-top:26px;">
-      <button class="ww-back" onclick="location.href='/'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Keer terug naar de startpagina</button>
-    </div>
+<section class="page-head tone-teal" aria-labelledby="ww-h1">
+  <div class="wrap-narrow">
+    <nav class="crumbs" aria-label="Kruimelpad"><a href="/">Home</a><svg class="i" aria-hidden="true"><use href="#i-chevron-right"/></svg><span aria-current="page">Wegwijzer</span></nav>
+    <h1 class="sr-only" id="ww-h1">Wegwijzer</h1>
+    <div class="ww" id="ww-shell"></div>
+    <p style="text-align:center;margin-top:26px"><a class="link-arrow" href="/" style="color:var(--muted)"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg>Terug naar de startpagina</a></p>
+  </div>
+</section>

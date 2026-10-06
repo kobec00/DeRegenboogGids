@@ -3,27 +3,39 @@ layout: default
 title: "Beleid & geschiedenis — De Regenbooggids"
 description: "Wetgeving, beleidskaders en de geschiedenis van LGBTQ+ rechten relevant voor zorg aan mensen met een verstandelijke beperking."
 permalink: /beleid/
+bodyclass: page-beleid
+tijdlijn: true
 ---
-    <h1>Beleid &amp; Vorming</h1>
-    <p class="page-intro">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie. Benieuwd hoe die rechten zich doorheen de jaren ontwikkelden? <span class="jump-link" role="button" tabindex="0" onclick="document.getElementById('tijdlijn').scrollIntoView({behavior:'smooth', block:'start'})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Bekijk de mijlpalen-tijdlijn<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></span></p>
+<header class="page-head tone-amber">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Kruimelpad"><a href="/">Home</a><svg class="i" aria-hidden="true"><use href="#i-chevron-right"/></svg><span aria-current="page">Beleid</span></nav>
+    <p class="eyebrow"><svg class="i" aria-hidden="true"><use href="#i-scale"/></svg>Beleid &amp; vorming</p>
+    <h1 class="page-title">Beleid &amp; <em>vorming</em></h1>
+    <p class="page-lead">Van antidiscriminatie-, gender- en transwetgeving over de wetenschappelijke depathologisering tot Vlaams zorgbeleid, good practices en vorming. De juridische en wetenschappelijke onderbouwing om LGBTQ+-inclusie structureel te verankeren in jouw organisatie. Benieuwd hoe die rechten zich doorheen de jaren ontwikkelden? <a class="link-inline" href="#tijdlijn">Bekijk de mijlpalen-tijdlijn<svg class="i" aria-hidden="true"><use href="#i-arrow-down"/></svg></a></p>
+    <nav class="jump-nav" id="jump-nav" aria-label="Spring naar"></nav>
+  </div>
+  <div class="page-art" aria-hidden="true">{% include embleem-beleid.html %}</div>
+</header>
 
-    <div class="alert-box">
-      <div class="alert-emoji">⚡</div>
-      <div>
-        <div class="alert-title">Wist je dat?</div>
-        <p class="alert-text">Onderzoek toont aan dat begeleiders vaak welwillend zijn tegenover LGBTQ+ cliënten, maar dat er een aanzienlijke <strong>handelingsverlegenheid</strong> bestaat. Specifieke vorming en een expliciet organisatiebeleid zijn essentieel om die kloof te dichten.</p>
-        <p class="alert-source">Bron: McCann et al. (2016); De Wit et al. (2022)</p>
-      </div>
+<div class="wrap">
+  <aside class="callout reveal" aria-label="Wist je dat?">
+    <span class="callout-ic"><svg class="i" aria-hidden="true"><use href="#i-zap"/></svg></span>
+    <div>
+      <p class="callout-title">Wist je dat?</p>
+      <p>Onderzoek toont aan dat begeleiders vaak welwillend zijn tegenover LGBTQ+ cliënten, maar dat er een aanzienlijke <strong>handelingsverlegenheid</strong> bestaat. Specifieke vorming en een expliciet organisatiebeleid zijn essentieel om die kloof te dichten.</p>
+      <p class="callout-src">Bron: McCann et al. (2016); De Wit et al. (2022)</p>
     </div>
-    <div class="card-grid-list" id="policy-list"></div>
+  </aside>
 
-    <section class="tl-section" id="tijdlijn" aria-labelledby="tl-h2">
-      <hr class="tl-divider" />
-      <header class="tl-header">
-        <span class="tl-eyebrow">TIJDLIJN</span>
-        <h2 class="tl-h2" id="tl-h2">Mijlpalen: rechten &amp; erkenning</h2>
-        <p class="tl-intro">Inclusieve zorg staat niet op zichzelf. Ze rust op meer dan een eeuw van wetenschappelijke, maatschappelijke en juridische kantelpunten: van de periode waarin homoseksualiteit als ziekte werd beschouwd, over het onderzoek dat die visie ontkrachtte, tot de hedendaagse Belgische wetgeving. Open een fase en klik op een jaar voor meer uitleg.</p>
-      </header>
-      <div class="tl" id="tl"></div>
-      <noscript><p class="tl-noscript">Schakel JavaScript in om de tijdlijn te bekijken.</p></noscript>
-    </section>
+  <div id="policy-list"></div>
+
+  <section class="tl-section" id="tijdlijn" aria-labelledby="tl-h2">
+    <header class="tl-header">
+      <p class="eyebrow"><span class="eyebrow-bar" aria-hidden="true"></span>Tijdlijn</p>
+      <h2 class="h2" id="tl-h2">Mijlpalen: rechten <em>&amp; erkenning</em></h2>
+      <p class="tl-intro">Inclusieve zorg staat niet op zichzelf. Ze rust op meer dan een eeuw van wetenschappelijke, maatschappelijke en juridische kantelpunten: van de periode waarin homoseksualiteit als ziekte werd beschouwd, over het onderzoek dat die visie ontkrachtte, tot de hedendaagse Belgische wetgeving. Open een fase en klik op een jaar voor meer uitleg.</p>
+    </header>
+    <div class="tl" id="tl"></div>
+    <noscript><p class="tl-noscript">Schakel JavaScript in om de tijdlijn te bekijken.</p></noscript>
+  </section>
+</div>
