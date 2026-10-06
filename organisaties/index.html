@@ -3,33 +3,31 @@ layout: default
 title: "Organisaties & hulplijnen — De Regenbooggids"
 description: "Vind contactorganisaties en hulplijnen rond LGBTQ+ en genderdiversiteit in de Vlaamse zorg, per regio en type."
 permalink: /organisaties/
+bodyclass: page-orgs
 ---
-    <h1>Organisaties &amp; Contacten</h1>
-    <p class="page-intro">Verenigingen, steunpunten en diensten voor LGBTQ+ personen met een beperking en hun begeleiders. Filter op regio of type.</p>
+<header class="page-head tone-blue">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Kruimelpad"><a href="/">Home</a><svg class="i" aria-hidden="true"><use href="#i-chevron-right"/></svg><span aria-current="page">Organisaties</span></nav>
+    <p class="eyebrow"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg>Organisaties &amp; contacten</p>
+    <h1 class="page-title">Organisaties &amp; <em>contacten</em></h1>
+    <p class="page-lead">Verenigingen, steunpunten en diensten voor LGBTQ+ personen met een beperking en hun begeleiders. Filter op regio of type, of bel meteen een infolijn.</p>
+  </div>
+  <div class="page-art" aria-hidden="true">{% include embleem-organisaties.html %}</div>
+</header>
 
-    <div class="filter-bar">
-      <div class="filter-label" style="color:var(--violet);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        Filter
-      </div>
-      <input type="text" id="org-search" placeholder="Zoek op naam of beschrijving…" oninput="renderOrgs()" />
-      <select id="org-regio" onchange="renderOrgs()">
-        <option>Alle regio's</option>
-        <option>Heel Vlaanderen</option>
-        <option>Antwerpen</option>
-        <option>Gent (Oost-Vlaanderen)</option>
-        <option>Leuven (Vlaams-Brabant)</option>
-        <option>West-Vlaanderen</option>
-        <option>Limburg</option>
-        <option>Brussel</option>
-      </select>
-      <select id="org-type" onchange="renderOrgs()">
-        <option>Alle types</option>
-        <option>Begeleiding &amp; Advies</option>
-        <option>Ontmoeting &amp; Activiteiten</option>
-        <option>Info &amp; Ondersteuning</option>
-        <option>Anonieme steun</option>
-      </select>
+<section class="wrap" aria-label="Overzicht van organisaties">
+  <div class="filters">
+    <div class="field">
+      <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="org-q" type="search" placeholder="Zoek op naam of beschrijving…" aria-label="Zoek in de organisaties" autocomplete="off" />
+      <button class="field-clear" type="button" aria-label="Zoekterm wissen" hidden><svg class="i"><use href="#i-x"/></svg></button>
     </div>
-    <div class="result-count" id="org-count"></div>
-    <div class="org-grid" id="orgs-list"></div>
+    <fieldset class="chip-row" id="org-regio"></fieldset>
+    <fieldset class="chip-row" id="org-type"></fieldset>
+  </div>
+  <div class="results-bar">
+    <span id="org-count" aria-live="polite"></span>
+    <button class="clear-btn" id="org-reset" type="button" hidden><svg class="i" aria-hidden="true"><use href="#i-x"/></svg>Wis filters</button>
+  </div>
+  <div class="cards" id="orgs-list"></div>
+</section>

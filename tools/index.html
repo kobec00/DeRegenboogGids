@@ -3,29 +3,31 @@ layout: default
 title: "Tools & instrumenten — De Regenbooggids"
 description: "Praktische tools en instrumenten voor begeleiders en organisaties rond LGBTQ+ en genderdiversiteit bij cliënten met een verstandelijke beperking, gefilterd op thema en doelgroep."
 permalink: /tools/
+bodyclass: page-tools
 ---
-    <h1>Tools &amp; Methodieken</h1>
-    <p class="page-intro">Praktische instrumenten voor begeleiders, teams en organisaties. Gefilterd op thema en doelgroep.</p>
+<header class="page-head tone-teal">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Kruimelpad"><a href="/">Home</a><svg class="i" aria-hidden="true"><use href="#i-chevron-right"/></svg><span aria-current="page">Tools</span></nav>
+    <p class="eyebrow"><svg class="i" aria-hidden="true"><use href="#i-tool"/></svg>Tools &amp; methodieken</p>
+    <h1 class="page-title">Tools &amp; <em>methodieken</em></h1>
+    <p class="page-lead">Praktische instrumenten voor begeleiders, teams en organisaties: werkboeken, zelfscanners, gesprekstools en meer. Gefilterd op thema en doelgroep.</p>
+  </div>
+  <div class="page-art" aria-hidden="true">{% include embleem-tools.html %}</div>
+</header>
 
-    <div class="filter-bar">
-      <div class="filter-label" style="color:var(--teal);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        Filter
-      </div>
-      <input type="text" id="tool-search" placeholder="Zoek op naam of beschrijving…" oninput="renderTools()" />
-      <select id="tool-thema" onchange="renderTools()">
-        <option>Alle thema's</option>
-        <option>Seksualiteit &amp; Identiteit</option>
-        <option>Gender &amp; Trans</option>
-        <option>Beleid &amp; Organisatie</option>
-      </select>
-      <select id="tool-doelgroep" onchange="renderTools()">
-        <option>Alle doelgroepen</option>
-        <option>Begeleiders</option>
-        <option>Cliënten</option>
-        <option>Cliënten &amp; Begeleiders</option>
-        <option>Organisaties</option>
-      </select>
+<section class="wrap" aria-label="Overzicht van tools">
+  <div class="filters">
+    <div class="field">
+      <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="tool-q" type="search" placeholder="Zoek op naam, organisatie of beschrijving…" aria-label="Zoek in de tools" autocomplete="off" />
+      <button class="field-clear" type="button" aria-label="Zoekterm wissen" hidden><svg class="i"><use href="#i-x"/></svg></button>
     </div>
-    <div class="result-count" id="tool-count"></div>
-    <div class="card-grid-list" id="tools-list"></div>
+    <fieldset class="chip-row" id="tool-thema"></fieldset>
+    <fieldset class="chip-row" id="tool-dg"></fieldset>
+  </div>
+  <div class="results-bar">
+    <span id="tool-count" aria-live="polite"></span>
+    <button class="clear-btn" id="tool-reset" type="button" hidden><svg class="i" aria-hidden="true"><use href="#i-x"/></svg>Wis filters</button>
+  </div>
+  <div class="cards" id="tools-list"></div>
+</section>
