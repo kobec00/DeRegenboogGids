@@ -7,53 +7,54 @@
 
 // ── TOOLS · ORGANISATIES · BELEID ────────────────────────────────────────────────
 
+// ww: de thema's waarvoor de Wegwijzer een item voorstelt (zie WEGWIJZER, verderop)
 const TOOLS = [
   // ── Voor cliënten: eenvoudige taal ──
-  { title:"De Roze Pagina", org:"çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Toegankelijke website in eenvoudige taal voor holebi, transgender en intersekse personen met een verstandelijke beperking en hun omgeving. Met info over coming-out, verliefdheid, relaties en seksualiteit, en doorverwijzing naar de regionale ontmoetingsgroepen.", url:"https://www.cavaria.be/derozepagina" },
-  { title:"Meer weten over transgender zijn", org:"çavaria", thema:"Gender & Trans", doelgroep:"Cliënten", beschrijving:"Gids in begrijpelijke taal die uitlegt wat transgender zijn is, hoe het kan voelen, wat je kan meemaken en wie kan helpen. Geschikt om samen met een cliënt door te nemen.", url:"https://cavaria.be/tools-lgbti-handicap" },
-  { title:"allesoverseks.be", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Publiekswebsite in toegankelijke taal (B1-niveau) over lichaam, relaties, gender, soa's en consent. Bekroond met de Wablieft-prijs voor heldere taal.", url:"https://www.allesoverseks.be" },
-  { title:"Zanzu", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Meertalige website (A1-niveau) met afbeeldingen en voorleesfunctie over seksuele gezondheid in veertien talen. Breed toegankelijk, ook voor laaggeletterde cliënten.", url:"https://www.zanzu.be/nl" },
+  { title:"De Roze Pagina", org:"çavaria", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Toegankelijke website in eenvoudige taal voor holebi, transgender en intersekse personen met een verstandelijke beperking en hun omgeving. Met info over coming-out, verliefdheid, relaties en seksualiteit, en doorverwijzing naar de regionale ontmoetingsgroepen.", url:"https://www.cavaria.be/derozepagina", ww:["relaties","comingout","gender","doorverwijzen"] },
+  { title:"Meer weten over transgender zijn", org:"çavaria", thema:"Gender & Trans", doelgroep:"Cliënten", beschrijving:"Gids in begrijpelijke taal die uitlegt wat transgender zijn is, hoe het kan voelen, wat je kan meemaken en wie kan helpen. Geschikt om samen met een cliënt door te nemen.", url:"https://cavaria.be/tools-lgbti-handicap", ww:["gender","comingout"] },
+  { title:"allesoverseks.be", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Publiekswebsite in toegankelijke taal (B1-niveau) over lichaam, relaties, gender, soa's en consent. Bekroond met de Wablieft-prijs voor heldere taal.", url:"https://www.allesoverseks.be", ww:["relaties","grenzen","gender"] },
+  { title:"Zanzu", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten", beschrijving:"Meertalige website (A1-niveau) met afbeeldingen en voorleesfunctie over seksuele gezondheid in veertien talen. Breed toegankelijk, ook voor laaggeletterde cliënten.", url:"https://www.zanzu.be/nl", ww:["relaties","grenzen"] },
   // ── Voor begeleiders: methodieken ──
-  { title:"Sensoa Vlaggensysteem", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"De Vlaamse basismethodiek om (grensoverschrijdend) seksueel gedrag in te schatten via zes criteria en gepast te reageren met een kleurensysteem. Maakt grenzen en seksualiteit bespreekbaar.", url:"https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag" },
-  { title:"Sensoa Vlaggensysteem voor Volwassenen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Variant van het Vlaggensysteem specifiek voor professionals in voorzieningen voor personen met een beperking, woonzorg en geestelijke gezondheidszorg.", url:"https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek" },
-  { title:"Buiten de lijnen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Aanvulling op het Vlaggensysteem voor mensen met een disharmonisch ontwikkelingsprofiel (beperking, trauma, gender). Ook bruikbaar bij volwassenen met een verstandelijke beperking via hun ontwikkelingsniveau.", url:"https://www.sensoa.be/materiaal/buiten-de-lijnen-methodiek" },
-  { title:"Vlaggensysteem op een bordje", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Visueel spelmateriaal in makkelijke taal waarmee ook kwetsbare volwassenen zelf kunnen deelnemen aan het gesprek over seksualiteit en grenzen.", url:"https://www.sensoa.be/materiaal/vlaggensysteem-op-een-bordje-methodiek" },
-  { title:"Op het kruispunt: toolset LGBTI+ & beperking", org:"çavaria en partners", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Vier downloadbare tools om je organisatie inclusiever te maken: een gids inclusieve communicatie, tips voor inclusief vergaderen, een inclusiescan en de gids 'Meer weten over transgender zijn'.", url:"https://cavaria.be/tools-lgbti-handicap" },
-  { title:"Zonder Stempel: instrumentenbox", org:"COC Nederland, LFB & Vilans", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Instrumentenbox met werkvormen, een training en een handleiding voor ontmoetingsgroepen om seksuele en genderdiversiteit bespreekbaar te maken in de zorg voor mensen met een (licht) verstandelijke beperking.", url:"https://zonderstempel.nl" },
-  { title:"LHBTI's met een verstandelijke beperking willen zichtbaar zijn!", org:"Movisie", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Handreiking met knelpunten en een concrete aanpak om deze groep te ondersteunen en zichtbaarder te maken in de zorg.", url:"https://www.movisie.nl/publicatie/lhbtis-verstandelijke-beperking-willen-zichtbaar-zijn" },
-  { title:"Roze Loper: scan & toolkit", org:"Roze 50+/COC, Movisie & Vilans", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Certificeringstraject met scan en toolkit voor LHBT-vriendelijkheid in zorginstellingen, ook toegepast bij organisaties voor mensen met een verstandelijke beperking.", url:"https://www.rozezorg.nl" },
-  { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een verstandelijke beperking. Inclusief inspiratiekaarten en een LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/tips-tools/tools/toolbox-seksuele-diversiteit" },
-  { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een verstandelijke beperking. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl" },
-  { title:"Transgendergids voor verstandelijke beperking", org:"Transvisie, COC Zonder Stempel & Transgender Netwerk Nederland", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een verstandelijke beperking.", url:"https://www.transgendernetwerk.nl/kennis/publicatie/transgender-gids-in-toegankelijke-taal/" },
+  { title:"Sensoa Vlaggensysteem", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"De Vlaamse basismethodiek om (grensoverschrijdend) seksueel gedrag in te schatten via zes criteria en gepast te reageren met een kleurensysteem. Maakt grenzen en seksualiteit bespreekbaar.", url:"https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag", ww:["grenzen","werking"] },
+  { title:"Sensoa Vlaggensysteem voor Volwassenen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Variant van het Vlaggensysteem specifiek voor professionals in voorzieningen voor personen met een beperking, woonzorg en geestelijke gezondheidszorg.", url:"https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek", ww:["grenzen","werking"] },
+  { title:"Buiten de lijnen", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Aanvulling op het Vlaggensysteem voor mensen met een disharmonisch ontwikkelingsprofiel (beperking, trauma, gender). Ook bruikbaar bij volwassenen met een verstandelijke beperking via hun ontwikkelingsniveau.", url:"https://www.sensoa.be/materiaal/buiten-de-lijnen-methodiek", ww:["grenzen","gender"] },
+  { title:"Vlaggensysteem op een bordje", org:"Sensoa", thema:"Seksualiteit & Identiteit", doelgroep:"Cliënten & Begeleiders", beschrijving:"Visueel spelmateriaal in makkelijke taal waarmee ook kwetsbare volwassenen zelf kunnen deelnemen aan het gesprek over seksualiteit en grenzen.", url:"https://www.sensoa.be/materiaal/vlaggensysteem-op-een-bordje-methodiek", ww:["grenzen","relaties"] },
+  { title:"Op het kruispunt: toolset LGBTI+ & beperking", org:"çavaria en partners", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Vier downloadbare tools om je organisatie inclusiever te maken: een gids inclusieve communicatie, tips voor inclusief vergaderen, een inclusiescan en de gids 'Meer weten over transgender zijn'.", url:"https://cavaria.be/tools-lgbti-handicap", ww:["werking","taal","gender"] },
+  { title:"Zonder Stempel: instrumentenbox", org:"COC Nederland, LFB & Vilans", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Instrumentenbox met werkvormen, een training en een handleiding voor ontmoetingsgroepen om seksuele en genderdiversiteit bespreekbaar te maken in de zorg voor mensen met een (licht) verstandelijke beperking.", url:"https://zonderstempel.nl", ww:["werking","comingout","relaties"] },
+  { title:"LHBTI's met een verstandelijke beperking willen zichtbaar zijn!", org:"Movisie", thema:"Beleid & Organisatie", doelgroep:"Begeleiders", beschrijving:"Handreiking met knelpunten en een concrete aanpak om deze groep te ondersteunen en zichtbaarder te maken in de zorg.", url:"https://www.movisie.nl/publicatie/lhbtis-verstandelijke-beperking-willen-zichtbaar-zijn", ww:["werking","comingout"] },
+  { title:"Roze Loper: scan & toolkit", org:"Roze 50+/COC, Movisie & Vilans", thema:"Beleid & Organisatie", doelgroep:"Organisaties", beschrijving:"Certificeringstraject met scan en toolkit voor LHBT-vriendelijkheid in zorginstellingen, ook toegepast bij organisaties voor mensen met een verstandelijke beperking.", url:"https://www.rozezorg.nl", ww:["werking"] },
+  { title:"Toolbox Seksuele Diversiteit", org:"Kennisplein Gehandicaptensector", thema:"Seksualiteit & Identiteit", doelgroep:"Begeleiders", beschrijving:"Instrumenten voor het bespreken en begeleiden van LHBTI-seksualiteit bij cliënten met een verstandelijke beperking. Inclusief inspiratiekaarten en een LHBT-quiz.", url:"https://www.kennispleingehandicaptensector.nl/tips-tools/tools/toolbox-seksuele-diversiteit", ww:["relaties","comingout","taal"] },
+  { title:"TransToegankelijk", org:"COC / Transgender Netwerk NL", thema:"Gender & Trans", doelgroep:"Begeleiders", beschrijving:"Platform voor begeleiders van transgender personen met een verstandelijke beperking. Filmpjes, oefeningen en spellen om het thema bespreekbaar te maken.", url:"https://www.transtoegankelijk.nl", ww:["gender","taal"] },
+  { title:"Transgendergids voor verstandelijke beperking", org:"Transvisie, COC Zonder Stempel & Transgender Netwerk Nederland", thema:"Gender & Trans", doelgroep:"Cliënten & Begeleiders", beschrijving:"Gids om over transgendergevoelens te praten en over een eventuele transitie. Specifiek toegankelijk gemaakt voor mensen met een verstandelijke beperking.", url:"https://www.transgendernetwerk.nl/kennis/publicatie/transgender-gids-in-toegankelijke-taal/", ww:["gender","comingout"] },
 ];
 
 const ORGS = [
   // ── Kern: kruispunt zorg, beperking & seksualiteit ──
-  { naam:"Aditi vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Advies- en informatiecentrum rond relaties, intimiteit en seksualiteit voor personen met een beperking of psychische kwetsbaarheid en hun netwerk. Erkend door het VAPH; biedt teamondersteuning, vorming en individuele begeleiding.", url:"https://aditivzw.be", telefoon:null },
-  { naam:"Sensoa", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams expertisecentrum voor seksuele gezondheid. Ontwikkelt methodieken zoals het Vlaggensysteem en toegankelijke websites om seksualiteit en grenzen bespreekbaar te maken.", url:"https://www.sensoa.be", telefoon:null },
+  { naam:"Aditi vzw", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Advies- en informatiecentrum rond relaties, intimiteit en seksualiteit voor personen met een beperking of psychische kwetsbaarheid en hun netwerk. Erkend door het VAPH; biedt teamondersteuning, vorming en individuele begeleiding.", url:"https://aditivzw.be", telefoon:null, ww:["relaties","grenzen","werking"] },
+  { naam:"Sensoa", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams expertisecentrum voor seksuele gezondheid. Ontwikkelt methodieken zoals het Vlaggensysteem en toegankelijke websites om seksualiteit en grenzen bespreekbaar te maken.", url:"https://www.sensoa.be", telefoon:null, ww:["grenzen","relaties"] },
   // ── Koepel & algemeen LGBTI+ ──
-  { naam:"çavaria", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaamse belangenverdediger en koepel voor LGBTI+ personen en verenigingen. Beheert De Roze Pagina, het project 'Op het kruispunt' en een woordenlijst. Sinds de fusie met KliQ (2025) biedt çavaria zelf vorming en advies aan via çavaria vorming.", url:"https://www.cavaria.be", telefoon:null },
-  { naam:"Lumi", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"De gratis en anonieme onthaal- en infolijn van çavaria voor alle vragen over gender, geslacht en seksuele oriëntatie, via telefoon, chat en mail. Ook voor naasten en begeleiders.", url:"https://www.lumi.be", telefoon:"0800 99 533" },
-  { naam:"Transgender Infopunt (TIP)", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams onthaal- en expertisecentrum voor transgenderthema's, ingebed in UZ Gent. Gratis en anoniem, met een zorgkaart van gespecialiseerde hulpverleners.", url:"https://www.transgenderinfo.be", telefoon:"0800 96 316" },
-  { naam:"çavaria vorming (voorheen KliQ)", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Het vormings- en adviesaanbod van çavaria. KliQ vzw is in 2025 opgegaan in çavaria; de vormingen en trajectbegeleiding voor sectoren zoals woonzorg en hulpverlening die inclusiever willen werken, lopen nu onder de naam çavaria vorming.", url:"https://vorming.cavaria.be", telefoon:null },
-  { naam:"GRIP vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Mensenrechtenorganisatie van en voor personen met een beperking. Heeft een eigen pagina in eenvoudige taal en denkt mee over het kruispunt beperking en LGBTI+.", url:"https://www.gripvzw.be", telefoon:null },
-  { naam:"Intersekse Vlaanderen", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Eerste en enige Vlaamse belangenvereniging van, voor en door mensen geboren met een intersekse variatie en hun ouders.", url:"https://www.interseksevlaanderen.be", telefoon:null },
-  { naam:"Wel Jong vzw", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Jeugdorganisatie voor en door LGBTQ+ jongeren tot 30 jaar, met laagdrempelige activiteiten en deelwerkingen zoals Min19 en T-Jong.", url:"https://www.weljong.be", telefoon:null },
-  { naam:"Aut & Out", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Activiteiten en ontmoetingsplekken voor en door LGBTQIA+ volwassenen met autisme. De enige werking in België op dit kruispunt (deelname zonder begeleider).", url:"https://www.autenout.be", telefoon:null },
-  { naam:"Dito vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vereniging van en voor mensen met een handicap of chronische ziekte en hun netwerk, met vrijetijdsaanbod, vrijwilligerswerk en belangenbehartiging. Geen specifieke LGBTI+-werking, wel een aanspreekpunt voor algemene vragen rond vrije tijd en participatie.", url:"https://www.ditovzw.be", telefoon:null },
+  { naam:"çavaria", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaamse belangenverdediger en koepel voor LGBTI+ personen en verenigingen. Beheert De Roze Pagina, het project 'Op het kruispunt' en een woordenlijst. Sinds de fusie met KliQ (2025) biedt çavaria zelf vorming en advies aan via çavaria vorming.", url:"https://www.cavaria.be", telefoon:null, ww:["comingout","gender","werking","taal"] },
+  { naam:"Lumi", regio:"Heel Vlaanderen", type:"Anonieme steun", beschrijving:"De gratis en anonieme onthaal- en infolijn van çavaria voor alle vragen over gender, geslacht en seksuele oriëntatie, via telefoon, chat en mail. Ook voor naasten en begeleiders.", url:"https://www.lumi.be", telefoon:"0800 99 533", ww:["comingout","gender","relaties","taal"] },
+  { naam:"Transgender Infopunt (TIP)", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vlaams onthaal- en expertisecentrum voor transgenderthema's, ingebed in UZ Gent. Gratis en anoniem, met een zorgkaart van gespecialiseerde hulpverleners.", url:"https://www.transgenderinfo.be", telefoon:"0800 96 316", ww:["gender"] },
+  { naam:"çavaria vorming (voorheen KliQ)", regio:"Heel Vlaanderen", type:"Begeleiding & Advies", beschrijving:"Het vormings- en adviesaanbod van çavaria. KliQ vzw is in 2025 opgegaan in çavaria; de vormingen en trajectbegeleiding voor sectoren zoals woonzorg en hulpverlening die inclusiever willen werken, lopen nu onder de naam çavaria vorming.", url:"https://vorming.cavaria.be", telefoon:null, ww:["werking","taal"] },
+  { naam:"GRIP vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Mensenrechtenorganisatie van en voor personen met een beperking. Heeft een eigen pagina in eenvoudige taal en denkt mee over het kruispunt beperking en LGBTI+.", url:"https://www.gripvzw.be", telefoon:null, ww:["werking"] },
+  { naam:"Intersekse Vlaanderen", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Eerste en enige Vlaamse belangenvereniging van, voor en door mensen geboren met een intersekse variatie en hun ouders.", url:"https://www.interseksevlaanderen.be", telefoon:null, ww:["gender"] },
+  { naam:"Wel Jong vzw", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Jeugdorganisatie voor en door LGBTQ+ jongeren tot 30 jaar, met laagdrempelige activiteiten en deelwerkingen zoals Min19 en T-Jong.", url:"https://www.weljong.be", telefoon:null, ww:["comingout","relaties"] },
+  { naam:"Aut & Out", regio:"Heel Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Activiteiten en ontmoetingsplekken voor en door LGBTQIA+ volwassenen met autisme. De enige werking in België op dit kruispunt (deelname zonder begeleider).", url:"https://www.autenout.be", telefoon:null, ww:["comingout","relaties"] },
+  { naam:"Dito vzw", regio:"Heel Vlaanderen", type:"Info & Ondersteuning", beschrijving:"Vereniging van en voor mensen met een handicap of chronische ziekte en hun netwerk, met vrijetijdsaanbod, vrijwilligerswerk en belangenbehartiging. Geen specifieke LGBTI+-werking, wel een aanspreekpunt voor algemene vragen rond vrije tijd en participatie.", url:"https://www.ditovzw.be", telefoon:null, ww:[] },
   // ── Regenbooghuizen per provincie ──
-  { naam:"Het Roze Huis", regio:"Antwerpen", type:"Info & Ondersteuning", beschrijving:"Regenbooghuis en koepel voor LGBTQIA+ verenigingen in de provincie Antwerpen. Met ontmoeting, belangenbehartiging en een RegenboogBib.", url:"https://www.hetrozehuis.be", telefoon:null },
-  { naam:"Regenbooghuis Gent (RBG)", regio:"Gent (Oost-Vlaanderen)", type:"Info & Ondersteuning", beschrijving:"Ontmoetingshuis voor LGBTQI+ personen in de Kammerstraat in Gent. Sinds mei 2026 opnieuw open met een nieuwe ploeg (voorlopige naam 'Regenbooghuis Gent'), als doorstart na Casa Rosa. Zet in op onthaal en info en is een thuisbasis voor verenigingen. Casa Rosa vzw beheert nog het gebouw; de stad Gent financiert de werking voor 2026-2028.", url:"https://www.casarosa.be", telefoon:null },
-  { naam:"UniQue", regio:"Leuven (Vlaams-Brabant)", type:"Info & Ondersteuning", beschrijving:"Vlaams-Brabants regenbooghuis dat verenigingen en vrijwilligers ondersteunt. Nam mee het initiatief voor De Roze Ballon voor holebi's met een verstandelijke beperking.", url:"https://www.unique-rbh.be", telefoon:null },
-  { naam:"Genres Pluriels", regio:"Brussel", type:"Begeleiding & Advies", beschrijving:"Franstalige organisatie die de rechten van transgender, genderfluïde en intersekse personen verdedigt. Biedt therapie, permanenties en steungroepen.", url:"https://www.genrespluriels.be", telefoon:null },
-  { naam:"Rainbowhouse Brussel", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"LGBTQIA+ gemeenschapscentrum in Brussel, ook met een meldpunt voor LGBTQI+-fobe incidenten.", url:"https://rainbowhouse.be/nl/", telefoon:null },
-  { naam:"Merhaba vzw", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"Organisatie voor LGBT+ personen met een migratieachtergrond, bereikbaar via telefoon, WhatsApp en mail, met praatgroepen.", url:"https://www.merhaba.be", telefoon:null },
+  { naam:"Het Roze Huis", regio:"Antwerpen", type:"Info & Ondersteuning", beschrijving:"Regenbooghuis en koepel voor LGBTQIA+ verenigingen in de provincie Antwerpen. Met ontmoeting, belangenbehartiging en een RegenboogBib.", url:"https://www.hetrozehuis.be", telefoon:null, ww:["comingout"] },
+  { naam:"Regenbooghuis Gent (RBG)", regio:"Gent (Oost-Vlaanderen)", type:"Info & Ondersteuning", beschrijving:"Ontmoetingshuis voor LGBTQI+ personen in de Kammerstraat in Gent. Sinds mei 2026 opnieuw open met een nieuwe ploeg (voorlopige naam 'Regenbooghuis Gent'), als doorstart na Casa Rosa. Zet in op onthaal en info en is een thuisbasis voor verenigingen. Casa Rosa vzw beheert nog het gebouw; de stad Gent financiert de werking voor 2026-2028.", url:"https://www.casarosa.be", telefoon:null, ww:["comingout"] },
+  { naam:"UniQue", regio:"Leuven (Vlaams-Brabant)", type:"Info & Ondersteuning", beschrijving:"Vlaams-Brabants regenbooghuis dat verenigingen en vrijwilligers ondersteunt. Nam mee het initiatief voor De Roze Ballon voor holebi's met een verstandelijke beperking.", url:"https://www.unique-rbh.be", telefoon:null, ww:["comingout"] },
+  { naam:"Genres Pluriels", regio:"Brussel", type:"Begeleiding & Advies", beschrijving:"Franstalige organisatie die de rechten van transgender, genderfluïde en intersekse personen verdedigt. Biedt therapie, permanenties en steungroepen.", url:"https://www.genrespluriels.be", telefoon:null, ww:["gender"] },
+  { naam:"Rainbowhouse Brussel", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"LGBTQIA+ gemeenschapscentrum in Brussel, ook met een meldpunt voor LGBTQI+-fobe incidenten.", url:"https://rainbowhouse.be/nl/", telefoon:null, ww:["comingout"] },
+  { naam:"Merhaba vzw", regio:"Brussel", type:"Info & Ondersteuning", beschrijving:"Organisatie voor LGBT+ personen met een migratieachtergrond, bereikbaar via telefoon, WhatsApp en mail, met praatgroepen.", url:"https://www.merhaba.be", telefoon:null, ww:["comingout"] },
   // ── Regionale ontmoetingsgroepen voor de doelgroep zelf ──
-  { naam:"De Roze Ballon", regio:"Leuven (Vlaams-Brabant)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een verstandelijke beperking. Regelmatige activiteiten zoals bowlen, museumbezoek en uitstappen.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Maks", regio:"West-Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's en LGBTI+ personen met een verstandelijke beperking in West-Vlaanderen. Let op: staat niet meer in de lijst van actieve verenigingen op De Roze Pagina (oktober 2026). Vraag de actuele status na bij Lumi of çavaria.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Joker", regio:"Gent (Oost-Vlaanderen)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een beperking, maar iedereen is welkom. Zes toegankelijke activiteiten per jaar.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Wapper", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's met een verstandelijke beperking in de regio Antwerpen. Let op: staat niet meer in de lijst van actieve verenigingen op De Roze Pagina (oktober 2026). Vraag de actuele status na bij Het Roze Huis of çavaria.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
-  { naam:"De Roze Bink", regio:"Limburg", type:"Ontmoeting & Activiteiten", beschrijving:"Voor holebi's en transgender personen met een beperking. Activiteiten zoals een praatcafé, filmavond en bowling.", url:"https://www.cavaria.be/derozepagina", telefoon:null },
+  { naam:"De Roze Ballon", regio:"Leuven (Vlaams-Brabant)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een verstandelijke beperking. Regelmatige activiteiten zoals bowlen, museumbezoek en uitstappen.", url:"https://www.cavaria.be/derozepagina", telefoon:null, ww:["relaties","comingout"] },
+  { naam:"De Roze Maks", regio:"West-Vlaanderen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's en LGBTI+ personen met een verstandelijke beperking in West-Vlaanderen. Let op: staat niet meer in de lijst van actieve verenigingen op De Roze Pagina (oktober 2026). Vraag de actuele status na bij Lumi of çavaria.", url:"https://www.cavaria.be/derozepagina", telefoon:null, ww:["relaties","comingout"] },
+  { naam:"De Roze Joker", regio:"Gent (Oost-Vlaanderen)", type:"Ontmoeting & Activiteiten", beschrijving:"Vereniging voor holebi's met een beperking, maar iedereen is welkom. Zes toegankelijke activiteiten per jaar.", url:"https://www.cavaria.be/derozepagina", telefoon:null, ww:["relaties","comingout"] },
+  { naam:"De Roze Wapper", regio:"Antwerpen", type:"Ontmoeting & Activiteiten", beschrijving:"Ontmoetingsgroep voor holebi's met een verstandelijke beperking in de regio Antwerpen. Let op: staat niet meer in de lijst van actieve verenigingen op De Roze Pagina (oktober 2026). Vraag de actuele status na bij Het Roze Huis of çavaria.", url:"https://www.cavaria.be/derozepagina", telefoon:null, ww:["relaties","comingout"] },
+  { naam:"De Roze Bink", regio:"Limburg", type:"Ontmoeting & Activiteiten", beschrijving:"Voor holebi's en transgender personen met een beperking. Activiteiten zoals een praatcafé, filmavond en bowling.", url:"https://www.cavaria.be/derozepagina", telefoon:null, ww:["relaties","comingout"] },
 ];
 
 const BELEID = [
@@ -93,28 +94,42 @@ const HULPLIJNEN = [
   { naam: 'Awel', desc: 'Voor kinderen en jongeren met een vraag, verhaal of probleem. Telefoon ma-za 16-22u (wo en za vanaf 14u); chat ma-za 18-22u; niet op zon- en feestdagen.', tel: '102', chat: 'https://www.awel.be', kleur: 'teal', icon: 'star' },
 ];
 
-// ── WEGWIJZER: vragen en labels ──────────────────────────────────────────────────
+// ── WEGWIJZER ────────────────────────────────────────────────────────────────────
+// De Wegwijzer stelt twee of drie vragen en weegt daarna elk praktijkinstrument, elke
+// casus, tool en organisatie. Wat het best past, staat bovenaan. Beleid hoort er bewust
+// niet bij. Welke thema's een item raakt, staat in zijn veld 'ww' (het eerste is het
+// hoofdthema): relaties · grenzen · gender · comingout · taal · werking · doorverwijzen.
+//
+// Per keuze: val (komt in de link), t (titel), d (uitleg), icon, tone (kleur),
+// zin (zo staat de keuze in de samenvatting) en waarom (label bij een passend resultaat).
+// Welke vragen er komen, beslist main.js: 'casus' enkel bij een concrete situatie,
+// 'regio' enkel als er regionale organisaties zijn die bij de keuzes passen.
 const WW_STAPPEN = [
   {
-    key: 'wie', vraag: 'Voor wie zoek je iets?', opties: [
-      { val: 'client', t: 'Een cliënt', d: 'Iets toegankelijks om samen te bekijken of door te geven.', icon: 'user' },
-      { val: 'begeleider', t: 'Mezelf als begeleider', d: 'Methodieken en achtergrond om sterker in mijn schoenen te staan.', icon: 'badge' },
-      { val: 'team', t: 'Mijn team of organisatie', d: 'Beleid, vorming en structurele inbedding.', icon: 'users' },
+    key: 'wie', vraag: 'Voor wie zoek je iets?', kort: 'Voor wie?', opties: [
+      { val: 'client', t: 'Een cliënt', d: 'Iets toegankelijks om samen te bekijken of door te geven.', icon: 'user', tone: 'teal', zin: 'een cliënt', waarom: 'Voor cliënten' },
+      { val: 'begeleider', t: 'Mezelf als begeleider', d: 'Handvatten en achtergrond om sterker in mijn schoenen te staan.', icon: 'badge', tone: 'violet', zin: 'jezelf als begeleider', waarom: 'Voor begeleiders' },
+      { val: 'team', t: 'Mijn team of organisatie', d: 'Een gedeelde visie, vorming en afspraken.', icon: 'users', tone: 'amber', zin: 'je team of organisatie', waarom: 'Voor teams' },
     ]
   },
   {
-    key: 'wat', vraag: 'Waar gaat het vooral over?', opties: [
-      { val: 'seksualiteit', t: 'Seksualiteit & relaties', d: 'Verliefdheid, intimiteit, grenzen en consent.', icon: 'heart' },
-      { val: 'gender', t: 'Gender & transgender', d: 'Genderidentiteit, transitie, de juiste naam.', icon: 'gender' },
-      { val: 'taal', t: 'Taal & begrippen', d: 'De juiste woorden vinden om erover te praten.', icon: 'book' },
-      { val: 'situatie', t: 'Een concrete situatie', d: 'Ik zit met een specifiek moment in de leefgroep.', icon: 'spark' },
-      { val: 'beleid', t: 'Beleid opzetten', d: 'Een visie of kader uitwerken voor de werking.', icon: 'doc' },
-      { val: 'doorverwijzen', t: 'Iemand doorverwijzen', d: 'Een organisatie of aanspreekpunt vinden.', icon: 'compass' },
+    key: 'wat', vraag: 'Waar gaat het vooral over?', kort: 'Welk thema?', opties: [
+      { val: 'relaties', t: 'Relaties & verliefdheid', d: 'Verliefd zijn, een lief, intimiteit en seksualiteit.', icon: 'heart', tone: 'rose', zin: 'relaties en verliefdheid', waarom: 'Relaties' },
+      { val: 'grenzen', t: 'Grenzen & seksueel gedrag', d: 'Inschatten wat oké is, consent en gepast reageren.', icon: 'shield', tone: 'amber', zin: 'grenzen en seksueel gedrag', waarom: 'Grenzen' },
+      { val: 'gender', t: 'Gender & transgender', d: 'Genderidentiteit, transitie, intersekse, de juiste naam.', icon: 'gender', tone: 'violet', zin: 'gender en transgender', waarom: 'Gender' },
+      { val: 'comingout', t: 'Coming-out & zelfbeeld', d: 'Uit de kast komen, zichzelf aanvaarden, geloof en familie.', icon: 'rainbow', tone: 'blue', zin: 'coming-out en zelfbeeld', waarom: 'Coming-out' },
+      { val: 'taal', t: 'Taal & begrippen', d: 'De juiste woorden vinden om erover te praten.', icon: 'book', tone: 'teal', zin: 'taal en begrippen', waarom: 'Taal' },
+      { val: 'werking', t: 'Inclusief werken', d: 'Visie, afspraken en een veilig klimaat in het team.', icon: 'layers', tone: 'slate', zin: 'inclusief werken', waarom: 'Inclusief werken' },
+      // doel: geen thema maar een vraag; deze twee staan apart onder de thema's
+      { val: 'situatie', doel: true, t: 'Een concrete situatie', d: 'Ik zit met een specifiek moment uit de leefgroep.', icon: 'bubble', tone: 'violet', zin: 'een concrete situatie', waarom: 'Situatie' },
+      { val: 'doorverwijzen', doel: true, t: 'Iemand doorverwijzen', d: 'Een organisatie of aanspreekpunt vinden.', icon: 'compass', tone: 'blue', zin: 'doorverwijzen', waarom: 'Doorverwijzen' },
     ]
   },
+  // De keuzes bij deze vraag zijn de casussen hieronder (CASUS)
+  { key: 'casus', vraag: 'Welke situatie lijkt het meest op de jouwe?', kort: 'Welke situatie?' },
   {
-    key: 'regio', vraag: 'In welke regio?', optioneel: true, opties: [
-      { val: 'Heel Vlaanderen', t: 'Maakt niet uit', d: 'Toon ook Vlaanderenbrede werkingen.', icon: 'globe' },
+    key: 'regio', vraag: 'In welke regio zoek je?', kort: 'Welke regio?', optioneel: true, opties: [
+      { val: 'Heel Vlaanderen', t: 'Maakt niet uit', d: 'Enkel werkingen in heel Vlaanderen.', icon: 'globe', kort: 'Heel Vlaanderen', zin: 'heel Vlaanderen' },
       { val: 'Antwerpen', t: 'Antwerpen', icon: 'pin' },
       { val: 'Gent (Oost-Vlaanderen)', t: 'Oost-Vlaanderen', icon: 'pin' },
       { val: 'Leuven (Vlaams-Brabant)', t: 'Vlaams-Brabant', icon: 'pin' },
@@ -124,18 +139,30 @@ const WW_STAPPEN = [
     ]
   },
 ];
-const WW_ORDER = ['wie', 'wat', 'regio'];
-const WW_LABELS = {
-  wie: { client: 'Een cliënt', begeleider: 'Als begeleider', team: 'Team of organisatie' },
-  wat: { seksualiteit: 'Seksualiteit & relaties', gender: 'Gender & transgender', taal: 'Taal & begrippen', situatie: 'Een concrete situatie', beleid: 'Beleid opzetten', doorverwijzen: 'Doorverwijzen' },
-  regio: { 'Heel Vlaanderen': 'Heel Vlaanderen', 'Antwerpen': 'Antwerpen', 'Gent (Oost-Vlaanderen)': 'Oost-Vlaanderen', 'Leuven (Vlaams-Brabant)': 'Vlaams-Brabant', 'West-Vlaanderen': 'West-Vlaanderen', 'Limburg': 'Limburg', 'Brussel': 'Brussel' },
+
+// De vijf instrumenten van de Praktijk-pagina, zoals de Wegwijzer ze weegt.
+// voor: hoe goed het past per doelgroep (0 = niet, 4 = uitstekend)
+const WW_PRAKTIJK = [
+  { tab: 'taal', t: 'Taalgids', d: 'Begrippen rond seksuele en genderdiversiteit, in toegankelijke taal. Naslaan of inoefenen met leerkaarten.', icon: 'book', tone: 'teal', ww: ['taal', 'gender', 'comingout', 'relaties'], voor: { client: 3, begeleider: 3, team: 2 } },
+  { tab: 'vlag', t: 'Vlaggensysteem in het kort', d: 'Seksueel gedrag inschatten met zes criteria en vier vlaggen, en weten hoe je gepast reageert.', icon: 'flag', tone: 'rose', ww: ['grenzen', 'relaties', 'werking'], voor: { client: 1, begeleider: 3, team: 3 } },
+  { tab: 'scan', t: 'Team-zelfscan', d: 'Veertien stellingen over acht domeinen: waar staat je team, en waar liggen de kansen?', icon: 'clipboard', tone: 'amber', ww: ['werking'], voor: { client: 0, begeleider: 1, team: 4 } },
+  { tab: 'quiz', t: 'Test jezelf', d: 'Tien korte vragen over je eigen reflexen, met telkens uitleg bij het juiste antwoord.', icon: 'help', tone: 'blue', ww: ['taal', 'werking', 'gender'], voor: { client: 0, begeleider: 3, team: 2 } },
+  { tab: 'casus', t: 'Casuïstiek', d: 'Herkenbare situaties uit de leefgroep, telkens met een korte duiding en concrete handvatten.', icon: 'bubble', tone: 'violet', ww: ['situatie'], voor: { client: 1, begeleider: 3, team: 3 } },
+];
+// Voorproefje uit de taalgids per thema: de soort waarop de taalgids opent, en vier begrippen (exact zoals in TERMEN)
+const WW_TERMEN = {
+  gender: { cat: 'Gender', woorden: ['Genderidentiteit', 'Transgender', 'Non-binair', 'Voornaamwoorden'] },
+  comingout: { cat: 'Algemeen', woorden: ['Coming-out', 'In de kast', 'Affirmatief', 'Queer'] },
+  relaties: { cat: 'Oriëntatie', woorden: ['Holebi', 'Biseksueel', 'Aseksueel', 'Heteronormativiteit'] },
+  standaard: { cat: '', woorden: ['LGBTQIA+', 'Heteronormativiteit', 'Deadnaming', 'Misgenderen'] },
 };
 
 // ── PRAKTIJK: casuïstiek ─────────────────────────────────────────────────────────
 // thema: groepeert de situaties in de filter (Identiteit · Relaties & seksualiteit · Team & netwerk)
+// ww: de thema's voor de Wegwijzer (zie hierboven)
 const CASUS = [
   {
-    thema: 'Identiteit', tag: 'Gender & identiteit', titel: 'Een cliënt vertelt je in vertrouwen dat die zich geen jongen voelt.',
+    thema: 'Identiteit', ww: ['comingout', 'gender', 'doorverwijzen'], tag: 'Gender & identiteit', titel: 'Een cliënt vertelt je in vertrouwen dat die zich geen jongen voelt.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Een cliënt die dit deelt, zet een grote stap en toont vertrouwen. Het gaat zelden om een impuls: vaak ging er een lang, stil proces aan vooraf. Jouw eerste reactie bepaalt mee of die deur openblijft of voorgoed dichtgaat.' },
       { kop: 'Wat kan je doen?', tekst: 'Luister zonder te sturen of te minimaliseren, en bevestig het vertrouwen ("dank je dat je dit met mij deelt"). Leg niet meteen labels of oplossingen op. Vraag hoe de cliënt zelf aangesproken en benaderd wil worden, bvb. met welke naam of welk voornaamwoord, en respecteer dat. Ga na wat de cliënt nu nodig heeft: gehoord worden, info, of contact met lotgenoten.' },
@@ -144,7 +171,7 @@ const CASUS = [
     chips: [{ l: 'Transgender Infopunt', url: 'https://www.transgenderinfo.be' }, { l: 'Meer weten over transgender zijn', url: 'https://cavaria.be/tools-lgbti-handicap' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
   {
-    thema: 'Relaties & seksualiteit', tag: 'Seksualiteit & relaties', titel: 'Twee huisgenoten van hetzelfde geslacht worden verliefd op elkaar.',
+    thema: 'Relaties & seksualiteit', ww: ['relaties', 'grenzen'], tag: 'Seksualiteit & relaties', titel: 'Twee huisgenoten van hetzelfde geslacht worden verliefd op elkaar.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Verliefdheid tussen cliënten is in de eerste plaats iets moois en gewoon. Bij koppels van hetzelfde geslacht ontstaat soms extra terughoudendheid bij begeleiding of familie — terwijl het recht op relaties en intimiteit voor iedereen gelijk is.' },
       { kop: 'Wat kan je doen?', tekst: 'Benader het zoals je elke prille relatie zou benaderen: met ruimte, respect en aandacht voor wederzijdse toestemming. Toets of beide personen het even graag willen en of ze begrijpen wat ze willen. Bied ondersteuning op maat — info over relaties en seksualiteit in toegankelijke taal kan helpen.' },
@@ -153,7 +180,7 @@ const CASUS = [
     chips: [{ l: 'Sensoa Vlaggensysteem', url: 'https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag' }, { l: 'De Roze Pagina', url: 'https://www.cavaria.be/derozepagina' }, { l: 'allesoverseks.be', url: 'https://www.allesoverseks.be' }, { l: 'Vlaggensysteem in het kort', go: 'vlag' }],
   },
   {
-    thema: 'Team & netwerk', tag: 'Team & cultuur', titel: "Een collega maakt geregeld grappen over 'holebi's' in de leefgroep.",
+    thema: 'Team & netwerk', ww: ['werking', 'taal'], tag: 'Team & cultuur', titel: "Een collega maakt geregeld grappen over 'holebi's' in de leefgroep.",
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Ook "onschuldig" bedoelde grappen bepalen het klimaat. Voor een cliënt die worstelt met hun identiteit is zo\'n opmerking een signaal: hier kan ik beter zwijgen. Stilte van de rest van het team wordt dan al snel als instemming gelezen.' },
       { kop: 'Wat kan je doen?', tekst: 'Benoem het, liefst rustig en concreet, bvb. "ik merk dat zulke grappen hier vaak vallen — ik denk niet dat ze voor iedereen onschuldig overkomen." Maak het bespreekbaar in team of intervisie in plaats van enkel onder vier ogen, en koppel het aan de visie van de organisatie als die er is.' },
@@ -162,7 +189,7 @@ const CASUS = [
     chips: [{ l: 'Doe de team-zelfscan', go: 'scan' }, { l: 'çavaria vorming', url: 'https://vorming.cavaria.be' }, { l: 'Naar beleid & vorming', go: 'beleid' }],
   },
   {
-    thema: 'Team & netwerk', tag: 'Netwerk & deontologie', titel: "De ouders van een cliënt willen niet dat hun zoon 'zo' is en vragen jou er niet op in te gaan.",
+    thema: 'Team & netwerk', ww: ['werking', 'comingout'], tag: 'Netwerk & deontologie', titel: "De ouders van een cliënt willen niet dat hun zoon 'zo' is en vragen jou er niet op in te gaan.",
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Hier botsen twee dingen: de bezorgdheid (of het ongemak) van het netwerk en het zelfbeschikkingsrecht van de cliënt. Als begeleider sta je in de eerste plaats naast de cliënt, niet naast de wens om iets weg te duwen.' },
       { kop: 'Wat kan je doen?', tekst: 'Erken de bezorgdheid van de ouders zonder de identiteit van de cliënt te ontkennen. Leg uit dat negeren of verbieden de cliënt niet "verandert", maar wel schaadt en het vertrouwen breekt. Zoek waar mogelijk naar dialoog, geef ouders correcte info en betrek desnoods een neutrale dienst.' },
@@ -171,7 +198,7 @@ const CASUS = [
     chips: [{ l: 'Rechten & wetgeving', go: 'beleid' }, { l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
   {
-    thema: 'Identiteit', tag: 'Gender & respect', titel: 'Een transgender cliënte wil voortaan met een andere naam aangesproken worden.',
+    thema: 'Identiteit', ww: ['gender', 'taal'], tag: 'Gender & respect', titel: 'Een transgender cliënte wil voortaan met een andere naam aangesproken worden.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'De juiste naam en het juiste voornaamwoord gebruiken is een van de meest concrete vormen van respect. Telkens de oude naam gebruiken — deadnaming, ook per ongeluk — doet pijn en ondermijnt het opgebouwde vertrouwen.' },
       { kop: 'Wat kan je doen?', tekst: 'Gebruik vanaf nu de naam en aanspreking die zij wenst, ook onderling in het team en in de dagelijkse omgang. Maak praktische afspraken: hoe gaan we om met het dossier, etiketten, de brievenbus? Maak je een fout? Corrigeer kort, verontschuldig je zonder overdrijven en ga verder.' },
@@ -180,7 +207,7 @@ const CASUS = [
     chips: [{ l: 'Transgender Infopunt', url: 'https://www.transgenderinfo.be' }, { l: 'Transgenderwet (2017)', go: 'beleid' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
   {
-    thema: 'Relaties & seksualiteit', tag: 'Grenzen & consent', titel: 'Een cliënt stelt seksueel getint gedrag dat je doet twijfelen over de grens.',
+    thema: 'Relaties & seksualiteit', ww: ['grenzen', 'relaties'], tag: 'Grenzen & consent', titel: 'Een cliënt stelt seksueel getint gedrag dat je doet twijfelen over de grens.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Seksueel gedrag bij cliënten is normaal — maar niet elk gedrag is oké. Het is niet altijd makkelijk in te schatten of iets gezond, experimenteel of grensoverschrijdend is, zeker bij een verstandelijke beperking. Vertrekken vanuit paniek of een verbod helpt niet.' },
       { kop: 'Wat kan je doen?', tekst: 'Gebruik een gedeeld kader in plaats van je onderbuik. Het Sensoa Vlaggensysteem weegt gedrag op zes criteria (bvb. wederzijdse toestemming, vrijwilligheid en gelijkwaardigheid) en geeft een gepaste reactie via kleuren. Bespreek twijfelgevallen in team zodat je niet alleen oordeelt.' },
@@ -189,7 +216,7 @@ const CASUS = [
     chips: [{ l: 'Sensoa Vlaggensysteem', url: 'https://www.sensoa.be/vlaggensysteem-hoe-reageren-op-seksueel-grensoverschrijdend-gedrag' }, { l: 'Vlaggensysteem voor Volwassenen', url: 'https://www.sensoa.be/materiaal/sensoa-vlaggensysteem-voor-volwassenen-boek' }, { l: 'Naar beleid & vorming', go: 'beleid' }, { l: 'Vlaggensysteem in het kort', go: 'vlag' }],
   },
   {
-    thema: 'Identiteit', tag: 'Identiteit & lichaam', titel: 'Een intersekse cliënt voelt zich onzeker over het eigen lichaam en weet niet bij wie die terechtkan.',
+    thema: 'Identiteit', ww: ['gender', 'doorverwijzen'], tag: 'Identiteit & lichaam', titel: 'Een intersekse cliënt voelt zich onzeker over het eigen lichaam en weet niet bij wie die terechtkan.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Sommige mensen worden geboren met lichaamskenmerken die niet eenduidig "mannelijk" of "vrouwelijk" zijn: dat noemen we intersekse. Het is geen ziekte en geen keuze, maar een natuurlijke variatie. In de praktijk merk je het vaak niet aan grote vragen, maar aan kleine signalen: een cliënt die zich ongemakkelijk voelt bij lichamelijke zorg, die opvalt of vermijdt in gedeelde doucheruimtes, of die zich afvraagt waarom die "anders" is dan de anderen. Vaak werd er thuis of in eerdere voorzieningen met stilte over omgegaan.' },
       { kop: 'Wat kan je doen?', tekst: 'Zorg eerst voor gewone, praktische veiligheid: privacy bij wassen en aankleden, en respect voor schaamtegevoelens, net zoals bij elke cliënt. Beantwoord vragen eerlijk en in eenvoudige taal en stel gerust dat er niets "mis" is met hun lichaam. Vraag de cliënt hoe die zichzelf ziet en hoe die aangesproken wil worden, en respecteer dat. Maak duidelijk dat die bij jou of een vast aanspreekpunt terechtkan, zodat die er niet alleen mee blijft zitten.' },
@@ -198,7 +225,7 @@ const CASUS = [
     chips: [{ l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'çavaria', url: 'https://www.cavaria.be' }, { l: 'Naar de taalgids', go: 'taal' }],
   },
   {
-    thema: 'Relaties & seksualiteit', tag: 'Relaties & autonomie', titel: 'Begeleiding of familie maakt zich zorgen omdat een cliënt nooit een lief lijkt te willen.',
+    thema: 'Relaties & seksualiteit', ww: ['relaties', 'comingout'], tag: 'Relaties & autonomie', titel: 'Begeleiding of familie maakt zich zorgen omdat een cliënt nooit een lief lijkt te willen.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Er leeft vaak een stille aanname dat iedereen een relatie en seks hoort te willen. Wie daar geen interesse in heeft, wordt al snel als "een probleem" gezien. Maar weinig of geen romantische of seksuele aantrekking voelen is een geldige variatie: aseksualiteit. Het hoeft niet gerepareerd te worden.' },
       { kop: 'Wat kan je doen?', tekst: 'Onderzoek eerst of er echt een zorg is, of vooral een verwachting van de omgeving. Vraag de cliënt zelf, zonder te sturen, hoe die zich voelt en wat die wil. Geef ruimte voor het antwoord "ik hoef dat niet" en behandel dat als een volwaardige keuze. Onderscheid een vrije keuze van een drempel die wél ondersteuning vraagt, bvb. onzekerheid of een nare ervaring.' },
@@ -207,7 +234,7 @@ const CASUS = [
     chips: [{ l: 'De Roze Pagina', url: 'https://www.cavaria.be/derozepagina' }, { l: 'Naar de taalgids', go: 'taal' }, { l: 'Doe de team-zelfscan', go: 'scan' }],
   },
   {
-    thema: 'Team & netwerk', tag: 'Netwerk & cultuur', titel: 'Een cliënt zit klem tussen het eigen geloof of cultuur en de eigen geaardheid.',
+    thema: 'Team & netwerk', ww: ['comingout', 'doorverwijzen'], tag: 'Netwerk & cultuur', titel: 'Een cliënt zit klem tussen het eigen geloof of cultuur en de eigen geaardheid.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Geloof, cultuur en familie zijn voor veel cliënten een bron van houvast en verbondenheid. Wanneer de eigen geaardheid of genderidentiteit daarmee lijkt te botsen, ontstaat een pijnlijk innerlijk conflict: kiezen tussen wie ik ben en waar ik bij hoor. Dat kan zwaar wegen op het welzijn.' },
       { kop: 'Wat kan je doen?', tekst: 'Erken beide kanten zonder partij te kiezen tegen de identiteit of het geloof van de cliënt. Vermijd om geloof of cultuur weg te zetten als "het probleem". Help de cliënt zoeken naar wat voor hen klopt, op hun tempo, en wijs op het bestaan van mensen en groepen die geloof en LGBTQ+-zijn wél samenbrengen. Soms is enkel gehoord en niet veroordeeld worden al veel.' },
@@ -216,7 +243,7 @@ const CASUS = [
     chips: [{ l: 'Lumi (advies)', url: 'https://lumi.be' }, { l: 'çavaria', url: 'https://www.cavaria.be' }, { l: 'Netwerk & organisaties', go: 'orgs' }],
   },
   {
-    thema: 'Identiteit', tag: 'Zelfaanvaarding & welzijn', titel: 'Een cliënt aanvaardt de eigen geaardheid niet en vindt dat er iets mis is met hen.',
+    thema: 'Identiteit', ww: ['comingout', 'doorverwijzen'], tag: 'Zelfaanvaarding & welzijn', titel: 'Een cliënt aanvaardt de eigen geaardheid niet en vindt dat er iets mis is met hen.',
     blokken: [
       { kop: 'Wat speelt er?', tekst: 'Wat een cliënt over zichzelf zegt ("dit is niet natuurlijk", "er is iets mis met mij") is vaak niet hun eigen overtuiging, maar een echo van wat de omgeving hen jarenlang vertelde. Dat heet geïnternaliseerde stigma. Het doet pijn en kan leiden tot schaamte, somberheid of een laag zelfbeeld.' },
       { kop: 'Wat kan je doen?', tekst: 'Spreek de pijn aan, niet de "fout": laat merken dat er niets mis is met de cliënt en dat hun gevoelens normaal zijn. Ga niet mee in het idee dat die moet veranderen. Geef in eenvoudige taal correcte info, toon positieve voorbeelden en wijs op lotgenotencontact. Soms helpt de boodschap dat heel veel mensen zich net zo voelen en dat het beter wordt.' },

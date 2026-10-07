@@ -36,8 +36,9 @@ const GROEP_STIJL = {
   'Vlaams zorgbeleid': ['amber', 'doc'], 'Wetenschappelijke onderbouwing': ['blue', 'flask'],
 };
 const DOELGROEP_ICO = { 'Cliënten': 'user', 'Begeleiders': 'badge', 'Cliënten & Begeleiders': 'users', 'Organisaties': 'layers' };
-const REGIO_KORT = r => (WW_LABELS.regio && WW_LABELS.regio[r]) || r;
-const REGIO_VOLGORDE = WW_STAPPEN[2].opties.map(o => o.val);
+const WW_REGIO = WW_STAPPEN.find(s => s.key === 'regio').opties;
+const REGIO_KORT = r => { const o = WW_REGIO.find(x => x.val === r); return o ? o.kort || o.t : r; };
+const REGIO_VOLGORDE = WW_REGIO.map(o => o.val);
 const NU = new Date().getFullYear();
 
 // Regenboogkleur op positie t (0–1), dezelfde stops als de boog
@@ -203,7 +204,7 @@ const Zoek = {
       ['Test jezelf', 'Korte zelftest over je eigen reflexen', '/praktijk/?tab=quiz', 'help', 'rose'],
       ['Beleid & vorming', 'Wetgeving, zorgbeleid en wetenschappelijke onderbouwing', '/beleid/', 'scale', 'amber'],
       ['Mijlpalen-tijdlijn', 'Rechten en erkenning, van 1897 tot nu', '/beleid/#tijdlijn', 'clock', 'blue'],
-      ['Wegwijzer', 'Drie vragen, een selectie op maat', '/wegwijzer/', 'compass', 'teal'],
+      ['Wegwijzer', 'Een paar vragen, een selectie op maat', '/wegwijzer/', 'compass', 'teal'],
       ['Over dit project', 'Graduaatsproef UCLL · achtergrond', '/over/', 'info', 'slate'],
       ['Contact & aanvullingen', 'Mis je iets? Laat het weten', '/over/#contact', 'mail', 'slate'],
     ].forEach(([title, sub, href, icon, tone]) => add('pagina', { title, sub, href, icon, tone }));
@@ -1601,140 +1602,577 @@ function casusGa(go) {
 }
 
 // ── 10. WEGWIJZER ──────────────────────────────────────────────────────────────
-let ww = { antw: {}, gestart: false };
-const WW_KOP = { wie: 'Wie', wat: 'Thema', regio: 'Regio' };
-function wwFlow() {
+// Twee of drie vragen. Daarna krijgt elk item een score: praktijk (instrumenten en
+// casussen), tools en organisaties. Wat niet past, valt weg; de rest staat op volgorde,
+// telkens met de reden erbij. Beleid zit er bewust niet in. De keuzes staan in de URL:
+// een resultaat is te delen, en de terugknop van de browser gaat stap voor stap terug.
+const WW_STAP = Object.fromEntries(WW_STAPPEN.map(s => [s.key, s]));
+const nn = n => String(n).padStart(2, '0');
+const WW_CASUS = CASUS.map((c, i) => ({ val: String(i + 1), t: c.titel, tag: c.tag, thema: c.thema, tone: 'violet', zin: `${nn(i + 1)} · ${c.tag.toLowerCase()}` }));
+const wwOpties = key => (key === 'casus' ? WW_CASUS : WW_STAP[key].opties);
+const wwOptie = (key, val) => wwOpties(key).find(o => o.val === val);
+const wwZin = (key, val) => { const o = wwOptie(key, val); return o ? o.zin || o.kort || o.t : ''; };
+
+// Hoe goed iets past per doelgroep (0 = niet, 3 = goed): uit de doelgroep van een tool,
+// het type van een organisatie en het thema van een casus
+const WW_VOOR = {
+  tool: {
+    'Cliënten': { client: 3, begeleider: 1, team: 0 }, 'Cliënten & Begeleiders': { client: 3, begeleider: 2, team: 1 },
+    'Begeleiders': { client: 1, begeleider: 3, team: 2 }, 'Organisaties': { client: 0, begeleider: 1, team: 3 },
+  },
+  org: {
+    'Ontmoeting & Activiteiten': { client: 3, begeleider: 1, team: 0 }, 'Anonieme steun': { client: 3, begeleider: 2, team: 1 },
+    'Info & Ondersteuning': { client: 1, begeleider: 2, team: 2 }, 'Begeleiding & Advies': { client: 1, begeleider: 3, team: 3 },
+  },
+  casus: { 'Team & netwerk': { client: 1, begeleider: 3, team: 3 }, standaard: { client: 1, begeleider: 3, team: 2 } },
+};
+const WW_THEMA_TOOL = { 'Seksualiteit & Identiteit': 'relaties', 'Gender & Trans': 'gender', 'Beleid & Organisatie': 'werking' };
+const WW_GEWICHT = [10, 7, 5]; // hoofdthema · tweede thema · de rest
+const WW_ORG_ICO = { 'Begeleiding & Advies': 'hand', 'Ontmoeting & Activiteiten': 'users', 'Info & Ondersteuning': 'info', 'Anonieme steun': 'chat' };
+const WW_SOORT = {
+  prak: { t: 'Uit de praktijk', kort: 'Praktijk', icon: 'bulb', tone: 'violet', zicht: 3, een: 'instrument of casus', meer: 'instrumenten en casussen', alle: 'Naar de Praktijk-pagina' },
+  tool: { t: 'Tools & methodieken', kort: 'Tools', icon: 'tool', tone: 'teal', zicht: 4, een: 'tool', meer: 'tools', alle: 'Naar alle tools' },
+  org: { t: 'Organisaties', kort: 'Organisaties', icon: 'users', tone: 'blue', zicht: 4, een: 'organisatie', meer: 'organisaties', alle: 'Naar alle organisaties' },
+};
+const WW_CTA = { taal: 'Open de taalgids', vlag: 'Bekijk het Vlaggensysteem', scan: 'Start de zelfscan', quiz: 'Doe de test', casus: 'Bekijk de casuïstiek' };
+
+// Alle items in één lijst, met hun thema's (ww) en hoe goed ze per doelgroep passen (voor)
+let wwItems = null;
+function wwBouw() {
+  wwItems = [
+    ...WW_PRAKTIJK.map(p => ({ soort: 'prak', id: 'tab-' + p.tab, ww: p.ww, voor: p.voor, p })),
+    ...CASUS.map((c, i) => ({ soort: 'prak', id: `casus-${i + 1}`, ww: c.ww || [], voor: WW_VOOR.casus[c.thema] || WW_VOOR.casus.standaard, c, n: i + 1 })),
+    ...TOOLS.map(t => ({ soort: 'tool', id: 't-' + slug(t.title), ww: t.ww || [WW_THEMA_TOOL[t.thema]], voor: WW_VOOR.tool[t.doelgroep] || {}, t })),
+    ...ORGS.map(o => ({ soort: 'org', id: 'o-' + slug(o.naam), ww: o.ww || [], voor: WW_VOOR.org[o.type] || {}, regio: o.regio, letop: /Let op:/.test(o.beschrijving), o })),
+  ];
+}
+
+// Waar de "Verder"-knoppen van een casus naartoe wijzen (instrument, tool of organisatie).
+// Eerst op naam, dan op link; De Roze Pagina en de roze verenigingen delen immers één link.
+const wwKaal = s => norm(String(s).replace(/\(.*?\)/g, '')).trim();
+const wwLinkKaal = u => String(u || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const wwGenoemdCache = new Map();
+function wwGenoemd(c) {
+  if (!wwGenoemdCache.has(c)) {
+    wwGenoemdCache.set(c, (c.chips || []).map(ch => {
+      if (ch.go) return WW_PRAKTIJK.some(p => p.tab === ch.go) ? 'tab-' + ch.go : null;
+      const naam = wwKaal(ch.l);
+      const it = wwItems.find(x => (x.t && wwKaal(x.t.title) === naam) || (x.o && wwKaal(x.o.naam) === naam))
+        || wwItems.find(x => x.t && wwLinkKaal(x.t.url) === wwLinkKaal(ch.url));
+      return it ? it.id : null;
+    }).filter(Boolean));
+  }
+  return wwGenoemdCache.get(c);
+}
+// Het inhoudelijke thema van de keuzes; bij een situatie dat van de casus
+const wwThema = a => (a.wat === 'situatie' ? ((CASUS[+a.casus - 1] || {}).ww || [])[0] : a.wat);
+
+// De score van één item. ok = het past; waarom = [label, icoon] voor bij de kaart;
+// regionaal = het zou passen als je een regio koos.
+function wwScore(it, a) {
+  let s = 0, ok = true, regionaal = false;
+  const waarom = [];
+  if (a.wat === 'situatie') {
+    const c = CASUS[+a.casus - 1];
+    if (!c) ok = !!it.c || it.id === 'tab-casus';
+    else if (it.c === c) { s += 40; waarom.push(['Jouw situatie', 'star']); }
+    else {
+      if (wwGenoemd(c).includes(it.id)) { s += 14; waarom.push(['Genoemd bij deze situatie', 'link']); }
+      const samen = it.ww.filter(w => c.ww.includes(w));
+      if (samen.length) { s += 3 + 2 * samen.length; if (!waarom.length) waarom.push([wwOptie('wat', samen[0]).waarom, 'check']); }
+      if (!s) ok = false;
+    }
+  } else if (a.wat) {
+    let i = it.ww.indexOf(a.wat);
+    // Doorverwijzen: elke organisatie telt mee, die met een eigen LGBTQ+-werking het zwaarst
+    if (a.wat === 'doorverwijzen' && it.soort === 'org') i = it.ww.length ? 0 : 2;
+    if (i < 0) ok = false;
+    else { s += WW_GEWICHT[Math.min(i, 2)]; waarom.push([wwOptie('wat', a.wat).waarom, 'check']); }
+  }
+  if (a.wie) {
+    const v = it.voor[a.wie] || 0;
+    if (!v) ok = false;
+    s += 2 * v;
+    if (v >= 3) waarom.push([wwOptie('wie', a.wie).waarom, 'check']);
+  }
+  if (it.regio) {
+    const r = a.regio && a.regio !== 'Heel Vlaanderen' ? a.regio : '';
+    if (it.regio === 'Heel Vlaanderen') { s += 2; if (r) waarom.push(['Heel Vlaanderen', 'globe']); }
+    else if (it.regio === r) { s += 12; waarom.unshift([REGIO_KORT(r), 'pin']); }
+    else { regionaal = ok && !r; ok = false; }
+  }
+  if (it.letop) s -= 6;
+  return { s, ok, waarom, regionaal };
+}
+function wwResultaten(a) {
+  if (!wwItems) wwBouw();
+  const res = { prak: [], tool: [], org: [], regionaal: [] };
+  wwItems.forEach((it, k) => {
+    const sc = wwScore(it, a);
+    if (sc.ok) res[it.soort].push(Object.assign({ k }, it, sc));
+    else if (sc.regionaal) res.regionaal.push(it);
+  });
+  ['prak', 'tool', 'org'].forEach(g => res[g].sort((x, y) => y.s - x.s || x.k - y.k));
+  return res;
+}
+function wwTel(a) {
+  if (!wwItems) wwBouw();
+  if (!a.wie && !a.wat) {
+    const t = { prak: 0, tool: 0, org: 0, n: wwItems.length, leeg: true };
+    wwItems.forEach(it => { t[it.soort]++; });
+    return t;
+  }
+  const r = wwResultaten(a);
+  return { prak: r.prak.length, tool: r.tool.length, org: r.org.length, n: r.prak.length + r.tool.length + r.org.length };
+}
+
+// Welke vragen er komen: de regio enkel als die iets verandert aan het resultaat
+const wwRegionaal = a => (a.wat ? wwResultaten(Object.assign({}, a, { regio: '' })).regionaal : []);
+function wwFlow(a) {
   const f = ['wie', 'wat'];
-  if (ww.antw.wat && !['taal', 'situatie'].includes(ww.antw.wat)) f.push('regio');
+  if (a.wat === 'situatie') f.push('casus');
+  else if (!a.wat || wwRegionaal(a).length) f.push('regio');
   return f;
 }
-function wwHuidige() { for (const k of wwFlow()) if (!ww.antw[k]) return k; return null; }
-// Voor de weergave: zolang het thema niet gekozen is, gaan we uit van drie stappen
-const wwTotaal = () => (ww.antw.wat ? wwFlow() : WW_ORDER);
+const wwVolgende = a => wwFlow(a).find(k => !a[k]) || null;
+const wwRegioLijst = lijst => REGIO_VOLGORDE.filter(r => lijst.some(o => o.regio === r)).map(REGIO_KORT);
+const wwRegioTelt = a => a.wat === 'situatie' ? wwRegionaal(a).length > 0 : wwFlow(a).includes('regio');
+
+// ── Toestand en URL ──
+// stap: de vraag die open staat, of null voor het resultaat
+let ww = { antw: {}, stap: 'wie' }, wwRich = 1, wwTab = 'alles', wwVorig = null, wwBezig = false;
+function wwUrl() {
+  const a = ww.antw, p = new URLSearchParams();
+  wwFlow(a).forEach(k => { if (a[k]) p.set(k, a[k]); });
+  if (a.regio && !p.has('regio') && wwRegioTelt(a)) p.set('regio', a.regio);
+  if (ww.stap && ww.stap !== wwVolgende(a)) p.set('stap', ww.stap);
+  const q = p.toString();
+  return location.pathname + (q ? '?' + q : '');
+}
+function wwBewaar(nieuw) {
+  try { history[nieuw ? 'pushState' : 'replaceState']({ ww: { antw: Object.assign({}, ww.antw), stap: ww.stap } }, '', wwUrl()); } catch (e) { /* file:// */ }
+}
+function wwUitUrl(P) {
+  const a = {};
+  ['wie', 'wat', 'regio'].forEach(k => { const v = P.get(k); if (v && wwOptie(k, v)) a[k] = v; });
+  if (a.wat === 'situatie' && wwOptie('casus', P.get('casus'))) a.casus = P.get('casus');
+  const f = wwFlow(a), volgende = wwVolgende(a), stap = P.get('stap');
+  const mag = f.includes(stap) && (!volgende || f.indexOf(stap) <= f.indexOf(volgende));
+  return { antw: a, stap: mag ? stap : volgende };
+}
+function wwGa(stap, rich) {
+  ww.stap = stap; wwRich = rich;
+  if (!stap) wwTab = 'alles';
+  wwBewaar(true);
+  renderWegwijzer(true);
+}
 function wwKies(key, val) {
   ww.antw[key] = val;
-  WW_ORDER.slice(WW_ORDER.indexOf(key) + 1).forEach(k => delete ww.antw[k]);
-  renderWegwijzer(true);
+  if (key === 'wat' && val !== 'situatie') delete ww.antw.casus;
+  wwGa(wwVolgende(ww.antw), 1);
 }
-function wwGaNaar(key) { WW_ORDER.slice(WW_ORDER.indexOf(key)).forEach(k => delete ww.antw[k]); renderWegwijzer(true); }
 function wwTerug() {
-  const f = wwFlow(), h = wwHuidige();
-  if (h === f[0]) { ww.gestart = false; renderWegwijzer(true); return; }
-  for (let i = f.length - 1; i >= 0; i--) { if (ww.antw[f[i]]) { delete ww.antw[f[i]]; break; } }
-  renderWegwijzer(true);
+  const f = wwFlow(ww.antw), i = ww.stap ? f.indexOf(ww.stap) : f.length;
+  if (i > 0) wwGa(f[i - 1], -1);
 }
-function wwTools() {
+function wwOpnieuw() { ww.antw = {}; wwTab = 'alles'; wwGa('wie', -1); }
+// Een keuze aanpassen vanuit het resultaat: meteen herberekenen, zonder de vragen opnieuw te doorlopen
+function wwPasAan(key, val, nr) {
   const a = ww.antw;
-  const dg = a.wie === 'client' ? ['Cliënten', 'Cliënten & Begeleiders'] : a.wie === 'begeleider' ? ['Begeleiders', 'Cliënten & Begeleiders'] : ['Organisaties', 'Begeleiders', 'Cliënten & Begeleiders'];
-  const th = a.wat === 'seksualiteit' ? 'Seksualiteit & Identiteit' : a.wat === 'gender' ? 'Gender & Trans' : a.wat === 'beleid' ? 'Beleid & Organisatie' : null;
-  let res = TOOLS.filter(t => dg.includes(t.doelgroep) && (!th || t.thema === th));
-  if (!res.length) res = TOOLS.filter(t => !th || t.thema === th);
-  return res.slice(0, 4);
+  a[key] = val;
+  if (key === 'wat' && val !== 'situatie') delete a.casus;
+  if (wwRegioTelt(a) && !a.regio) a.regio = 'Heel Vlaanderen';
+  const open = wwVolgende(a);
+  if (open) { wwGa(open, 1); return; } // bv. net "een concrete situatie" gekozen: welke dan?
+  ww.stap = null;
+  wwBewaar(false);
+  renderWegwijzer(false, [key, nr]);
 }
-function wwOrgs() {
-  const a = ww.antw, r = a.regio;
-  const res = (r && r !== 'Heel Vlaanderen') ? ORGS.filter(o => o.regio === r || o.regio === 'Heel Vlaanderen') : ORGS.slice();
-  const pref = a.wie === 'client' ? ['Ontmoeting & Activiteiten', 'Anonieme steun'] : ['Begeleiding & Advies', 'Info & Ondersteuning'];
-  // Eerst de regio zelf, dan de voorkeurstypes
-  res.sort((x, y) => ((y.regio === r) - (x.regio === r)) || (pref.includes(y.type) - pref.includes(x.type)));
-  return res.slice(0, 4);
+
+// ── Weergave: de vragen ──
+function wwVraagHTML(tel) {
+  const a = ww.antw, key = ww.stap, stap = WW_STAP[key], f = wwFlow(a), idx = f.indexOf(key);
+  const route = f.map((k, i) => {
+    const st = k === key ? 'is-now' : a[k] ? 'is-done' : 'is-next';
+    const bereik = k !== key && f.slice(0, i).every(x => a[x]);
+    const o = a[k] && wwOptie(k, a[k]);
+    const label = !a.wat && k === 'regio' ? 'Regio of situatie?' : WW_STAP[k].kort;
+    const keuze = o ? (k === 'casus' ? o.zin : o.kort || o.t) : k === key ? 'Nu aan het kiezen' : 'Nog te kiezen';
+    return `<li class="${st}"><button type="button" class="ww-route-b" data-ww-stap="${k}"${bereik ? '' : ' disabled'}${k === key ? ' aria-current="step"' : ''}${o && bereik ? ` aria-label="${esc(label)} ${esc(keuze)}, wijzig"` : ''}>
+      <span class="ww-route-dot">${o && k !== key ? ico('check') : i + 1}</span>
+      <span class="ww-route-t"><small>${label}</small><b>${esc(keuze)}</b></span></button></li>`;
+  }).join('');
+  let n = 0;
+  const knop = o => {
+    const i = n++;
+    const casus = key === 'casus';
+    return `<button class="ww-opt tone-${o.tone || 'teal'}${casus ? ' ww-opt-casus' : ''}" type="button" data-ww="${key}" data-val="${esc(o.val)}" aria-pressed="${a[key] === o.val}" style="--ad:${calm() ? 0 : i * 40}ms">
+      ${casus ? `<span class="ww-opt-n" aria-hidden="true">${nn(o.val)}</span>` : `<span class="ww-opt-ic">${ico(o.icon || 'spark')}</span>`}
+      <span class="ww-opt-txt">${casus ? `<small class="ww-opt-tag">${o.tag}</small>` : ''}<b>${o.t}</b>${o.d ? `<small>${o.d}</small>` : ''}</span>
+      <span class="ww-opt-end" aria-hidden="true">${i < 9 ? `<kbd class="kbd">${i + 1}</kbd>` : ''}${ico('check', 'ww-opt-check')}</span>
+    </button>`;
+  };
+  let opties;
+  if (key === 'casus') {
+    const themas = [...new Set(WW_CASUS.map(o => o.thema))];
+    opties = `<div class="ww-options ww-options-casus" role="group" aria-labelledby="ww-q">${themas.map(th =>
+      `<p class="ww-opt-group">${th}</p>${WW_CASUS.filter(o => o.thema === th).map(knop).join('')}`).join('')}</div>`;
+  } else if (key === 'wat') {
+    opties = `<div class="ww-options" role="group" aria-labelledby="ww-q">${stap.opties.filter(o => !o.doel).map(knop).join('')}</div>
+      <p class="ww-or"><span>Of zoek je iets specifieks?</span></p>
+      <div class="ww-options ww-options-doel" role="group" aria-label="Iets specifieks">${stap.opties.filter(o => o.doel).map(knop).join('')}</div>`;
+  } else {
+    opties = `<div class="ww-options ww-options-${key}" role="group" aria-labelledby="ww-q">${stap.opties.map(knop).join('')}</div>`;
+  }
+  let hint = '';
+  if (key === 'regio') {
+    const reg = wwRegionaal(a), regios = wwRegioLijst(reg);
+    hint = `<p class="ww-qhint">${reg.length} ${reg.length === 1 ? 'werking' : 'werkingen'} in een specifieke regio ${reg.length === 1 ? 'past' : 'passen'} bij je keuzes (${zinLijst(regios)}). Kies je regio om ze mee te nemen.</p>`;
+  } else if (key === 'casus') hint = '<p class="ww-qhint">Kies de situatie die het dichtst bij de jouwe aanleunt. Je krijgt meteen de handvatten erbij.</p>';
+  const v = wwVorig || tel;
+  const SG = ['prak', 'tool', 'org'];
+  return `<div class="ww-app">
+    <aside class="ww-rail" aria-label="Jouw route">
+      <p class="ww-rail-k">Jouw route</p>
+      <ol class="ww-route" style="--p:${v.p == null ? 0 : v.p}" data-p="${f.length > 1 ? idx / (f.length - 1) : 0}">${route}</ol>
+      <div class="ww-live">
+        <p class="ww-live-top"><span class="ww-live-n" data-tel="${tel.n}">${v.n}</span><span class="ww-live-t">${tel.leeg ? 'items in de gids.<br> Elke keuze filtert.' : 'suggesties passen<br> bij je keuzes.'}</span></p>
+        <span class="ww-live-bar" aria-hidden="true">${SG.map(g => `<i class="tone-${WW_SOORT[g].tone}" style="--g:${v[g]}" data-g="${tel[g]}"></i>`).join('')}</span>
+        <ul class="ww-live-leg">${SG.map(g => `<li class="tone-${WW_SOORT[g].tone}"><span class="chip-dot" aria-hidden="true"></span>${WW_SOORT[g].kort}<b>${tel[g]}</b></li>`).join('')}</ul>
+      </div>
+    </aside>
+    <div class="ww-stage ${wwRich < 0 ? 'is-terug' : 'is-verder'}">
+      <p class="ww-steplabel">Stap ${idx + 1} van ${f.length}${stap.optioneel ? ' · optioneel' : ''}</p>
+      <h2 class="ww-question" id="ww-q" tabindex="-1">${stap.vraag}</h2>
+      ${hint}
+      ${opties}
+      <div class="ww-stage-foot">
+        ${idx > 0 ? `<button class="ww-back" type="button" data-action="ww-back">${ico('arrow-left')}Vorige stap</button>` : '<span></span>'}
+        ${!wwVolgende(a) ? `<button class="btn btn-primary btn-sm" type="button" data-action="ww-res">Naar je resultaat${ico('arrow-right')}</button>`
+          : `<span class="ww-keys" aria-hidden="true">Kies met <kbd class="kbd">1</kbd>–<kbd class="kbd">${Math.min(9, n)}</kbd></span>`}
+      </div>
+    </div>
+  </div>`;
 }
-function wwBeleid() {
-  const a = ww.antw;
-  if (a.wat === 'beleid') return BELEID.filter(b => b.groep === 'Vlaams zorgbeleid' || b.groep === 'Praktijk & vorming').slice(0, 3);
-  if (a.wie === 'team') return BELEID.filter(b => b.groep === 'Praktijk & vorming' || b.groep === 'Rechten & wetgeving').slice(0, 3);
-  return BELEID.filter(b => b.groep === 'Rechten & wetgeving').slice(0, 2);
+
+// ── Weergave: het resultaat ──
+const wwWaarom = w => (w && w.length ? `<span class="ww-why"><span class="sr-only">Past bij: </span>${w.slice(0, 3).map(([t, i]) => `<span>${ico(i)}${esc(t)}</span>`).join('')}</span>` : '');
+function wwTabHref(tab, a) {
+  if (tab !== 'taal') return `/praktijk/?tab=${tab}`;
+  const cat = (WW_TERMEN[wwThema(a)] || WW_TERMEN.standaard).cat;
+  return `/praktijk/?tab=taal${cat ? '&cat=' + encodeURIComponent(cat) : ''}`;
 }
-function renderWegwijzer(scroll) {
+function wwPrakInfo(it, a) {
+  if (it.c) return { tone: 'violet', icon: 'bubble', k: `Casus ${nn(it.n)} · ${it.c.tag}`, t: it.c.titel, d: it.c.blokken[0].tekst, href: `/praktijk/?tab=casus#casus-${it.n}`, cta: 'Lees de situatie' };
+  const p = it.p;
+  return { tone: p.tone, icon: p.icon, k: 'Instrument', t: p.t, d: p.d, href: wwTabHref(p.tab, a), cta: WW_CTA[p.tab] };
+}
+function wwPrakKaart(it, a, i, extra) {
+  const k = wwPrakInfo(it, a);
+  return `<a class="ww-pk tone-${k.tone}${extra ? ' ww-extra' : ''}" href="${k.href}" style="--ad:${Math.min(i, 6) * 50}ms"${extra ? ' hidden' : ''}>
+    <span class="ww-pk-top"><span class="ww-pk-ic">${ico(k.icon)}</span><span class="ww-pk-k">${k.k}</span></span>
+    <span class="ww-pk-t">${k.t}</span>
+    <span class="ww-pk-d">${kort(k.d, 125)}</span>
+    ${wwWaarom(it.waarom)}
+    <span class="ww-pk-go">${k.cta}${ico('arrow-right')}</span>
+  </a>`;
+}
+function wwToolKaart(it, a, i, extra) {
+  const t = it.t;
+  return `<article class="ww-row tone-${THEMA_TONE[t.thema] || 'teal'}${extra ? ' ww-extra' : ''}" style="--ad:${Math.min(i, 6) * 50}ms"${extra ? ' hidden' : ''}>
+    <span class="ww-row-ic">${ico('tool')}</span>
+    <div class="ww-row-body">
+      <h4 class="ww-row-t"><a href="${t.url}" target="_blank" rel="noopener noreferrer">${t.title}${ext}</a></h4>
+      <p class="ww-row-sub">${t.org} <span aria-hidden="true">·</span> ${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}${t.doelgroep}</p>
+      <p class="ww-row-d">${kort(t.beschrijving, 125)}</p>
+      ${wwWaarom(it.waarom)}
+    </div>
+    <span class="ww-row-go" aria-hidden="true">${ico('arrow-up-right')}</span>
+  </article>`;
+}
+function wwOrgKaart(it, a, i, extra) {
+  const o = it.o, tekst = o.beschrijving.split(/\s*Let op:\s*/)[0];
+  return `<article class="ww-row tone-${TYPE_TONE[o.type] || 'blue'}${extra ? ' ww-extra' : ''}" style="--ad:${Math.min(i, 6) * 50}ms"${extra ? ' hidden' : ''}>
+    <span class="ww-row-ic">${ico(WW_ORG_ICO[o.type] || 'users')}</span>
+    <div class="ww-row-body">
+      <h4 class="ww-row-t"><a href="${o.url}" target="_blank" rel="noopener noreferrer">${o.naam}${ext}</a></h4>
+      <p class="ww-row-sub">${ico('pin')}${REGIO_KORT(o.regio)} <span aria-hidden="true">·</span> ${o.type}</p>
+      <p class="ww-row-d">${kort(tekst, 125)}</p>
+      ${wwWaarom(it.waarom)}
+      ${it.letop ? `<p class="ww-row-note">${ico('alert')}Mogelijk niet meer actief: check eerst de status</p>` : ''}
+      ${o.telefoon ? `<a class="phone-btn" href="tel:${o.telefoon.replace(/\s/g, '')}" aria-label="Bel ${o.naam} op ${o.telefoon}">${ico('phone')}${o.telefoon}</a>` : ''}
+    </div>
+    <span class="ww-row-go" aria-hidden="true">${ico('arrow-up-right')}</span>
+  </article>`;
+}
+
+// "Begin hier": de beste match, groot en met een voorproefje
+function wwVoorproef(tab, a) {
+  const th = wwThema(a);
+  if (tab === 'taal') {
+    const termen = (WW_TERMEN[th] || WW_TERMEN.standaard).woorden.map(w => TERMEN.find(t => t.woord === w)).filter(Boolean);
+    return `<div class="ww-terms">${termen.map(t => `<div class="ww-term tone-${TERM_CAT_COLOR[t.cat] || 'teal'}"><b>${t.woord}</b><span>${kort(t.def, 95)}</span></div>`).join('')}</div>
+      <p class="ww-side-foot">${ico('cards')}En nog ${TERMEN.length - termen.length} begrippen, met een oefenmodus om ze in te oefenen.</p>`;
+  }
+  if (tab === 'vlag') {
+    return `<ul class="ww-flags">${VLAGGEN.map(v => `<li data-vlag="${v.key}" style="--fc:${v.kleur}"><svg class="ww-flag" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22V3"/><path d="M5 4h13l-3.5 4.5L18 13H5z"/></svg><b>${v.naam}</b><small>${v.wat}</small></li>`).join('')}</ul>
+      <p class="ww-side-foot">${ico('check-circle')}Zes criteria: ${zinLijst(VLAG_CRITERIA.map(c => c.naam.toLowerCase()))}.</p>`;
+  }
+  if (tab === 'scan') {
+    const dom = scanDomeinNamen(), bezig = Object.keys(Opslag.lees('rg-scan', {})).length, hist = Opslag.lees('rg-scan-hist', []);
+    const status = bezig && bezig < SCAN_VRAGEN.length ? `Je vulde al ${bezig} van de ${SCAN_VRAGEN.length} stellingen in. Ga verder waar je was.`
+      : hist.length ? `Je laatste resultaat: ${hist[hist.length - 1].pct}%. Doe de scan opnieuw en vergelijk.`
+      : `${SCAN_VRAGEN.length} stellingen over ${dom.length} domeinen. Je antwoorden blijven op dit toestel.`;
+    return `<ul class="ww-doms">${dom.map(d => `<li>${ico(SCAN_ICO[d] || 'spark')}${d}</li>`).join('')}</ul><p class="ww-side-foot">${ico('clipboard')}${status}</p>`;
+  }
+  if (tab === 'quiz') {
+    const q = QUIZ_VRAGEN[{ gender: 0, taal: 2, werking: 5, comingout: 7, relaties: 8 }[th] ?? 4] || QUIZ_VRAGEN[0];
+    const best = Opslag.lees('rg-quiz-best', null);
+    return `<div class="ww-quiz"><p class="ww-quiz-k">Voorbeeldvraag</p><p class="ww-quiz-q">${q.vraag}</p>
+      <ol class="ww-quiz-o">${q.opties.map((o, i) => `<li><span aria-hidden="true">${'ABC'[i]}</span>${o}</li>`).join('')}</ol></div>
+      <p class="ww-side-foot">${ico('trophy')}${best != null ? `Je beste score tot nu: ${best} op ${QUIZ_VRAGEN.length}.` : `${QUIZ_VRAGEN.length} vragen, telkens met uitleg bij het antwoord.`}</p>`;
+  }
+  return `<ol class="ww-steps">${CASUS.slice(0, 3).map((c, i) => `<li><span class="ww-steps-ic">${nn(i + 1)}</span><div><b>${c.tag}</b><p>${c.titel}</p></div></li>`).join('')}</ol>
+    <p class="ww-side-foot">${ico('bubble')}${CASUS.length} situaties, elk met duiding en handvatten.</p>`;
+}
+function wwTop(it, a) {
+  let tone, kop, titel, tekst, knoppen, zij;
+  if (it.c) {
+    const c = it.c, ic = ['eye', 'hand', 'alert'];
+    tone = 'violet'; kop = `Casus ${nn(it.n)} · ${c.tag}`; titel = c.titel; tekst = c.blokken[0].tekst;
+    knoppen = `<a class="btn ww-btn" href="/praktijk/?tab=casus#casus-${it.n}">Lees de handvatten${ico('arrow-right')}</a>`;
+    const verder = (c.chips || []).filter(ch => ch.go !== 'beleid').map(ch => (ch.url
+      ? `<a class="casus-chip" href="${ch.url}" target="_blank" rel="noopener noreferrer">${ch.l}${ico('arrow-up-right')}${ext}</a>`
+      : `<button class="casus-chip" type="button" data-go="${ch.go}">${ch.l}${ico('arrow-right')}</button>`)).join('');
+    zij = `<ol class="ww-steps">${c.blokken.slice(1).map((b, k) => `<li><span class="ww-steps-ic">${ico(ic[k + 1])}</span><div><b>${b.kop}</b><p>${kort(b.tekst, 150)}</p></div></li>`).join('')}</ol>
+      ${verder ? `<div class="ww-top-chips"><span class="ww-top-chips-k">Verder</span>${verder}</div>` : ''}`;
+  } else if (it.p) {
+    const p = it.p;
+    tone = p.tone; kop = 'Instrument uit de praktijk'; titel = p.t; tekst = p.d;
+    knoppen = `<a class="btn ww-btn" href="${wwTabHref(p.tab, a)}">${WW_CTA[p.tab]}${ico('arrow-right')}</a>`;
+    zij = wwVoorproef(p.tab, a);
+  } else {
+    const o = it.o, t = it.t, url = (o || t).url;
+    tone = o ? TYPE_TONE[o.type] || 'blue' : THEMA_TONE[t.thema] || 'teal';
+    kop = o ? o.type : `Tool · ${t.thema}`; titel = o ? o.naam : t.title; tekst = (o ? o.beschrijving.split(/\s*Let op:\s*/)[0] : t.beschrijving);
+    knoppen = `<a class="btn ww-btn" href="${url}" target="_blank" rel="noopener noreferrer">${o ? 'Bezoek de website' : 'Bekijk de tool'}${ico('arrow-up-right')}${ext}</a>`
+      + (o && o.telefoon ? `<a class="btn btn-ghost" href="tel:${o.telefoon.replace(/\s/g, '')}">${ico('phone')}Bel ${o.telefoon}</a>` : '');
+    zij = `<div class="ww-contact">
+      ${o ? `<p class="ww-contact-row">${ico('pin')}<span><small>Regio</small>${REGIO_KORT(o.regio)}</span></p>
+      <p class="ww-contact-row">${ico(WW_ORG_ICO[o.type] || 'users')}<span><small>Soort werking</small>${o.type}</span></p>` : `<p class="ww-contact-row">${ico('users')}<span><small>Van</small>${t.org}</span></p>`}
+      ${o && o.telefoon ? `<p class="ww-contact-row">${ico('phone')}<span><small>Telefoon</small><a href="tel:${o.telefoon.replace(/\s/g, '')}">${o.telefoon}</a></span></p>` : ''}
+      ${t ? `<p class="ww-contact-row">${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}<span><small>Voor</small>${t.doelgroep}</span></p>` : ''}
+      <p class="ww-contact-row">${ico('globe')}<span><small>Website</small><a href="${url}" target="_blank" rel="noopener noreferrer">${wwLinkKaal(url).split('/')[0]}${ext}</a></span></p>
+    </div>
+    ${o ? `<p class="ww-side-foot">${ico('info')}Tip: neem eerst even contact op. Zo hoor je wat er nu loopt en of het aanbod past.</p>` : ''}`;
+  }
+  return `<section class="ww-top tone-${tone}" data-sec="${it.soort}" aria-labelledby="ww-top-t" style="--ad:60ms">
+    <div class="ww-top-main">
+      <p class="ww-top-k"><span class="ww-top-star">${ico('star')}Begin hier</span><span>${kop}</span></p>
+      <h3 class="ww-top-t" id="ww-top-t">${titel}</h3>
+      <p class="ww-top-d">${kort(tekst, 330)}</p>
+      ${wwWaarom(it.waarom)}
+      <div class="ww-top-acts">${knoppen}</div>
+    </div>
+    <div class="ww-top-side">${zij}</div>
+  </section>`;
+}
+
+// Waarop een sectie gefilterd is, in gewone taal
+function wwFilterZin(g, a) {
+  if (g === 'prak') return 'Instrumenten en situaties van de Praktijk-pagina, het best passend eerst.';
+  const d = [];
+  if (a.wat === 'situatie') d.push('<b>wat bij deze situatie past</b>');
+  else if (a.wat && !(a.wat === 'doorverwijzen' && g === 'org')) d.push(`<b>${wwZin('wat', a.wat)}</b>`);
+  if (a.wie) d.push(`<b>${wwOptie('wie', a.wie).waarom.toLowerCase()}</b>`);
+  if (g === 'org') { const r = a.regio && a.regio !== 'Heel Vlaanderen' ? a.regio : ''; d.push(r ? `<b>${REGIO_KORT(r)}</b> of heel Vlaanderen` : 'werkingen in <b>heel Vlaanderen</b>'); }
+  return `Gefilterd op ${zinLijst(d)}. Best passend eerst.`;
+}
+function wwOverzicht(g, a) {
+  if (g === 'prak') return '/praktijk/';
+  if (g === 'tool') { const th = { relaties: 'sek', grenzen: 'sek', gender: 'gen', werking: 'bel' }[wwThema(a)]; return '/tools/' + (th ? '?thema=' + th : ''); }
+  return '/organisaties/' + (a.regio && a.regio !== 'Heel Vlaanderen' ? '?regio=' + encodeURIComponent(a.regio) : '');
+}
+function wwRegioKeuze(a, label) {
+  return `<label class="ww-sel"><span class="sr-only">${label}</span><select data-ww-tok="regio">${wwOpties('regio').map(o => `<option value="${esc(o.val)}"${o.val === (a.regio || 'Heel Vlaanderen') ? ' selected' : ''}>${o.kort || o.t}</option>`).join('')}</select>${ico('chevron-down')}</label>`;
+}
+function wwRegioHint(a, r) {
+  const reg = a.regio && a.regio !== 'Heel Vlaanderen' ? a.regio : '';
+  if (!reg && r.regionaal.length) {
+    const n = r.regionaal.length, regios = wwRegioLijst(r.regionaal);
+    return `<div class="ww-hint">${ico('pin')}<p><b>Nog ${n} ${n === 1 ? 'werking' : 'werkingen'} in een specifieke regio</b> (${zinLijst(regios)}). Kies je regio om ze mee te nemen.</p>${wwRegioKeuze(a, 'Kies je regio')}</div>`;
+  }
+  if (reg && !r.org.some(o => o.regio === reg)) return `<div class="ww-hint is-info">${ico('info')}<p>In <b>${REGIO_KORT(reg)}</b> vonden we geen aparte werking rond dit thema. Deze organisaties werken in heel Vlaanderen.</p></div>`;
+  return '';
+}
+function wwSectie(g, items, a, r) {
+  const S = WW_SOORT[g], hint = g === 'org' ? wwRegioHint(a, r) : '';
+  if (!items.length && !hint) return '';
+  const kaart = { prak: wwPrakKaart, tool: wwToolKaart, org: wwOrgKaart }[g];
+  const meer = items.length - S.zicht;
+  return `<section class="ww-sec tone-${S.tone}" data-sec="${g}" aria-labelledby="ww-h-${g}">
+    <header class="ww-sec-head">
+      <span class="ww-sec-ic">${ico(S.icon)}</span>
+      <div><h3 class="ww-sec-t" id="ww-h-${g}">${S.t}<span class="ww-sec-n">${r[g].length}</span></h3><p>${wwFilterZin(g, a)}</p></div>
+    </header>
+    ${hint}
+    ${items.length ? `<div class="ww-grid ww-grid-${g}">${items.map((it, i) => kaart(it, a, i, i >= S.zicht)).join('')}</div>` : ''}
+    <div class="ww-sec-foot">
+      ${meer > 0 ? `<button class="ww-more" type="button" data-ww-meer="${esc(`Toon nog ${meer} ${meer === 1 ? S.een : S.meer}`)}" aria-expanded="false">${ico('chevron-down')}<span>Toon nog ${meer} ${meer === 1 ? S.een : S.meer}</span></button>` : ''}
+      <a class="link-arrow" href="${wwOverzicht(g, a)}">${S.alle}${ico('arrow-right')}</a>
+    </div>
+  </section>`;
+}
+function wwKeuzeVeld(key, val, label) {
+  const o = wwOptie(key, val) || {};
+  return `<label class="ww-tok tone-${o.tone || 'teal'}"><span class="sr-only">${label}: </span><span class="ww-tok-v" aria-hidden="true">${esc(wwZin(key, val))}</span>${ico('chevron-down')}<select data-ww-tok="${key}">${wwOpties(key).map(x =>
+    `<option value="${esc(x.val)}"${x.val === val ? ' selected' : ''}>${esc(key === 'casus' ? `${nn(x.val)}. ${x.t}` : x.kort || x.t)}</option>`).join('')}</select></label>`;
+}
+function wwResultaatHTML() {
+  const a = ww.antw, r = wwResultaten(a);
+  const orgEerst = a.wat === 'doorverwijzen';
+  const volgorde = orgEerst ? ['org', 'prak', 'tool'] : ['prak', 'tool', 'org'];
+  // Een organisatie die mogelijk niet meer actief is, zetten we nooit als eerste tip
+  const org = r.org.find(o => !o.letop);
+  const top = (orgEerst ? org : r.prak[0]) || r.prak[0] || org || r.tool[0];
+  const n = r.prak.length + r.tool.length + r.org.length;
+  const zin = `Voor ${wwKeuzeVeld('wie', a.wie, 'Voor wie')}, over ${wwKeuzeVeld('wat', a.wat, 'Thema')}${a.casus ? `: ${wwKeuzeVeld('casus', a.casus, 'Situatie')}` : ''}${wwRegioTelt(a) ? `, in ${wwKeuzeVeld('regio', a.regio || 'Heel Vlaanderen', 'Regio')}` : ''}.`;
+  const tabs = [['alles', 'Alles', n], ...volgorde.map(g => [g, WW_SOORT[g].kort, r[g].length])];
+  return `<div class="ww-res">
+    <header class="ww-res-head">
+      <div class="ww-res-intro">
+        <p class="ww-res-k">${ico('check-circle')}Jouw wegwijzer</p>
+        <h2 class="ww-res-title" id="ww-res-title" tabindex="-1">${n ? `${n} ${n === 1 ? 'suggestie' : 'suggesties'} op maat` : 'Geen directe match'}</h2>
+        <p class="ww-zin">${zin}</p>
+        <p class="ww-zin-hint">${ico('edit')}Wijzig een keuze in de zin hierboven en het resultaat past zich meteen aan.</p>
+      </div>
+      <div class="ww-res-acts">
+        <button class="ww-act" type="button" data-action="ww-link" aria-label="Kopieer een link naar deze selectie">${ico('link')}<span>Deel</span></button>
+        <button class="ww-act" type="button" data-action="ww-print" aria-label="Druk deze selectie af">${ico('printer')}<span>Afdrukken</span></button>
+        <button class="ww-act" type="button" data-action="ww-reset" aria-label="Begin opnieuw">${ico('refresh')}<span>Opnieuw</span></button>
+      </div>
+    </header>
+    ${n ? `<nav class="ww-tabs" aria-label="Toon enkel"><div class="ww-tabs-in">${tabs.map(([k, t, c]) =>
+      `<button type="button" data-ww-tab="${k}"${k !== 'alles' ? ` class="tone-${WW_SOORT[k].tone}"` : ''} aria-pressed="${wwTab === k}"${c ? '' : ' disabled'}>${k !== 'alles' ? '<span class="chip-dot" aria-hidden="true"></span>' : ''}${t}<span class="ww-tabs-n">${c}</span></button>`).join('')}</div></nav>
+    ${top ? wwTop(top, a) : ''}
+    ${volgorde.map(g => wwSectie(g, r[g].filter(x => x !== top), a, r)).join('')}`
+    : `<div class="empty ww-leeg"><b>Niets dat precies bij deze combinatie past</b>Pas hierboven een keuze aan, of bekijk de volledige overzichten.<br><a class="btn btn-ghost btn-sm" href="/praktijk/">Praktijk</a> <a class="btn btn-ghost btn-sm" href="/tools/">Tools</a> <a class="btn btn-ghost btn-sm" href="/organisaties/">Organisaties</a></div>`}
+    <footer class="ww-res-foot">
+      <div><p class="ww-res-foot-t">Niet gevonden wat je zocht?</p><p>Zoek in alle tools, organisaties, begrippen en casussen, of pas hierboven je keuzes aan.</p></div>
+      <div class="ww-res-foot-acts">
+        <button class="btn btn-ghost" type="button" data-action="search">${ico('search')}Zoeken</button>
+        <button class="btn btn-ghost" type="button" data-action="help">${ico('heart')}Hulp nodig?</button>
+      </div>
+    </footer>
+    <p class="print-only">Selectie via De Regenbooggids: ${esc(location.href)}</p>
+  </div>`;
+}
+function wwToonTab(tab, scroll) {
+  const sh = $('#ww-shell'), knop = $(`[data-ww-tab="${tab}"]`, sh);
+  if (!knop || knop.disabled) tab = 'alles';
+  wwTab = tab;
+  $$('[data-ww-tab]', sh).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.wwTab === tab)));
+  $$('[data-sec]', sh).forEach(s => { s.hidden = tab !== 'alles' && s.dataset.sec !== tab; });
+  // Stond de balk al vast bovenaan? Breng dan het begin van de selectie in beeld
+  const balk = $('.ww-tabs', sh), eerste = $('[data-sec]:not([hidden])', sh);
+  if (scroll && balk && eerste && balk.getBoundingClientRect().top < 120) eerste.scrollIntoView({ block: 'start', behavior: calm() ? 'auto' : 'smooth' });
+}
+function wwMeer(knop) {
+  const sec = knop.closest('.ww-sec'), extra = $$('.ww-extra', sec), open = knop.getAttribute('aria-expanded') !== 'true';
+  extra.forEach((el, i) => { el.hidden = !open; el.style.setProperty('--ad', `${i * 50}ms`); });
+  knop.setAttribute('aria-expanded', String(open));
+  $('span', knop).textContent = open ? 'Toon minder' : knop.dataset.wwMeer;
+}
+
+function renderWegwijzer(scroll, focusVeld) {
   const sh = $('#ww-shell');
   if (!sh) return;
-  const naarBoven = () => {
-    if (!scroll) return;
-    const r = sh.getBoundingClientRect();
-    if (r.top < 80 || r.top > innerHeight * 0.4) sh.scrollIntoView({ block: 'start', behavior: calm() ? 'auto' : 'smooth' });
-  };
-
-  if (!ww.gestart && !Object.keys(ww.antw).length) {
-    sh.innerHTML = `
-      <div class="ww-intro">
-        <div class="ww-intro-art" aria-hidden="true"><svg class="emblem emblem-ww" viewBox="0 0 240 180" focusable="false"><defs><linearGradient id="eg-ww" gradientUnits="userSpaceOnUse" x1="0" y1="24" x2="0" y2="170"><stop offset="0" style="stop-color:var(--r1)"/><stop offset=".2" style="stop-color:var(--r2)"/><stop offset=".4" style="stop-color:var(--r3)"/><stop offset=".6" style="stop-color:var(--r4)"/><stop offset=".8" style="stop-color:var(--r5)"/><stop offset="1" style="stop-color:var(--r6)"/></linearGradient><radialGradient id="eg-ww-glow"><stop offset="0" style="stop-color:var(--brand);stop-opacity:.22"/><stop offset="1" style="stop-color:var(--brand);stop-opacity:0"/></radialGradient></defs><circle class="em-glow" cx="120" cy="96" r="84" fill="url(#eg-ww-glow)"/><path class="em-post draw" pathLength="100" d="M120 30V166" stroke="url(#eg-ww)"/><path class="em-base draw" style="--i:1" pathLength="100" d="M98 166H142" stroke="url(#eg-ww)"/><g class="em-board" style="--i:0"><path d="M70 38H168L184 53L168 68H70Z" style="stroke:var(--r1)"/><path d="M86 53H148" style="stroke:var(--r1)"/></g><g class="em-board" style="--i:1;--sw:-1.5deg"><path d="M170 82H72L56 97L72 112H170Z" style="stroke:var(--r4)"/><path d="M92 97H154" style="stroke:var(--r4)"/></g><g class="em-board" style="--i:2"><path d="M80 126H148L162 139L148 152H80Z" style="stroke:var(--r6)"/><path d="M92 139H134" style="stroke:var(--r6)"/></g><circle class="em-finial" cx="120" cy="26" r="6"/></svg></div>
-        <p class="eyebrow">${ico('compass')}Persoonlijke keuzehulp</p>
-        <h2 class="h2">Niet zeker waar <em>te beginnen?</em></h2>
-        <p>Beantwoord drie korte vragen en de Wegwijzer stelt een selectie samen op maat van jouw situatie: de meest relevante tools, organisaties en kaders. Klaar in minder dan een minuut.</p>
-        <ol class="ww-steps-preview"><li><span>1</span>Voor wie?</li><li><span>2</span>Welk thema?</li><li><span>3</span>Welke regio?</li></ol>
-        <button class="btn btn-primary btn-lg" type="button" data-action="ww-start">Start de Wegwijzer${ico('arrow-right')}</button>
-      </div>`;
-    naarBoven();
-    return;
+  const res = !ww.stap;
+  let tel = null;
+  sh.dataset.view = res ? 'res' : 'vraag';
+  if (res) {
+    sh.innerHTML = wwResultaatHTML();
+    wwToonTab(wwTab);
+    wwVorig = null;
+  } else {
+    tel = wwTel(ww.antw);
+    sh.innerHTML = wwVraagHTML(tel);
+    // Teller, verdeling en route schuiven vanaf de vorige stand naar de nieuwe
+    const route = $('.ww-route', sh), nEl = $('.ww-live-n', sh), p = +route.dataset.p;
+    tel.p = p;
+    requestAnimationFrame(() => {
+      route.style.setProperty('--p', p);
+      $$('.ww-live-bar i', sh).forEach(i => i.style.setProperty('--g', i.dataset.g));
+    });
+    const van = +nEl.textContent, naar = tel.n;
+    if (calm() || van === naar) nEl.textContent = naar;
+    else {
+      const t0 = performance.now();
+      const stap = t => {
+        const q = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - q, 3);
+        nEl.textContent = Math.round(van + (naar - van) * e);
+        if (q < 1 && nEl.isConnected) requestAnimationFrame(stap);
+      };
+      requestAnimationFrame(stap);
+    }
+    wwVorig = tel;
   }
-  const h = wwHuidige();
-  if (!h) { sh.innerHTML = wwResultaat(); naarBoven(); const t = $('#ww-res-title'); if (t) t.focus({ preventScroll: true }); initReveal(sh); return; }
-  const stap = WW_STAPPEN.find(s => s.key === h), flow = wwTotaal(), idx = flow.indexOf(h);
-  const chips = wwFlow().filter(k => ww.antw[k]).map(k =>
-    `<button class="ww-chip" type="button" data-ww-naar="${k}" title="Wijzig deze keuze"><small>${WW_KOP[k]}</small>${WW_LABELS[k][ww.antw[k]] || ww.antw[k]}${ico('edit')}</button>`).join('');
-  sh.innerHTML = `
-    <div class="ww-progress" aria-hidden="true">${flow.map((k, i) => `<button type="button" tabindex="-1" class="${i < idx ? 'is-done' : i === idx ? 'is-now' : ''}"${i < idx ? ` data-ww-naar="${k}"` : ''}></button>`).join('')}</div>
-    ${chips ? `<div class="ww-chips">${chips}</div>` : ''}
-    <p class="ww-steplabel">Stap ${idx + 1} van ${flow.length}${stap.optioneel ? ' · optioneel' : ''}</p>
-    <h2 class="ww-question" id="ww-q" tabindex="-1">${stap.vraag}</h2>
-    <div class="ww-options">${stap.opties.map((o, k) => `
-      <button class="ww-option" type="button" data-ww="${stap.key}" data-val="${esc(o.val)}" style="--ad:${calm() ? 0 : k * 45}ms">
-        <span class="ww-option-ic">${ico(o.icon || 'spark')}</span>
-        <span><b>${o.t}</b>${o.d ? `<small>${o.d}</small>` : ''}</span>
-        ${ico('chevron-right')}
-      </button>`).join('')}</div>
-    <button class="ww-back" type="button" data-action="ww-back">${ico('arrow-left')}${idx > 0 ? 'Vorige stap' : 'Terug naar de start'}</button>`;
-  naarBoven();
-  if (scroll) $('#ww-q').focus({ preventScroll: true });
+  if (scroll) {
+    const top = sh.getBoundingClientRect().top;
+    if (top < 80 || top > innerHeight * 0.5) sh.scrollIntoView({ block: 'start', behavior: calm() ? 'auto' : 'smooth' });
+  }
+  if (focusVeld) {
+    const velden = $$(`[data-ww-tok="${focusVeld[0]}"]`, sh);
+    const v = velden[focusVeld[1]] || velden[0];
+    if (v) v.focus({ preventScroll: true });
+  } else if (scroll) {
+    const kop = $(res ? '#ww-res-title' : '#ww-q', sh);
+    if (kop) kop.focus({ preventScroll: true });
+  }
 }
-function wwResultaat() {
-  const a = ww.antw;
-  const WIE = { client: 'een cliënt', begeleider: 'jezelf als begeleider', team: 'je team of organisatie' };
-  const WAT = { seksualiteit: 'seksualiteit en relaties', gender: 'gender en transgender', taal: 'taal en begrippen', situatie: 'een concrete situatie', beleid: 'beleid opzetten', doorverwijzen: 'iemand doorverwijzen' };
-  const regio = (a.regio && a.regio !== 'Heel Vlaanderen') ? a.regio : '';
-  const tools = a.wat !== 'doorverwijzen' ? wwTools() : [], orgs = wwOrgs(), beleid = wwBeleid();
-  const totaal = tools.length + orgs.length + beleid.length;
-  const groep = (tone, icon, titel, lijst, kaart) => lijst.length ? `
-    <section class="ww-group tone-${tone} reveal">
-      <h3 class="ww-group-h"><span class="ww-group-ic">${ico(icon)}</span>${titel}<span class="ww-group-n">${lijst.length}</span></h3>
-      <div class="ww-mini">${lijst.map(kaart).join('')}</div>
-    </section>` : '';
-  const toolsKort = t => toolKaart(Object.assign({}, t, { beschrijving: kort(t.beschrijving, 140) })).replace(/ id="t-[^"]*"/, '');
-  let groepen = groep('teal', 'tool', 'Aanbevolen tools', tools, toolsKort)
-    + groep('blue', 'users', `Organisaties${regio ? ` in ${REGIO_KORT(regio)}` : ''}`, orgs, o => orgKaart(o, true).replace(/ id="o-[^"]*"/, ''))
-    + groep('amber', 'scale', 'Beleid & kaders', beleid, b => beleidKaart(b, true).replace(/ id="b-[^"]*"/, ''));
-  if (!groepen) groepen = '<div class="empty"><b>Geen directe match</b>Bekijk gerust de volledige overzichten via de knoppen hieronder.</div>';
-  const thKey = a.wat === 'seksualiteit' ? 'sek' : a.wat === 'gender' ? 'gen' : a.wat === 'beleid' ? 'bel' : '';
-  const toolsUrl = '/tools/' + (() => { const p = new URLSearchParams(); if (thKey) p.set('thema', thKey); if (a.wie) p.set('doelgroep', a.wie); const s = p.toString(); return s ? '?' + s : ''; })();
-  const ctas = [];
-  if (a.wat === 'taal') ctas.push(`<a class="btn btn-primary" href="/praktijk/?tab=taal">${ico('book')}Open de taalgids</a>`);
-  if (a.wat === 'situatie') ctas.push(`<a class="btn btn-primary" href="/praktijk/?tab=casus">${ico('bubble')}Bekijk de casuïstiek</a>`);
-  if (a.wat === 'seksualiteit') ctas.push(`<a class="btn btn-ghost" href="/praktijk/?tab=vlag">${ico('flag')}Vlaggensysteem in het kort</a>`);
-  ctas.push(`<a class="btn ${ctas.length ? 'btn-ghost' : 'btn-primary'}" href="${toolsUrl}">Alle tools bekijken${ico('arrow-right')}</a>`);
-  ctas.push(`<a class="btn btn-ghost" href="/organisaties/${regio ? '?regio=' + encodeURIComponent(regio) : ''}">Alle organisaties</a>`);
-  if (a.wie === 'team' || a.wat === 'beleid') ctas.push(`<a class="btn btn-ghost" href="/praktijk/?tab=scan">${ico('clipboard')}Doe de team-zelfscan</a>`);
-  const samen = wwFlow().filter(k => a[k]).map(k => `<span>${WW_LABELS[k][a[k]] || a[k]}</span>`).join('');
-  return `
-    <div class="ww-result-hero">
-      <p class="ww-result-badge">${ico('check-circle')}Jouw wegwijzer</p>
-      <h2 class="ww-result-title" id="ww-res-title" tabindex="-1">${totaal} suggesties op maat</h2>
-      <p class="ww-result-sub">Voor ${WIE[a.wie] || 'jou'}, rond ${WAT[a.wat] || 'dit thema'}${regio ? ` in ${REGIO_KORT(regio)}` : ''}. Dit is een vertrekpunt, bekijk gerust ook de volledige overzichten.</p>
-      ${samen ? `<div class="ww-sum">${samen}</div>` : ''}
-    </div>
-    ${groepen}
-    <div class="ww-cta-row">${ctas.join('')}</div>
-    <button class="ww-back" type="button" data-action="ww-reset">${ico('refresh')}Opnieuw beginnen</button>`;
+function wwKlik(o) {
+  if (wwBezig) return;
+  wwBezig = true;
+  $$(`[data-ww="${o.dataset.ww}"]`).forEach(b => b.setAttribute('aria-pressed', String(b === o)));
+  o.classList.add('is-picked');
+  setTimeout(() => { wwBezig = false; wwKies(o.dataset.ww, o.dataset.val); }, calm() ? 0 : 170);
 }
 function initWegwijzer() {
   const sh = $('#ww-shell');
   if (!sh) return;
-  const wie = QP.get('wie');
-  if (wie && WW_STAPPEN[0].opties.some(o => o.val === wie)) ww = { antw: { wie }, gestart: true };
+  wwBouw();
+  ww = wwUitUrl(QP);
+  wwBewaar(false);
   sh.addEventListener('click', e => {
     const o = e.target.closest('[data-ww]');
-    if (o) { wwKies(o.dataset.ww, o.dataset.val); return; }
-    const n = e.target.closest('[data-ww-naar]');
-    if (n) wwGaNaar(n.dataset.wwNaar);
+    if (o) { wwKlik(o); return; }
+    const s = e.target.closest('[data-ww-stap]');
+    if (s) { const f = wwFlow(ww.antw); wwGa(s.dataset.wwStap, f.indexOf(s.dataset.wwStap) < f.indexOf(ww.stap) ? -1 : 1); return; }
+    const t = e.target.closest('[data-ww-tab]');
+    if (t) { wwToonTab(t.dataset.wwTab, true); return; }
+    const m = e.target.closest('[data-ww-meer]');
+    if (m) wwMeer(m);
+  });
+  sh.addEventListener('change', e => {
+    const s = e.target.closest('[data-ww-tok]');
+    if (s) wwPasAan(s.dataset.wwTok, s.value, $$(`[data-ww-tok="${s.dataset.wwTok}"]`, sh).indexOf(s));
+  });
+  addEventListener('popstate', e => {
+    const st = e.state && e.state.ww ? e.state.ww : wwUitUrl(new URLSearchParams(location.search));
+    const f = wwFlow(st.antw), nu = ww.stap ? f.indexOf(ww.stap) : f.length, straks = st.stap ? f.indexOf(st.stap) : f.length;
+    ww = { antw: Object.assign({}, st.antw), stap: st.stap };
+    wwRich = straks < nu ? -1 : 1;
+    wwTab = 'alles';
+    renderWegwijzer(true);
+  });
+  // Sneltoetsen tijdens de vragen: 1–9 kiest, Backspace gaat een stap terug
+  document.addEventListener('keydown', e => {
+    if (!ww.stap || e.metaKey || e.ctrlKey || e.altKey || document.querySelector('dialog[open]')) return;
+    if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+    if (/^[1-9]$/.test(e.key)) {
+      const o = $$('[data-ww]', sh)[+e.key - 1];
+      if (o) { e.preventDefault(); wwKlik(o); }
+    } else if (e.key === 'Backspace' && ww.stap !== 'wie') { e.preventDefault(); wwTerug(); }
   });
   renderWegwijzer(false);
 }
@@ -1786,9 +2224,11 @@ const ACT = {
       const k = $('#quiz-card'); if (k && k.getBoundingClientRect().top < 70) k.scrollIntoView({ block: 'start', behavior: calm() ? 'auto' : 'smooth' });
     } else quizResultaat();
   },
-  'ww-start': () => { ww.gestart = true; renderWegwijzer(true); },
   'ww-back': () => wwTerug(),
-  'ww-reset': () => { ww = { antw: {}, gestart: true }; renderWegwijzer(true); },
+  'ww-reset': () => wwOpnieuw(),
+  'ww-res': () => wwGa(null, 1),
+  'ww-link': () => kopieer(location.href, 'Link naar je selectie gekopieerd'),
+  'ww-print': () => window.print(),
 };
 
 document.addEventListener('click', e => {
