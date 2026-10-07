@@ -19,7 +19,11 @@ const calm = () => prefersReduced() || isA11y();
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const slug = s => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const kort = (s, n = 150) => (s.length > n ? s.slice(0, n).replace(/\s+\S*$/, '') + '…' : s);
+const kort = (s, n = 150) => {
+  if (s.length <= n) return s;
+  const t = s.slice(0, n).replace(/\s+\S*$/, '');
+  return /[.!?]["”’']?$/.test(t) ? t : t.replace(/[,;:]+$/, '') + '…';
+};
 const zonderTags = html => String(html).replace(/<[^>]+>/g, '');
 const ext = '<span class="sr-only"> (opent in nieuw tabblad)</span>';
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -1909,11 +1913,12 @@ function wwOrgKaart(it, a, i, extra) {
 // "Begin hier": de beste match, met een voorproefje. Op mobiel valt wat ww-vp-extra heet weg.
 // Toon de eerste volledige zin (of twee korte); de rest krijgt ww-vp-extra, zodat een smal scherm nooit midden in een zin afkapt
 function wwKern(tekst) {
-  const grens = /[.!?]\s+(?=[A-Z"“'])/g; // zonder lookbehind: oudere Safari kan die niet lezen
+  // Een zinseinde (eventueel met afsluitend aanhalingsteken), gevolgd door een hoofdletter. Geen lookbehind: oudere Safari kan die niet lezen.
+  const grens = /[.!?]["”’]?\s+(?=["“'‘]?[A-ZÀ-Ý])/g;
   let m = grens.exec(tekst);
   if (m && m.index < 50) m = grens.exec(tekst) || m;
   if (!m) return tekst;
-  const knip = m.index + 1;
+  const knip = m.index + m[0].trimEnd().length;
   return `${tekst.slice(0, knip)}<span class="ww-vp-extra">${tekst.slice(knip)}</span>`;
 }
 function wwVoorproef(tab, a) {
@@ -1968,6 +1973,7 @@ function wwTop(it, a) {
       + (o && o.telefoon ? `<a class="btn btn-ghost btn-sm" href="tel:${o.telefoon.replace(/\s/g, '')}">${ico('phone')}Bel ${o.telefoon}</a>` : '');
     zij = `<div class="ww-contact">
       ${o ? `<p class="ww-contact-row">${ico('pin')}<span><small>Regio</small>${REGIO_KORT(o.regio)}</span></p>` : `<p class="ww-contact-row">${ico('users')}<span><small>Van</small>${t.org}</span></p>`}
+      ${o && o.telefoon ? `<p class="ww-contact-row ww-tel-print">${ico('phone')}<span><small>Telefoon</small>${o.telefoon}</span></p>` : ''}
       ${t ? `<p class="ww-contact-row ww-vp-extra">${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}<span><small>Voor</small>${t.doelgroep}</span></p>` : ''}
       <p class="ww-contact-row">${ico('globe')}<span><small>Website</small><a href="${url}" target="_blank" rel="noopener noreferrer">${wwLinkKaal(url).split('/')[0]}${ext}</a></span></p>
     </div>

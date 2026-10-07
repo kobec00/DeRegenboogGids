@@ -1690,7 +1690,8 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .ww-top-star .i { width: 12px; height: 12px; fill: currentColor; stroke-width: 1.5; }
 .ww-top-t { margin: 8px 0 4px; font-family: var(--font-display); font-size: clamp(1.375rem, 1.2rem + .45vw, 1.55rem); font-weight: 600; line-height: 1.18; letter-spacing: -.02em; color: var(--ink); font-variation-settings: var(--soft); text-wrap: balance; }
 .ww-top-d { max-width: 38em; margin-bottom: 8px; font-size: .9375rem; line-height: 1.6; color: var(--text); }
-.ww-top-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.ww-top-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; max-width: 100%; }
+.ww-top-acts .btn { max-width: 100%; height: auto; min-height: 40px; padding-block: 8px; white-space: normal; text-align: center; line-height: 1.25; }
 .ww-btn { background: var(--tone); color: var(--surface); }
 .ww-btn:hover { filter: brightness(1.1); }
 .ww-top-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; min-width: 0; }
@@ -1718,6 +1719,7 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .ww-flag path + path { fill: var(--fc); stroke: var(--fc); }
 .ww-flags b { font-size: .9063rem; line-height: 1.3; color: var(--ink); }
 .ww-flags small { font-size: .7813rem; line-height: 1.4; color: var(--muted); }
+.ww-flags small, .ww-term b, .ww-doms li { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
 .ww-doms { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; }
 .ww-doms li { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: .875rem; color: var(--ink); }
 .ww-doms li:nth-child(n+3) { padding-top: 8px; border-top: 1px solid var(--line); }
@@ -1735,6 +1737,7 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .ww-contact-row > span { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; min-width: 0; }
 .ww-contact-row small { flex: 0 0 7rem; font-size: .6875rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
 .ww-contact-row a { color: inherit; }
+.ww-tel-print { display: none; } /* het nummer staat op de Bel-knop; op papier hier */
 
 /* Secties: praktijk, tools, organisaties */
 .ww-sec { margin-top: clamp(36px, 5vw, 60px); scroll-margin-top: 160px; }
@@ -1845,8 +1848,8 @@ input:disabled + .chip { opacity: .45; cursor: default; }
   .ww-doms li:nth-child(n+3) { padding-top: 6px; }
 }
 @media (max-width: 440px) {
-  .ww-terms { grid-template-columns: minmax(0, 1fr); }
-  .ww-term + .ww-term { padding-top: 10px; border-top: 1px solid var(--line); }
+  .ww-terms, .ww-flags { grid-template-columns: minmax(0, 1fr); }
+  .ww-term + .ww-term, .ww-flags li + li { padding-top: 10px; border-top: 1px solid var(--line); }
 }
 
 /* ── 11. OVER ──────────────────────────────────────────────────────────────────── */
@@ -2049,6 +2052,7 @@ html.vt-theme .nav-bar, html.vt-theme .help-fab { view-transition-name: none; }
   a[href]::after { content: none; }
   .ww-tabs, .ww-res-acts, .ww-zin-hint, .ww-sec-foot, .ww-res-foot, .ww-hint, .ww-top-acts, .ww-row-go, .page-wegwijzer .page-head { display: none !important; }
   .ww-res { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ww-tel-print { display: flex !important; }
   .ww-res .ww-pk.ww-extra[hidden] { display: flex !important; }
   .ww-res .ww-row.ww-extra[hidden] { display: grid !important; }
   .ww-res-head, .ww-top, .ww-pk, .ww-row { break-inside: avoid; box-shadow: none !important; animation: none !important; }
