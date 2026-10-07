@@ -1,15 +1,23 @@
 ---
 layout: default
 title: "Wegwijzer — De Regenbooggids"
-description: "Beantwoord drie korte vragen en ontvang een selectie op maat van tools, organisaties en kaders."
+description: "Beantwoord twee of drie korte vragen en krijg een selectie op maat: eerst wat je meteen in de praktijk kan gebruiken, daarna de tools en organisaties die bij jouw situatie passen."
 permalink: /wegwijzer/
 bodyclass: page-wegwijzer
 ---
-<section class="page-head tone-teal" aria-labelledby="ww-h1">
-  <div class="wrap-narrow">
+<header class="page-head tone-teal">
+  <div class="wrap">
     <nav class="crumbs" aria-label="Kruimelpad"><a href="/">Home</a><svg class="i" aria-hidden="true"><use href="#i-chevron-right"/></svg><span aria-current="page">Wegwijzer</span></nav>
-    <h1 class="sr-only" id="ww-h1">Wegwijzer</h1>
-    <div class="ww" id="ww-shell"></div>
-    <p style="text-align:center;margin-top:26px"><a class="link-arrow" href="/" style="color:var(--muted)"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg>Terug naar de startpagina</a></p>
+    <p class="eyebrow"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg>Persoonlijke keuzehulp</p>
+    <h1 class="page-title">Vind je weg, <em>op maat</em></h1>
+    <p class="page-lead">Twee of drie korte vragen, en je krijgt een selectie op maat. Bovenaan staat wat je meteen in de praktijk kan gebruiken, daaronder de tools en organisaties die bij jouw situatie passen, telkens met de reden erbij.</p>
   </div>
+  <div class="page-art" aria-hidden="true">{% include embleem-wegwijzer.html %}</div>
+</header>
+
+<section class="wrap ww-wrap" aria-label="Wegwijzer">
+  <div class="ww" id="ww-shell"></div>
+  <noscript>
+    <div class="empty"><b>De Wegwijzer werkt met JavaScript</b>Schakel het in, of bekijk meteen de <a href="/praktijk/">praktijkinstrumenten</a>, de <a href="/tools/">tools</a> of de <a href="/organisaties/">organisaties</a>.</div>
+  </noscript>
 </section>
