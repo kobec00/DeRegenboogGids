@@ -19,7 +19,11 @@ const calm = () => prefersReduced() || isA11y();
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const slug = s => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const kort = (s, n = 150) => (s.length > n ? s.slice(0, n).replace(/\s+\S*$/, '') + '…' : s);
+const kort = (s, n = 150) => {
+  if (s.length <= n) return s;
+  const t = s.slice(0, n).replace(/\s+\S*$/, '');
+  return /[.!?]["”’']?$/.test(t) ? t : t.replace(/[,;:]+$/, '') + '…';
+};
 const zonderTags = html => String(html).replace(/<[^>]+>/g, '');
 const ext = '<span class="sr-only"> (opent in nieuw tabblad)</span>';
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -1906,17 +1910,27 @@ function wwOrgKaart(it, a, i, extra) {
   </article>`;
 }
 
-// "Begin hier": de beste match, groot en met een voorproefje
+// "Begin hier": de beste match, met een voorproefje. Op mobiel valt wat ww-vp-extra heet weg.
+// Toon de eerste volledige zin (of twee korte); de rest krijgt ww-vp-extra, zodat een smal scherm nooit midden in een zin afkapt
+function wwKern(tekst) {
+  // Een zinseinde (eventueel met afsluitend aanhalingsteken), gevolgd door een hoofdletter. Geen lookbehind: oudere Safari kan die niet lezen.
+  const grens = /[.!?]["”’]?\s+(?=["“'‘]?[A-ZÀ-Ý])/g;
+  let m = grens.exec(tekst);
+  if (m && m.index < 50) m = grens.exec(tekst) || m;
+  if (!m) return tekst;
+  const knip = m.index + m[0].trimEnd().length;
+  return `${tekst.slice(0, knip)}<span class="ww-vp-extra">${tekst.slice(knip)}</span>`;
+}
 function wwVoorproef(tab, a) {
   const th = wwThema(a);
   if (tab === 'taal') {
     const termen = (WW_TERMEN[th] || WW_TERMEN.standaard).woorden.map(w => TERMEN.find(t => t.woord === w)).filter(Boolean);
-    return `<div class="ww-terms">${termen.map(t => `<div class="ww-term tone-${TERM_CAT_COLOR[t.cat] || 'teal'}"><b>${t.woord}</b><span>${kort(t.def, 95)}</span></div>`).join('')}</div>
-      <p class="ww-side-foot">${ico('cards')}En nog ${TERMEN.length - termen.length} begrippen, met een oefenmodus om ze in te oefenen.</p>`;
+    return `<div class="ww-terms">${termen.map((t, i) => `<div class="ww-term${i > 1 ? ' ww-vp-extra' : ''}"><b>${t.woord}</b><span>${kort(t.def, 80)}</span></div>`).join('')}</div>
+      <p class="ww-side-foot ww-vp-extra">${ico('cards')}En nog ${TERMEN.length - termen.length} begrippen, met een oefenmodus om ze in te oefenen.</p>`;
   }
   if (tab === 'vlag') {
     return `<ul class="ww-flags">${VLAGGEN.map(v => `<li data-vlag="${v.key}" style="--fc:${v.kleur}"><svg class="ww-flag" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22V3"/><path d="M5 4h13l-3.5 4.5L18 13H5z"/></svg><b>${v.naam}</b><small>${v.wat}</small></li>`).join('')}</ul>
-      <p class="ww-side-foot">${ico('check-circle')}Zes criteria: ${zinLijst(VLAG_CRITERIA.map(c => c.naam.toLowerCase()))}.</p>`;
+      <p class="ww-side-foot ww-vp-extra">${ico('check-circle')}Zes criteria: ${zinLijst(VLAG_CRITERIA.map(c => c.naam.toLowerCase()))}.</p>`;
   }
   if (tab === 'scan') {
     const dom = scanDomeinNamen(), bezig = Object.keys(Opslag.lees('rg-scan', {})).length, hist = Opslag.lees('rg-scan-hist', []);
@@ -1929,10 +1943,10 @@ function wwVoorproef(tab, a) {
     const q = QUIZ_VRAGEN[{ gender: 0, taal: 2, werking: 5, comingout: 7, relaties: 8 }[th] ?? 4] || QUIZ_VRAGEN[0];
     const best = Opslag.lees('rg-quiz-best', null);
     return `<div class="ww-quiz"><p class="ww-quiz-k">Voorbeeldvraag</p><p class="ww-quiz-q">${q.vraag}</p>
-      <ol class="ww-quiz-o">${q.opties.map((o, i) => `<li><span aria-hidden="true">${'ABC'[i]}</span>${o}</li>`).join('')}</ol></div>
+      <ol class="ww-quiz-o ww-vp-extra">${q.opties.map((o, i) => `<li><span aria-hidden="true">${'ABC'[i]}</span>${o}</li>`).join('')}</ol></div>
       <p class="ww-side-foot">${ico('trophy')}${best != null ? `Je beste score tot nu: ${best} op ${QUIZ_VRAGEN.length}.` : `${QUIZ_VRAGEN.length} vragen, telkens met uitleg bij het antwoord.`}</p>`;
   }
-  return `<ol class="ww-steps">${CASUS.slice(0, 3).map((c, i) => `<li><span class="ww-steps-ic">${nn(i + 1)}</span><div><b>${c.tag}</b><p>${c.titel}</p></div></li>`).join('')}</ol>
+  return `<ol class="ww-steps">${CASUS.slice(0, 3).map((c, i) => `<li${i > 1 ? ' class="ww-vp-extra"' : ''}><span class="ww-steps-ic">${nn(i + 1)}</span><div><b>${c.tag}</b><p>${c.titel}</p></div></li>`).join('')}</ol>
     <p class="ww-side-foot">${ico('bubble')}${CASUS.length} situaties, elk met duiding en handvatten.</p>`;
 }
 function wwTop(it, a) {
@@ -1940,28 +1954,27 @@ function wwTop(it, a) {
   if (it.c) {
     const c = it.c, ic = ['eye', 'hand', 'alert'];
     tone = 'violet'; kop = `Casus ${nn(it.n)} · ${c.tag}`; titel = c.titel; tekst = c.blokken[0].tekst;
-    knoppen = `<a class="btn ww-btn" href="/praktijk/?tab=casus#casus-${it.n}">Lees de handvatten${ico('arrow-right')}</a>`;
+    knoppen = `<a class="btn btn-sm ww-btn" href="/praktijk/?tab=casus#casus-${it.n}">Lees de handvatten${ico('arrow-right')}</a>`;
     const verder = (c.chips || []).filter(ch => ch.go !== 'beleid').map(ch => (ch.url
       ? `<a class="casus-chip" href="${ch.url}" target="_blank" rel="noopener noreferrer">${ch.l}${ico('arrow-up-right')}${ext}</a>`
       : `<button class="casus-chip" type="button" data-go="${ch.go}">${ch.l}${ico('arrow-right')}</button>`)).join('');
-    zij = `<ol class="ww-steps">${c.blokken.slice(1).map((b, k) => `<li><span class="ww-steps-ic">${ico(ic[k + 1])}</span><div><b>${b.kop}</b><p>${kort(b.tekst, 150)}</p></div></li>`).join('')}</ol>
-      ${verder ? `<div class="ww-top-chips"><span class="ww-top-chips-k">Verder</span>${verder}</div>` : ''}`;
+    zij = `<ol class="ww-steps">${c.blokken.slice(1).map((b, k) => `<li${k ? ' class="ww-vp-extra"' : ''}><span class="ww-steps-ic">${ico(ic[k + 1])}</span><div><b>${b.kop}</b><p>${wwKern(kort(b.tekst, 150))}</p></div></li>`).join('')}</ol>
+      ${verder ? `<div class="ww-top-chips ww-vp-extra"><span class="ww-top-chips-k">Verder</span>${verder}</div>` : ''}`;
   } else if (it.p) {
     const p = it.p;
     tone = p.tone; kop = 'Instrument uit de praktijk'; titel = p.t; tekst = p.d;
-    knoppen = `<a class="btn ww-btn" href="${wwTabHref(p.tab, a)}">${WW_CTA[p.tab]}${ico('arrow-right')}</a>`;
+    knoppen = `<a class="btn btn-sm ww-btn" href="${wwTabHref(p.tab, a)}">${WW_CTA[p.tab]}${ico('arrow-right')}</a>`;
     zij = wwVoorproef(p.tab, a);
   } else {
     const o = it.o, t = it.t, url = (o || t).url;
     tone = o ? TYPE_TONE[o.type] || 'blue' : THEMA_TONE[t.thema] || 'teal';
     kop = o ? o.type : `Tool · ${t.thema}`; titel = o ? o.naam : t.title; tekst = (o ? o.beschrijving.split(/\s*Let op:\s*/)[0] : t.beschrijving);
-    knoppen = `<a class="btn ww-btn" href="${url}" target="_blank" rel="noopener noreferrer">${o ? 'Bezoek de website' : 'Bekijk de tool'}${ico('arrow-up-right')}${ext}</a>`
-      + (o && o.telefoon ? `<a class="btn btn-ghost" href="tel:${o.telefoon.replace(/\s/g, '')}">${ico('phone')}Bel ${o.telefoon}</a>` : '');
+    knoppen = `<a class="btn btn-sm ww-btn" href="${url}" target="_blank" rel="noopener noreferrer">${o ? 'Bezoek de website' : 'Bekijk de tool'}${ico('arrow-up-right')}${ext}</a>`
+      + (o && o.telefoon ? `<a class="btn btn-ghost btn-sm" href="tel:${o.telefoon.replace(/\s/g, '')}">${ico('phone')}Bel ${o.telefoon}</a>` : '');
     zij = `<div class="ww-contact">
-      ${o ? `<p class="ww-contact-row">${ico('pin')}<span><small>Regio</small>${REGIO_KORT(o.regio)}</span></p>
-      <p class="ww-contact-row">${ico(WW_ORG_ICO[o.type] || 'users')}<span><small>Soort werking</small>${o.type}</span></p>` : `<p class="ww-contact-row">${ico('users')}<span><small>Van</small>${t.org}</span></p>`}
-      ${o && o.telefoon ? `<p class="ww-contact-row">${ico('phone')}<span><small>Telefoon</small><a href="tel:${o.telefoon.replace(/\s/g, '')}">${o.telefoon}</a></span></p>` : ''}
-      ${t ? `<p class="ww-contact-row">${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}<span><small>Voor</small>${t.doelgroep}</span></p>` : ''}
+      ${o ? `<p class="ww-contact-row">${ico('pin')}<span><small>Regio</small>${REGIO_KORT(o.regio)}</span></p>` : `<p class="ww-contact-row">${ico('users')}<span><small>Van</small>${t.org}</span></p>`}
+      ${o && o.telefoon ? `<p class="ww-contact-row ww-tel-print">${ico('phone')}<span><small>Telefoon</small>${o.telefoon}</span></p>` : ''}
+      ${t ? `<p class="ww-contact-row ww-vp-extra">${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}<span><small>Voor</small>${t.doelgroep}</span></p>` : ''}
       <p class="ww-contact-row">${ico('globe')}<span><small>Website</small><a href="${url}" target="_blank" rel="noopener noreferrer">${wwLinkKaal(url).split('/')[0]}${ext}</a></span></p>
     </div>
     ${o ? `<p class="ww-side-foot">${ico('info')}Tip: neem eerst even contact op. Zo hoor je wat er nu loopt en of het aanbod past.</p>` : ''}`;
@@ -1970,7 +1983,7 @@ function wwTop(it, a) {
     <div class="ww-top-main">
       <p class="ww-top-k"><span class="ww-top-star">${ico('star')}Begin hier</span><span>${kop}</span></p>
       <h3 class="ww-top-t" id="ww-top-t">${titel}</h3>
-      <p class="ww-top-d">${kort(tekst, 330)}</p>
+      <p class="ww-top-d">${wwKern(kort(tekst, 330))}</p>
       ${wwWaarom(it.waarom)}
       <div class="ww-top-acts">${knoppen}</div>
     </div>
