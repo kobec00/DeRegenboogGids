@@ -213,7 +213,8 @@ const Zoek = {
       ['Wegwijzer', 'Een paar vragen, een selectie op maat', '/wegwijzer/', 'compass', 'teal'],
       ['Over dit project', 'Graduaatsproef UCLL · achtergrond', '/over/', 'info', 'slate'],
       ['Contact & aanvullingen', 'Mis je iets? Laat het weten', '/over/#contact', 'mail', 'slate'],
-    ].forEach(([title, sub, href, icon, tone]) => add('pagina', { title, sub, href, icon, tone }));
+      ['Wat vind jij van deze website?', 'Oproep aan ervaringsdeskundigen: geef je mening', '/over/#jouw-mening', 'bubble', 'violet', 'meedenken testen feedback mening ervaringsdeskundige'],
+    ].forEach(([title, sub, href, icon, tone, text]) => add('pagina', { title, sub, href, icon, tone, text }));
     add('pagina', { title: 'Hulp nodig?', sub: 'Crisis- en hulplijnen', text: 'zelfmoord crisis noodnummer', action: 'help', icon: 'heart', tone: 'rose' });
     add('pagina', { title: 'Steun een organisatie', sub: 'Doneren aan het werkveld', text: 'gift doneren', action: 'doneer', icon: 'heart', tone: 'rose' });
     TOOLS.forEach(t => add('tool', { title: t.title, sub: `${t.org} · ${t.doelgroep}`, text: t.thema + ' ' + t.beschrijving, href: '/tools/#t-' + slug(t.title), icon: 'tool', tone: THEMA_TONE[t.thema] || 'teal' }));
