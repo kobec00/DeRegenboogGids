@@ -114,7 +114,7 @@
       transition: opacity .24s var(--tl-ease), transform .24s var(--tl-ease);
     }
     .tl-bead-wj { top: 2px; width: 8px; height: 8px; margin-left: -4px; background: var(--tl-wj-dot); box-shadow: inset 0 0 0 1.5px var(--tl-wj-mark); }
-    .tl-bead-werf { top: 2px; width: 8px; height: 8px; margin-left: -4px; background: var(--tl-surface); box-shadow: inset 0 0 0 1.5px var(--c); }
+    .tl-bead-dossier { top: 2px; width: 8px; height: 8px; margin-left: -4px; background: var(--tl-surface); box-shadow: inset 0 0 0 1.5px var(--c); }
     .tl-p3 .tl-ch-thread::before { -webkit-mask-image: var(--dash-x); mask-image: var(--dash-x); }
     .tl-ch-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 10px; margin-top: 14px; }
     .tl-ch-count { display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; line-height: 1.3; color: var(--tl-mute); white-space: nowrap; }
@@ -123,7 +123,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--tl-wj-dot); border: 1.5px dashed var(--tl-wj-mark); color: var(--tl-wj-mark);
     }
-    .tl-werf-mini { width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; flex-shrink: 0; border: 1.5px dashed var(--ph-ink); }
+    .tl-dossier-mini { width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; flex-shrink: 0; border: 1.5px dashed var(--ph-ink); }
     .tl-ch-cta {
       display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 9px 0 13px; border-radius: 999px;
       font-size: 13px; font-weight: 700; color: var(--ph-ink);
@@ -315,10 +315,10 @@
     .tl-weetje.is-open { background: rgba(255,248,220,0.95); box-shadow: 0 8px 24px rgba(180,83,9,0.10); }
     .tl-weetje .tl-desc { padding-bottom: 16px; }
 
-    /* ── Open werf: nog niet af. Het bolletje blijft hol, ook als de rail eraan voorbij is ── */
-    .tl-werf .tl-dot { border-style: dashed; }
-    .tl-werf.is-past .tl-dot { background: var(--tl-dot-bg); border-color: var(--c); }
-    .tl-werf .tl-year small { font-weight: 700; color: var(--ph-ink); }
+    /* ── Open dossier: nog niet af. Het bolletje blijft hol, ook als de rail eraan voorbij is ── */
+    .tl-dossier .tl-dot { border-style: dashed; }
+    .tl-dossier.is-past .tl-dot { background: var(--tl-dot-bg); border-color: var(--c); }
+    .tl-dossier .tl-year small { font-weight: 700; color: var(--ph-ink); }
 
     /* ── Voet: door naar de volgende fase, of het "nu"-eindpunt ── */
     .tl-panel-foot { margin-top: 22px; }
@@ -463,7 +463,7 @@
       .tl-item.is-past .tl-dot { background: CanvasText; }
       .tl-weetje, .tl-weetje .tl-dot { border: 2px dashed CanvasText; }
       .tl-weetje.is-past .tl-dot { background: Canvas; }
-      .tl-werf .tl-dot, .tl-werf.is-past .tl-dot { background: Canvas; border-style: dashed; }
+      .tl-dossier .tl-dot, .tl-dossier.is-past .tl-dot { background: Canvas; border-style: dashed; }
       .tl-ch[aria-expanded="true"] { outline: 4px double Highlight; outline-offset: 0; }
       .tl-ch[aria-expanded]:focus-visible { outline: 3px dashed CanvasText; outline-offset: 4px; }
     }
@@ -564,8 +564,8 @@ html.dark .tl-cat[data-cat="weetje"]  { --cat: #f5cd72; }
     html.a11y .tl-ch[aria-expanded="true"] .tl-ch-glyph { background: #fff !important; }
     html.a11y .tl-ch[aria-expanded="true"] .tl-bead-wj { background: #0a4a42 !important; box-shadow: none !important; border: 2px solid #fff; width: 10px; height: 10px; margin-left: -5px; top: 1px; }
     html.a11y .tl-ch[aria-expanded="true"] .tl-zap-mini { background: transparent; border: 1.5px solid #fff; color: #fff; }
-    html.a11y .tl-ch[aria-expanded="true"] .tl-werf-mini { border-color: #fff; }
-    html.a11y .tl-ch[aria-expanded="true"] .tl-bead-werf { background: #0a4a42 !important; box-shadow: inset 0 0 0 2px #fff; }
+    html.a11y .tl-ch[aria-expanded="true"] .tl-dossier-mini { border-color: #fff; }
+    html.a11y .tl-ch[aria-expanded="true"] .tl-bead-dossier { background: #0a4a42 !important; box-shadow: inset 0 0 0 2px #fff; }
     html.a11y .tl-ch-title { font-size: 17px; }
     html.a11y .tl-ch-count { font-size: 14px; }
     html.a11y .tl-odo-col { -webkit-mask-image: none; mask-image: none; }
@@ -575,7 +575,7 @@ html.dark .tl-cat[data-cat="weetje"]  { --cat: #f5cd72; }
     html.a11y .tl-rail-tail { opacity: 1 !important; }
     html.a11y .tl-dot { background: #000 !important; border: 2px solid #000 !important; box-shadow: 0 0 0 2px #fff !important; }
     html.a11y .tl-weetje .tl-dot { background: #fff !important; color: #000 !important; border: 2px dashed #000 !important; }
-    html.a11y .tl-werf .tl-dot { background: #fff !important; border: 2px dashed #000 !important; }
+    html.a11y .tl-dossier .tl-dot { background: #fff !important; border: 2px dashed #000 !important; }
     html.a11y .tl-weetje { background: #fffbea !important; border: 2px dashed #1a1a1a !important; box-shadow: none !important; }
     html.a11y .tl-weetje::after { opacity: 1 !important; }
     html.a11y .tl-item.is-open:not(.tl-weetje) { background: #fff !important; box-shadow: none !important; outline: 2px solid #1a1a1a; }

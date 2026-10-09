@@ -219,7 +219,7 @@ const Zoek = {
     TERMEN.forEach(t => add('term', { title: t.woord.replace(/"/g, ''), sub: `Taalgids · ${t.cat}`, text: t.def, href: '/praktijk/?tab=taal#term-' + slug(t.woord), icon: 'book', tone: TERM_CAT_COLOR[t.cat] || 'teal' }));
     CASUS.forEach((c, i) => add('casus', { title: c.titel, sub: `Casus ${i + 1} · ${c.tag}`, text: c.blokken.map(b => b.tekst).join(' '), href: `/praktijk/?tab=casus#casus-${i + 1}`, icon: 'bubble', tone: 'violet' }));
     BELEID.forEach(b => add('beleid', { title: b.titel, sub: `${b.groep} · ${b.type}`, text: b.beschrijving, href: '/beleid/#b-' + slug(b.titel), icon: (GROEP_STIJL[b.groep] || ['amber', 'scale'])[1], tone: (GROEP_STIJL[b.groep] || ['amber'])[0] }));
-    TIJDLIJN.forEach(m => add('mijlpaal', { title: `${m.type === 'werf' ? 'Open werf' : m.jaar} · ${zonderTags(m.titel)}`, sub: m.type === 'werf' ? 'Tijdlijn · wat nog moet gebeuren' : m.type === 'weetje' ? 'Tijdlijn · weetje' : 'Tijdlijn', text: zonderTags(m.desc), href: `/beleid/#tijdlijn-${m.id ?? m.jaar}`, icon: 'clock', tone: 'blue' }));
+    TIJDLIJN.forEach(m => add('mijlpaal', { title: `${m.type === 'dossier' ? 'Open dossier' : m.jaar} · ${zonderTags(m.titel)}`, sub: m.type === 'dossier' ? 'Tijdlijn · wat nog moet gebeuren' : m.type === 'weetje' ? 'Tijdlijn · weetje' : 'Tijdlijn', text: zonderTags(m.desc), href: `/beleid/#tijdlijn-${m.id ?? m.jaar}`, icon: 'clock', tone: 'blue' }));
     HULPLIJNEN.forEach(l => add('hulp', { title: l.naam, sub: l.tel ? `Bel ${l.tel}` : 'Hulplijn', text: l.desc, action: 'help', icon: l.icon || 'heart', tone: l.kleur || 'rose' }));
     this.index = idx;
   },
@@ -510,11 +510,11 @@ function initStrook() {
   const el = $('#strip');
   if (!el) return;
   const CAT = { science: 'Wetenschap & zorg', move: 'Samenleving & beweging', law: 'Wetgeving & beleid' };
-  // Enkel afgeronde kantelpunten. De toekomstfase (open werven) krijgt één afsluitende kaart.
+  // Enkel afgeronde kantelpunten. De toekomstfase (open dossiers) krijgt één afsluitende kaart.
   const open = TL_FASES.find(f => f.toekomst);
   const items = TIJDLIJN.filter(m => m.type !== 'weetje' && m.fase !== open?.nr);
-  const werven = TIJDLIJN.filter(m => m.type === 'werf').map(m => m.kort);
-  const lijst = werven.length > 1 ? `${werven.slice(0, -1).join(', ')} en ${werven[werven.length - 1]}` : werven[0];
+  const dossiers = TIJDLIJN.filter(m => m.type === 'dossier').map(m => m.kort);
+  const lijst = dossiers.length > 1 ? `${dossiers.slice(0, -1).join(', ')} en ${dossiers[dossiers.length - 1]}` : dossiers[0];
   const f2 = items.filter(m => m.fase === 2), a = +f2[0].jaar, b = +f2[f2.length - 1].jaar;
   el.innerHTML = items.map(m => {
     const c = m.fase === 1 ? '#a8a29e' : boogKleur((+m.jaar - a) / (b - a));
@@ -524,10 +524,10 @@ function initStrook() {
       <span class="strip-title">${m.titel}</span>
       <span class="strip-go">Lees meer${ico('arrow-right')}</span>
     </a></li>`;
-  }).join('') + (open && werven.length ? `<li><a class="strip-card strip-card-open" href="/beleid/#tijdlijn-fase-${open.nr}" style="--c:${boogKleur(1)}">
+  }).join('') + (open && dossiers.length ? `<li><a class="strip-card strip-card-open" href="/beleid/#tijdlijn-fase-${open.nr}" style="--c:${boogKleur(1)}">
       <span class="strip-year">${open.start}–?</span>
       <span class="strip-cat">${open.titel}</span>
-      <span class="strip-title">Nog ${werven.length} open werven: ${lijst}.</span>
+      <span class="strip-title">Nog ${dossiers.length} open dossiers: ${lijst}.</span>
       <span class="strip-go">Bekijk fase ${open.nr}${ico('arrow-right')}</span>
     </a></li>` : '');
   const knoppen = $$('[data-action="strip"]');

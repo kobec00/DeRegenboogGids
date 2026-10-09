@@ -2,7 +2,7 @@
 //  MIJLPALEN-TIJDLIJN (enkel geladen op /beleid/)
 //  Drie fases als hoofdstukken: standaard zie je enkel de kiezer (Fase 1 | 2 | 3),
 //  een fase klapt open tot een rustige verticale tijdlijn met een rollende jaarteller.
-//  Fase 3 kijkt vooruit: open werven (type 'werf') in plaats van afgeronde mijlpalen.
+//  Fase 3 kijkt vooruit: open dossiers (type 'dossier') in plaats van afgeronde mijlpalen.
 //  De inhoud (TL_FASES, TIJDLIJN) staat in data.js.
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -20,7 +20,7 @@ const tlOpenEind = f => f.toekomst ? '?' : 'nu';
 const tlPeriode = f => `${f.start}–${f.eind ?? tlOpenEind(f)}`;
 const tlPeriodeSr = f => f.eind ? `${f.start} tot ${f.eind}` : f.toekomst ? `vanaf ${f.start}, nog open` : `${f.start} tot nu`;
 // Deeplink (#tijdlijn-1973, #tijdlijn-haatspraak) en het jaar waarop de scroll-engine een item zet:
-// een open werf heeft geen eigen jaar en staat op het begin van zijn fase.
+// een open dossier heeft geen eigen jaar en staat op het begin van zijn fase.
 const tlId = m => m.id ?? m.jaar;
 const tlJaar = m => +(m.jaar ?? TL_FASES[m.fase - 1].start);
 
@@ -47,17 +47,17 @@ function tlOdoHTML() {
 function tlChooserHTML(f) {
   const items = TIJDLIJN.filter(m => m.fase === f.nr);
   const tel = type => items.filter(m => m.type === type).length;
-  const nWeet = tel('weetje'), nWerf = tel('werf'), nMijl = items.length - nWeet - nWerf;
+  const nWeet = tel('weetje'), nDos = tel('dossier'), nMijl = items.length - nWeet - nDos;
   const beads = items.map((m, k) => {
     // Een toekomstfase heeft geen tijdschaal: kralen op gelijke afstand, de draad blijft open
     const x = f.toekomst ? Math.round((k + 1) / (items.length + 1) * 1000) / 1000
       : Math.round((+m.jaar - f.start) / (tlEind(f) - f.start) * 1000) / 1000;
-    const wj = m.type === 'weetje', werf = m.type === 'werf';
-    return `<i class="tl-bead${wj ? ' tl-bead-wj' : ''}${werf ? ' tl-bead-werf' : ''}" style="--x:${x}${f.nr > 1 && !wj ? `;--c:${tlRainbow(x)}` : ''}"></i>`;
+    const wj = m.type === 'weetje', dos = m.type === 'dossier';
+    return `<i class="tl-bead${wj ? ' tl-bead-wj' : ''}${dos ? ' tl-bead-dossier' : ''}" style="--x:${x}${f.nr > 1 && !wj ? `;--c:${tlRainbow(x)}` : ''}"></i>`;
   }).join('');
   const sep = '<span aria-hidden="true">&nbsp;·&nbsp;</span><span class="tl-sr"> en </span>';
   const count = `${nMijl} ${nMijl === 1 ? 'mijlpaal' : 'mijlpalen'}`
-    + (nWerf ? `${sep}<span class="tl-werf-mini" aria-hidden="true"></span>${nWerf} open ${nWerf === 1 ? 'werf' : 'werven'}` : '')
+    + (nDos ? `${sep}<span class="tl-dossier-mini" aria-hidden="true"></span>${nDos} open ${nDos === 1 ? 'dossier' : 'dossiers'}` : '')
     + (nWeet ? `${sep}<span class="tl-zap-mini" aria-hidden="true">${tlZap(9)}</span>${nWeet} ${nWeet === 1 ? 'weetje' : 'weetjes'}` : '');
   return `
     <h3 class="tl-ch-h" id="tijdlijn-fase-${f.nr}">
@@ -76,16 +76,16 @@ function tlChooserHTML(f) {
 }
 
 function tlItemHTML(m, i) {
-  const wj = m.type === 'weetje', werf = m.type === 'werf';
-  // Een open werf toont sinds wanneer het dossier openligt, met "nog open" waar anders het tweede jaartal staat
-  const jaar = werf
+  const wj = m.type === 'weetje', dos = m.type === 'dossier';
+  // Een open dossier toont sinds wanneer het openligt, met "nog open" waar anders het tweede jaartal staat
+  const jaar = dos
     ? `${m.sinds}<small aria-hidden="true">nog open</small>`
     : `${m.jaar}${m.jaar2 ? `<small><span aria-hidden="true">/ </span><span class="tl-sr">en </span>${m.jaar2}</small>` : ''}`;
   return `
-            <li class="tl-item${wj ? ' tl-weetje' : ''}${werf ? ' tl-werf' : ''}" id="tijdlijn-${tlId(m)}" data-i="${i}" data-jaar="${tlJaar(m)}">
+            <li class="tl-item${wj ? ' tl-weetje' : ''}${dos ? ' tl-dossier' : ''}" id="tijdlijn-${tlId(m)}" data-i="${i}" data-jaar="${tlJaar(m)}">
               <span class="tl-dot" aria-hidden="true">${wj ? tlZap(11) : ''}</span>
               <button type="button" class="tl-row" aria-expanded="false" aria-controls="tl-more-${i}">
-                ${wj ? `<span class="tl-wj-label">${tlZap(12)}Wist je dat?</span><span class="tl-sr"> Weetje, geen mijlpaal: </span>` : ''}${werf ? '<span class="tl-sr">Open werf sinds </span>' : ''}
+                ${wj ? `<span class="tl-wj-label">${tlZap(12)}Wist je dat?</span><span class="tl-sr"> Weetje, geen mijlpaal: </span>` : ''}${dos ? '<span class="tl-sr">Open dossier sinds </span>' : ''}
                 <span class="tl-year">${jaar}</span>
                 <span class="tl-title"><span class="tl-title-t">${m.titel}</span></span>
                 ${tlChev(16)}
@@ -93,7 +93,7 @@ function tlItemHTML(m, i) {
               <div class="tl-more" id="tl-more-${i}">
                 <div class="tl-more-in" hidden="until-found">
                   <div class="tl-desc">
-                    <p class="tl-cat" data-cat="${m.cat}">${werf ? 'Open werf · ' : ''}${TL_CAT[m.cat]}</p>
+                    <p class="tl-cat" data-cat="${m.cat}">${dos ? 'Open dossier · ' : ''}${TL_CAT[m.cat]}</p>
                     <div class="tl-desc-t">${m.desc}</div>
                     ${m.bron ? `<p class="tl-src"><span class="tl-src-k">Bron</span>${m.bron}</p>` : ''}
                   </div>
