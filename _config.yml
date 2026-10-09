@@ -3,3 +3,5 @@ url: "https://deregenbooggids.be"
 baseurl: ""
 lang: nl
 markdown: kramdown
+# Eén plek voor de datum van de laatste inhoudelijke controle (footer, Over, Bronnen)
+laatst_bijgewerkt: "oktober 2026"
