@@ -1,13 +1,14 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MIJLPALEN-TIJDLIJN (enkel geladen op /beleid/)
-//  Twee fases als hoofdstukken: standaard zie je enkel de kiezer (Fase 1 | Fase 2),
+//  Drie fases als hoofdstukken: standaard zie je enkel de kiezer (Fase 1 | 2 | 3),
 //  een fase klapt open tot een rustige verticale tijdlijn met een rollende jaarteller.
+//  Fase 3 kijkt vooruit: open dossiers (type 'dossier') in plaats van afgeronde mijlpalen.
 //  De inhoud (TL_FASES, TIJDLIJN) staat in data.js.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const TL_NU = new Date().getFullYear();
 const TL_CAT = { science: 'Wetenschap &amp; zorg', move: 'Samenleving &amp; beweging', law: 'Wetgeving &amp; beleid', weetje: 'Weetje · geen mijlpaal' };
-// Zelfde stops als de regenboog-rail in de CSS (--tl-rainbow), zodat een bolletje in fase 2
+// Zelfde stops als de regenboog-rail in de CSS (--tl-rainbow), zodat een bolletje vanaf fase 2
 // exact de kleur krijgt van de rail eronder.
 const TL_RAINBOW = [[0, '#e85d8a'], [0.2, '#f4a44a'], [0.38, '#f7d44a'], [0.55, '#5bbf7a'], [0.75, '#4ab8d4'], [1, '#7b6fd4']];
 const tlZap = px => `<svg width="${px}" height="${px}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>`;
@@ -15,7 +16,13 @@ const tlChev = px => `<svg class="tl-chev" width="${px}" height="${px}" viewBox=
 const TL_UP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>';
 const TL_RIGHT = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
 const tlEind = f => f.eind ?? TL_NU;
-const tlPeriode = f => `${f.start}–${f.eind ?? 'nu'}`;
+const tlOpenEind = f => f.toekomst ? '?' : 'nu';
+const tlPeriode = f => `${f.start}–${f.eind ?? tlOpenEind(f)}`;
+const tlPeriodeSr = f => f.eind ? `${f.start} tot ${f.eind}` : f.toekomst ? `vanaf ${f.start}, nog open` : `${f.start} tot nu`;
+// Deeplink (#tijdlijn-1973, #tijdlijn-haatspraak) en het jaar waarop de scroll-engine een item zet:
+// een open dossier heeft geen eigen jaar en staat op het begin van zijn fase.
+const tlId = m => m.id ?? m.jaar;
+const tlJaar = m => +(m.jaar ?? TL_FASES[m.fase - 1].start);
 
 function tlRainbow(t) {
   t = Math.max(0, Math.min(1, t));
@@ -39,21 +46,25 @@ function tlOdoHTML() {
 
 function tlChooserHTML(f) {
   const items = TIJDLIJN.filter(m => m.fase === f.nr);
-  const nWeet = items.filter(m => m.type === 'weetje').length, nMijl = items.length - nWeet;
-  const beads = items.map(m => {
-    const x = Math.round((+m.jaar - f.start) / (tlEind(f) - f.start) * 1000) / 1000;
-    const wj = m.type === 'weetje';
-    return `<i class="tl-bead${wj ? ' tl-bead-wj' : ''}" style="--x:${x}${f.nr === 2 && !wj ? `;--c:${tlRainbow(x)}` : ''}"></i>`;
+  const tel = type => items.filter(m => m.type === type).length;
+  const nWeet = tel('weetje'), nDos = tel('dossier'), nMijl = items.length - nWeet - nDos;
+  const beads = items.map((m, k) => {
+    // Een toekomstfase heeft geen tijdschaal: kralen op gelijke afstand, de draad blijft open
+    const x = f.toekomst ? Math.round((k + 1) / (items.length + 1) * 1000) / 1000
+      : Math.round((+m.jaar - f.start) / (tlEind(f) - f.start) * 1000) / 1000;
+    const wj = m.type === 'weetje', dos = m.type === 'dossier';
+    return `<i class="tl-bead${wj ? ' tl-bead-wj' : ''}${dos ? ' tl-bead-dossier' : ''}" style="--x:${x}${f.nr > 1 && !wj ? `;--c:${tlRainbow(x)}` : ''}"></i>`;
   }).join('');
-  const count = `${nMijl} ${nMijl === 1 ? 'mijlpaal' : 'mijlpalen'}` + (nWeet
-    ? `<span aria-hidden="true">&nbsp;·&nbsp;</span><span class="tl-sr"> en </span><span class="tl-zap-mini" aria-hidden="true">${tlZap(9)}</span>${nWeet} ${nWeet === 1 ? 'weetje' : 'weetjes'}`
-    : '');
+  const sep = '<span aria-hidden="true">&nbsp;·&nbsp;</span><span class="tl-sr"> en </span>';
+  const count = `${nMijl} ${nMijl === 1 ? 'mijlpaal' : 'mijlpalen'}`
+    + (nDos ? `${sep}<span class="tl-dossier-mini" aria-hidden="true"></span>${nDos} open ${nDos === 1 ? 'dossier' : 'dossiers'}` : '')
+    + (nWeet ? `${sep}<span class="tl-zap-mini" aria-hidden="true">${tlZap(9)}</span>${nWeet} ${nWeet === 1 ? 'weetje' : 'weetjes'}` : '');
   return `
     <h3 class="tl-ch-h" id="tijdlijn-fase-${f.nr}">
       <button type="button" class="tl-ch tl-p${f.nr}" id="tl-ch-${f.nr}" data-fase="${f.nr}" aria-expanded="false" aria-controls="tl-panel-${f.nr}">
         <span class="tl-ch-eb"><span class="tl-ch-glyph" aria-hidden="true"></span>Fase ${f.nr}</span>
         <span class="tl-ch-mini" aria-hidden="true">${tlPeriode(f)}</span>
-        <span class="tl-ch-period"><span class="tl-sr">, ${f.start} tot ${f.eind ?? 'nu'}, </span><span aria-hidden="true">${f.start}<span class="tl-dash">–</span><span class="tl-ch-end${f.eind ? '' : ' is-nu'}">${tlOdoHTML()}${f.eind ? '' : '<span class="tl-ch-nu">nu</span>'}</span></span></span>
+        <span class="tl-ch-period"><span class="tl-sr">, ${tlPeriodeSr(f)}, </span><span aria-hidden="true">${f.start}<span class="tl-dash">–</span><span class="tl-ch-end${f.eind ? '' : ' is-nu'}">${tlOdoHTML()}${f.eind ? '' : `<span class="tl-ch-nu">${tlOpenEind(f)}</span>`}</span></span></span>
         <span class="tl-ch-title">${f.titel}</span>
         <span class="tl-ch-thread" aria-hidden="true">${beads}</span>
         <span class="tl-ch-foot">
@@ -65,20 +76,24 @@ function tlChooserHTML(f) {
 }
 
 function tlItemHTML(m, i) {
-  const wj = m.type === 'weetje';
+  const wj = m.type === 'weetje', dos = m.type === 'dossier';
+  // Een open dossier toont sinds wanneer het openligt, met "nog open" waar anders het tweede jaartal staat
+  const jaar = dos
+    ? `${m.sinds}<small aria-hidden="true">nog open</small>`
+    : `${m.jaar}${m.jaar2 ? `<small><span aria-hidden="true">/ </span><span class="tl-sr">en </span>${m.jaar2}</small>` : ''}`;
   return `
-            <li class="tl-item${wj ? ' tl-weetje' : ''}" id="tijdlijn-${m.jaar}" data-i="${i}" data-jaar="${m.jaar}">
+            <li class="tl-item${wj ? ' tl-weetje' : ''}${dos ? ' tl-dossier' : ''}" id="tijdlijn-${tlId(m)}" data-i="${i}" data-jaar="${tlJaar(m)}">
               <span class="tl-dot" aria-hidden="true">${wj ? tlZap(11) : ''}</span>
               <button type="button" class="tl-row" aria-expanded="false" aria-controls="tl-more-${i}">
-                ${wj ? `<span class="tl-wj-label">${tlZap(12)}Wist je dat?</span><span class="tl-sr"> Weetje, geen mijlpaal: </span>` : ''}
-                <span class="tl-year">${m.jaar}${m.jaar2 ? `<small><span aria-hidden="true">/ </span><span class="tl-sr">en </span>${m.jaar2}</small>` : ''}</span>
+                ${wj ? `<span class="tl-wj-label">${tlZap(12)}Wist je dat?</span><span class="tl-sr"> Weetje, geen mijlpaal: </span>` : ''}${dos ? '<span class="tl-sr">Open dossier sinds </span>' : ''}
+                <span class="tl-year">${jaar}</span>
                 <span class="tl-title"><span class="tl-title-t">${m.titel}</span></span>
                 ${tlChev(16)}
               </button>
               <div class="tl-more" id="tl-more-${i}">
                 <div class="tl-more-in" hidden="until-found">
                   <div class="tl-desc">
-                    <p class="tl-cat" data-cat="${m.cat}">${TL_CAT[m.cat]}</p>
+                    <p class="tl-cat" data-cat="${m.cat}">${dos ? 'Open dossier · ' : ''}${TL_CAT[m.cat]}</p>
                     <div class="tl-desc-t">${m.desc}</div>
                     ${m.bron ? `<p class="tl-src"><span class="tl-src-k">Bron</span>${m.bron}</p>` : ''}
                   </div>
@@ -108,7 +123,7 @@ function tlPanelHTML(f) {
         <p class="tl-panel-intro">${f.tekst}</p>
         <div class="tl-track">
           <div class="tl-rail" aria-hidden="true"><span class="tl-fill"></span>${laatste ? '' : '<span class="tl-rail-tail"></span>'}</div>
-          <ol class="tl-list" role="list" aria-label="Tijdlijn fase ${f.nr}, ${f.start} tot ${f.eind ?? 'nu'}">${TIJDLIJN.map((m, i) => m.fase === f.nr ? tlItemHTML(m, i) : '').join('')}
+          <ol class="tl-list" role="list" aria-label="Tijdlijn fase ${f.nr}, ${tlPeriodeSr(f)}">${TIJDLIJN.map((m, i) => m.fase === f.nr ? tlItemHTML(m, i) : '').join('')}
           </ol>
           ${voet}
         </div>
@@ -122,7 +137,7 @@ function renderTijdlijn() {
   // Let op: geen overflow op .tl-shell of een voorouder, anders werkt de sticky jaarteller
   // (.tl-pin) niet meer. Enkel .tl-stage knipt af, en alleen tijdens het animeren.
   tl.innerHTML = `
-    <div class="tl-shell">
+    <div class="tl-shell" style="--tl-n:${TL_FASES.length}">
       <div class="tl-chooser"><span class="tl-thumb" aria-hidden="true"></span>${TL_FASES.map(tlChooserHTML).join('')}</div>
       <div class="tl-pin"><div class="tl-pill tl-p1" aria-hidden="true" title="Naar het begin van de tijdlijn"><span class="tl-pill-badge">1</span><span class="tl-pill-lbl">Fase 1</span>${tlOdoHTML()}</div></div>
       <div class="tl-stage">${TL_FASES.map(tlPanelHTML).join('')}</div>
@@ -248,7 +263,7 @@ function initTijdlijn() {
     near: false, active: false, geo: null, ticking: false, userGesture: false,
     phaseTok: 0, stageTok: 0, itemTok: {}, zapped: false, rippled: false, timers: [], cancels: [], introIO: null,
   };
-  const narrow = window.matchMedia('(max-width: 719.98px)');
+  const narrow = window.matchMedia('(max-width: 899.98px)');
   const itemEl = i => tl.querySelector(`.tl-item[data-i="${i}"]`);
   const faseOf = li => +li.closest('.tl-panel').dataset.fase;
   const stickPx = () => parseFloat(getComputedStyle(pin).top) || 75;
@@ -274,7 +289,8 @@ function initTijdlijn() {
       shell.classList.add('tl-in');
       TL_FASES.forEach((f, k) => {
         S.timers.push(setTimeout(() => {
-          endSlot[f.nr].classList.add('is-counting');
+          // een open einde ("?") telt niet op: dat verschijnt meteen terwijl de draad zich tekent
+          endSlot[f.nr].classList.add(f.toekomst ? 'is-nu' : 'is-counting');
           S.cancels.push(odoEnd[f.nr].tween(f.start, tlEind(f), k ? 1600 : 1400, p => {
             threads[f.nr].style.setProperty('--p', p.toFixed(4));
             beads[f.nr].forEach(b => {
@@ -284,7 +300,7 @@ function initTijdlijn() {
             if (!f.eind) endSlot[f.nr].classList.add('is-nu');
             if (k === TL_FASES.length - 1) S.intro = 'done';
           }));
-        }, k ? 900 : 250));
+        }, k ? 450 + k * 450 : 250));
       });
     }, { threshold: 0.35 });
     S.introIO.observe(chooser);
@@ -396,10 +412,10 @@ function initTijdlijn() {
     if (S.item !== null) { closeItem(S.item, true); S.item = null; }
     if (closing) closing.items.forEach(li => li.classList.remove('is-past', 'is-current'));
 
-    // Kiezer: aria-expanded, de witte "thumb" onder de gekozen helft
+    // Kiezer: aria-expanded, de witte "thumb" onder het gekozen hoofdstuk
     TL_FASES.forEach(f => chBtn[f.nr].setAttribute('aria-expanded', f.nr === nr ? 'true' : 'false'));
     if (nr) {
-      thumb.style.setProperty('--thumb-x', nr === 1 ? '0%' : '100%');
+      thumb.style.setProperty('--thumb-x', (nr - 1) * 100 + '%');
       if (!prev) {
         thumb.classList.add('is-snap');
         requestAnimationFrame(() => requestAnimationFrame(() => thumb.classList.remove('is-snap')));
@@ -442,8 +458,7 @@ function initTijdlijn() {
     else pill.classList.remove('is-on');
     if (!nr) ensureRoom();
     if (opening) {
-      pill.classList.toggle('tl-p1', nr === 1);
-      pill.classList.toggle('tl-p2', nr === 2);
+      TL_FASES.forEach(f => pill.classList.toggle('tl-p' + f.nr, f.nr === nr));
       pill.querySelector('.tl-pill-badge').textContent = nr;
       pill.querySelector('.tl-pill-lbl').textContent = 'Fase ' + nr;
       pillOdo.set(opening.f.start);
@@ -547,7 +562,7 @@ function initTijdlijn() {
     }
     openItem(li, o.instant);
     S.item = i;
-    if (o.hash !== false) tlWriteHash('tijdlijn-' + li.dataset.jaar);
+    if (o.hash !== false) tlWriteHash(li.id);
     if (o.instant || tlInstant()) { afterLayout(); if (!o.instant) ensureVisible(li); return; }
     const tok = S.itemTok[i];
     tlAfter(li.querySelector('.tl-more'), 'grid-template-rows', 450, () => {
@@ -608,7 +623,7 @@ function initTijdlijn() {
     p.rail.style.top = (railTop - trackTop) + 'px';
     p.rail.style.height = railH + 'px';
     if (p.tail && badge) p.tail.style.height = Math.max(0, badge.y - badge.h / 2 - endY - 3) + 'px';
-    if (p.nr === 2) pts.forEach(pt => { if (!pt.wj) pt.li.style.setProperty('--c', tlRainbow((pt.y - railTop) / railH)); });
+    if (p.nr > 1) pts.forEach(pt => { if (!pt.wj) pt.li.style.setProperty('--c', tlRainbow((pt.y - railTop) / railH)); });
     S.geo = { p, pts, railTop, railH, endY, start: p.f.start, endYear: tlEind(p.f), stick, pillH, readFrac, chooserBottom, panelEnd, maxS };
   }
   function update() {
@@ -761,7 +776,7 @@ function initTijdlijn() {
     }
   });
 
-  // ── Deeplinks: #tijdlijn-fase-2 of #tijdlijn-1973 ──
+  // ── Deeplinks: #tijdlijn-fase-2, #tijdlijn-1973 of #tijdlijn-haatspraak ──
   // Eén keer per pagina: zodra de bezoeker zelf iets doet, niet meer terugspringen naar
   // het deeplinkdoel (lettertypes en 'load' kunnen laat binnenkomen).
   let deepHold = true;
@@ -775,9 +790,9 @@ function initTijdlijn() {
       introFinish();
       tlNoTransition(shell, () => setPhase(+m[1], { instant: true, scroll: false, hash: false }));
       y = () => chooserDocTop() - stickPx() - 4;
-    } else if ((m = /^tijdlijn-(\d{4})$/.exec(h))) {
+    } else if (/^tijdlijn-[\w-]+$/.test(h)) {
       const li = document.getElementById(h);
-      if (!li || !tl.contains(li)) return;
+      if (!li || !tl.contains(li) || !li.classList.contains('tl-item')) return;
       introFinish();
       tlNoTransition(shell, () => toggleItem(+li.dataset.i, { open: true, instant: true, compensate: false, hash: false }));
       y = () => li.getBoundingClientRect().top + window.scrollY - Math.max(0.3 * window.innerHeight, stickPx() + pill.offsetHeight + 16);
