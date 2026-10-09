@@ -791,6 +791,12 @@ strong, b { font-weight: 700; }
 .strip-go { margin-top: auto; padding-top: 18px; display: inline-flex; align-items: center; gap: 6px; font-size: .875rem; font-weight: 700; color: var(--muted); transition: color .2s; }
 .strip-card:hover .strip-go { color: var(--brand); }
 .strip-foot { margin-top: 4px; }
+/* afsluitende kaart: wat nog moet gebeuren (gestippeld, want nog niet af) */
+.strip-card-open { background: transparent; border-style: dashed; border-color: color-mix(in srgb, var(--ink) 22%, transparent); box-shadow: none; }
+.strip-card-open::before {
+  background: linear-gradient(90deg, #ee6f9c, #f4a44a, #f5d23f, #5bbf7a, #46b3d6, #7b6fd4);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 8px, transparent 8px 13px); mask: repeating-linear-gradient(90deg, #000 0 8px, transparent 8px 13px);
+}
 
 /* Snelle hulp */
 .hulp-band {
