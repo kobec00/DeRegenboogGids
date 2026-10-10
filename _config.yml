@@ -5,3 +5,6 @@ lang: nl
 markdown: kramdown
 # Eén plek voor de datum van de laatste inhoudelijke controle (footer, Over, Bronnen)
 laatst_bijgewerkt: "oktober 2026"
+# sitemap.xml en robots.txt voor zoekmachines (standaard beschikbaar op GitHub Pages)
+plugins:
+  - jekyll-sitemap

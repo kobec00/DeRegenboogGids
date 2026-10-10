@@ -485,6 +485,9 @@ function initBento() {
 
 // Taalgids-kaarten om te draaien
 let stapel = [];
+// Lange samenstellingen mogen op de kaart enkel op een natuurlijke plek afbreken (Hetero-normativiteit)
+const KAART_AFBREEK = /^("?)(Hetero|Gender|Regenboog|Pan|Demi|Voornaam|Dead|Mis|Trans|Inter|Geslachts)(?=[a-zë]{4,})/;
+const kaartWoord = w => w.replace(KAART_AFBREEK, '$1$2\u00AD').replace('normativiteit', 'norma\u00ADtiviteit');
 function deelKaarten() {
   const el = $('#deck');
   if (!el) return;
@@ -496,11 +499,11 @@ function deelKaarten() {
     <button class="flip tone-${TERM_CAT_COLOR[t.cat] || 'teal'}${calm() ? '' : ' is-dealt'}" type="button" aria-pressed="false" style="--dd:${i * 85}ms">
       <span class="flip-face flip-front">
         <span class="tag">${vermijd ? ico('alert') : ''}${t.cat}</span>
-        <span class="flip-word">${t.woord}</span>
+        <span class="flip-word" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Draai om</span>
       </span>
       <span class="flip-face flip-back">
-        <span class="flip-word" aria-hidden="true">${t.woord}</span>
+        <span class="flip-word" aria-hidden="true" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
         <span class="flip-def">${kort(t.def, 175)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Terug</span>
       </span>
@@ -1243,7 +1246,7 @@ function kiesVlag(key) {
   void r.offsetWidth;
   r.classList.add('is-sel');
   const stappen = VLAG_STAPPEN.filter(s => s.vlaggen.includes(key)).map(s => s.naam.toLowerCase());
-  r.innerHTML = `${ico('flag')}<span><b>${v.naam}: ${v.wat.toLowerCase()}.</b> Bij deze vlag horen deze stappen: ${zinLijst(stappen)}.</span>`;
+  r.innerHTML = `${ico('flag')}<span><b>${v.naam}: ${v.wat.toLowerCase()}.</b> ${v.zin || 'Bij deze vlag horen deze stappen: '}${zinLijst(stappen)}.${v.noot ? ' ' + v.noot : ''}</span>`;
 }
 
 // ── Team-zelfscan ──
@@ -1885,7 +1888,7 @@ function wwVraagHTML(tel) {
   const v = wwVorig || tel;
   const SG = ['prak', 'tool', 'org'];
   return `<div class="ww-app">
-    <aside class="ww-rail" aria-label="Jouw route">
+    <nav class="ww-rail" aria-label="Jouw route">
       <p class="ww-rail-k">Jouw route</p>
       <ol class="ww-route" style="--p:${v.p == null ? 0 : v.p}" data-p="${f.length > 1 ? idx / (f.length - 1) : 0}">${route}</ol>
       <div class="ww-live">
@@ -1893,7 +1896,7 @@ function wwVraagHTML(tel) {
         <span class="ww-live-bar" aria-hidden="true">${SG.map(g => `<i class="tone-${WW_SOORT[g].tone}" style="--g:${v[g]}" data-g="${tel[g]}"></i>`).join('')}</span>
         <ul class="ww-live-leg">${SG.map(g => `<li class="tone-${WW_SOORT[g].tone}"><span class="chip-dot" aria-hidden="true"></span>${WW_SOORT[g].kort}<b>${tel[g]}</b></li>`).join('')}</ul>
       </div>
-    </aside>
+    </nav>
     <div class="ww-stage ${wwRich < 0 ? 'is-terug' : 'is-verder'}">
       <p class="ww-steplabel">Stap ${idx + 1} van ${f.length}${stap.optioneel ? ' · optioneel' : ''}</p>
       <h2 class="ww-question" id="ww-q" tabindex="-1">${stap.vraag}</h2>
