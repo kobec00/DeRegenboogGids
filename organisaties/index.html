@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Organisaties & hulplijnen — De Regenbooggids"
+title: "Organisaties & contacten — De Regenbooggids"
 description: "Vind contactorganisaties en hulplijnen rond LGBTQ+ en genderdiversiteit in de Vlaamse zorg, per regio en type."
 permalink: /organisaties/
 bodyclass: page-orgs
@@ -15,7 +15,8 @@ bodyclass: page-orgs
   <div class="page-art" aria-hidden="true">{% include embleem-organisaties.html %}</div>
 </header>
 
-<section class="wrap" aria-label="Overzicht van organisaties">
+<section class="wrap" aria-labelledby="orgs-h">
+  <h2 class="sr-only" id="orgs-h">Overzicht van organisaties</h2>
   <div class="filters">
     <div class="field">
       <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
@@ -30,4 +31,6 @@ bodyclass: page-orgs
     <button class="clear-btn" id="org-reset" type="button" hidden><svg class="i" aria-hidden="true"><use href="#i-x"/></svg>Wis filters</button>
   </div>
   <div class="cards" id="orgs-list"></div>
+  <noscript><div class="empty"><b>Deze lijst werkt met JavaScript</b>Schakel het in om de organisaties te bekijken en te filteren. Een vraag over gender of geaardheid? Bel gratis en anoniem <a href="tel:080099533">Lumi op 0800 99 533</a>.</div></noscript>
+  <div id="orgs-inactief" hidden></div>
 </section>

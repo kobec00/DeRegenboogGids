@@ -7,7 +7,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const TL_NU = new Date().getFullYear();
-const TL_CAT = { science: 'Wetenschap &amp; zorg', move: 'Samenleving &amp; beweging', law: 'Wetgeving &amp; beleid', weetje: 'Weetje · geen mijlpaal' };
+const TL_CAT = { science: 'Wetenschap &amp; zorg', move: 'Samenleving &amp; beweging', law: 'Wetgeving &amp; beleid', beperking: 'Beperking &amp; rechten', weetje: 'Weetje · geen mijlpaal' };
 // Zelfde stops als de regenboog-rail in de CSS (--tl-rainbow), zodat een bolletje vanaf fase 2
 // exact de kleur krijgt van de rail eronder.
 const TL_RAINBOW = [[0, '#e85d8a'], [0.2, '#f4a44a'], [0.38, '#f7d44a'], [0.55, '#5bbf7a'], [0.75, '#4ab8d4'], [1, '#7b6fd4']];

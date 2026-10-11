@@ -208,16 +208,19 @@ const Zoek = {
       ['Test jezelf', 'Korte zelftest over je eigen reflexen', '/praktijk/?tab=quiz', 'help', 'rose'],
       ['Beleid & vorming', 'Wetgeving, zorgbeleid en wetenschappelijke onderbouwing', '/beleid/', 'scale', 'amber'],
       ['Mijlpalen-tijdlijn', 'Rechten en erkenning, van 1897 tot nu', '/beleid/#tijdlijn', 'clock', 'blue'],
+      ['Discriminatie melden', 'VMRI, Unia of IGVM: waar meld je wat?', '/beleid/#melden', 'megaphone', 'amber'],
+      ['Bronnen', 'Alle bronnen in APA 7, en de graduaatsproef achter de gids', '/bronnen/', 'book', 'slate'],
       ['Wegwijzer', 'Een paar vragen, een selectie op maat', '/wegwijzer/', 'compass', 'teal'],
       ['Over dit project', 'Graduaatsproef UCLL · achtergrond', '/over/', 'info', 'slate'],
       ['Contact & aanvullingen', 'Mis je iets? Laat het weten', '/over/#contact', 'mail', 'slate'],
-    ].forEach(([title, sub, href, icon, tone]) => add('pagina', { title, sub, href, icon, tone }));
+      ['Wat vind jij van deze website?', 'Oproep aan ervaringsdeskundigen: geef je mening', '/over/#jouw-mening', 'bubble', 'violet', 'meedenken testen feedback mening ervaringsdeskundige'],
+    ].forEach(([title, sub, href, icon, tone, text]) => add('pagina', { title, sub, href, icon, tone, text }));
     add('pagina', { title: 'Hulp nodig?', sub: 'Crisis- en hulplijnen', text: 'zelfmoord crisis noodnummer', action: 'help', icon: 'heart', tone: 'rose' });
     add('pagina', { title: 'Steun een organisatie', sub: 'Doneren aan het werkveld', text: 'gift doneren', action: 'doneer', icon: 'heart', tone: 'rose' });
     TOOLS.forEach(t => add('tool', { title: t.title, sub: `${t.org} · ${t.doelgroep}`, text: t.thema + ' ' + t.beschrijving, href: '/tools/#t-' + slug(t.title), icon: 'tool', tone: THEMA_TONE[t.thema] || 'teal' }));
     ORGS.forEach(o => add('org', { title: o.naam, sub: `${REGIO_KORT(o.regio)} · ${o.type}`, text: o.beschrijving + ' ' + o.regio, href: '/organisaties/#o-' + slug(o.naam), icon: 'users', tone: TYPE_TONE[o.type] || 'blue' }));
     TERMEN.forEach(t => add('term', { title: t.woord.replace(/"/g, ''), sub: `Taalgids · ${t.cat}`, text: t.def, href: '/praktijk/?tab=taal#term-' + slug(t.woord), icon: 'book', tone: TERM_CAT_COLOR[t.cat] || 'teal' }));
-    CASUS.forEach((c, i) => add('casus', { title: c.titel, sub: `Casus ${i + 1} · ${c.tag}`, text: c.blokken.map(b => b.tekst).join(' '), href: `/praktijk/?tab=casus#casus-${i + 1}`, icon: 'bubble', tone: 'violet' }));
+    CASUS.forEach((c, i) => add('casus', { title: c.titel, sub: `Casus ${i + 1} · ${c.tag}`, text: c.blokken.map(b => b.tekst).concat(c.extra ? [c.extra.kop, c.extra.tekst] : []).join(' '), href: `/praktijk/?tab=casus#casus-${i + 1}`, icon: 'bubble', tone: 'violet' }));
     BELEID.forEach(b => add('beleid', { title: b.titel, sub: `${b.groep} · ${b.type}`, text: b.beschrijving, href: '/beleid/#b-' + slug(b.titel), icon: (GROEP_STIJL[b.groep] || ['amber', 'scale'])[1], tone: (GROEP_STIJL[b.groep] || ['amber'])[0] }));
     TIJDLIJN.forEach(m => add('mijlpaal', { title: `${m.type === 'dossier' ? 'Open dossier' : m.jaar} · ${zonderTags(m.titel)}`, sub: m.type === 'dossier' ? 'Tijdlijn · wat nog moet gebeuren' : m.type === 'weetje' ? 'Tijdlijn · weetje' : 'Tijdlijn', text: zonderTags(m.desc), href: `/beleid/#tijdlijn-${m.id ?? m.jaar}`, icon: 'clock', tone: 'blue' }));
     HULPLIJNEN.forEach(l => add('hulp', { title: l.naam, sub: l.tel ? `Bel ${l.tel}` : 'Hulplijn', text: l.desc, action: 'help', icon: l.icon || 'heart', tone: l.kleur || 'rose' }));
@@ -482,6 +485,9 @@ function initBento() {
 
 // Taalgids-kaarten om te draaien
 let stapel = [];
+// Lange samenstellingen mogen op de kaart enkel op een natuurlijke plek afbreken (Hetero-normativiteit)
+const KAART_AFBREEK = /^("?)(Hetero|Gender|Regenboog|Pan|Demi|Voornaam|Dead|Mis|Trans|Inter|Geslachts)(?=[a-zë]{4,})/;
+const kaartWoord = w => w.replace(KAART_AFBREEK, '$1$2\u00AD').replace('normativiteit', 'norma\u00ADtiviteit');
 function deelKaarten() {
   const el = $('#deck');
   if (!el) return;
@@ -493,11 +499,11 @@ function deelKaarten() {
     <button class="flip tone-${TERM_CAT_COLOR[t.cat] || 'teal'}${calm() ? '' : ' is-dealt'}" type="button" aria-pressed="false" style="--dd:${i * 85}ms">
       <span class="flip-face flip-front">
         <span class="tag">${vermijd ? ico('alert') : ''}${t.cat}</span>
-        <span class="flip-word">${t.woord}</span>
+        <span class="flip-word" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Draai om</span>
       </span>
       <span class="flip-face flip-back">
-        <span class="flip-word" aria-hidden="true">${t.woord}</span>
+        <span class="flip-word" aria-hidden="true" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
         <span class="flip-def">${kort(t.def, 175)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Terug</span>
       </span>
@@ -509,7 +515,7 @@ function deelKaarten() {
 function initStrook() {
   const el = $('#strip');
   if (!el) return;
-  const CAT = { science: 'Wetenschap & zorg', move: 'Samenleving & beweging', law: 'Wetgeving & beleid' };
+  const CAT = { science: 'Wetenschap & zorg', move: 'Samenleving & beweging', law: 'Wetgeving & beleid', beperking: 'Beperking & rechten' };
   // Enkel afgeronde kantelpunten. De toekomstfase (open dossiers) krijgt één afsluitende kaart.
   const open = TL_FASES.find(f => f.toekomst);
   const items = TIJDLIJN.filter(m => m.type !== 'weetje' && m.fase !== open?.nr);
@@ -518,7 +524,7 @@ function initStrook() {
   const f2 = items.filter(m => m.fase === 2), a = +f2[0].jaar, b = +f2[f2.length - 1].jaar;
   el.innerHTML = items.map(m => {
     const c = m.fase === 1 ? '#a8a29e' : boogKleur((+m.jaar - a) / (b - a));
-    return `<li><a class="strip-card" href="/beleid/#tijdlijn-${m.jaar}" style="--c:${c}">
+    return `<li><a class="strip-card" href="/beleid/#tijdlijn-${m.id ?? m.jaar}" style="--c:${c}">
       <span class="strip-year">${m.jaar}${m.jaar2 ? `<small>/ ${m.jaar2}</small>` : ''}</span>
       <span class="strip-cat">${CAT[m.cat] || ''}</span>
       <span class="strip-title">${m.titel}</span>
@@ -567,9 +573,10 @@ function strookSchuif(dir) {
 }
 
 // ── 8. KAARTEN & FILTERS (tools · organisaties · beleid · taalgids) ───────────
+const LAND_NL = `<span class="tag tag-plain tag-land" title="Nederlands materiaal: soms andere termen, een ander zorgstelsel en andere wetgeving">${ico('globe')}Uit Nederland</span>`;
 function toolKaart(t) {
   return `<article class="item tone-${THEMA_TONE[t.thema] || 'teal'}" id="t-${slug(t.title)}">
-    <div class="item-meta"><span class="tag">${t.thema}</span></div>
+    <div class="item-meta"><span class="tag">${t.thema}</span>${t.land === 'NL' ? LAND_NL : ''}</div>
     <h3 class="item-title">${t.title}</h3>
     <p class="item-sub">${t.org}</p>
     <p class="item-desc">${t.beschrijving}</p>
@@ -601,6 +608,30 @@ function beleidKaart(b, compact) {
     <p class="item-desc">${compact ? kort(b.beschrijving, 140) : b.beschrijving}</p>
     ${b.url ? `<div class="item-foot"><span></span><a class="item-link" href="${b.url}" target="_blank" rel="noopener noreferrer">Meer info${ico('arrow-up-right')}${ext}</a></div>` : ''}
   </article>`;
+}
+// Waar meld je discriminatie? Drie meldpunten, afhankelijk van wie bevoegd is.
+function meldBlok() {
+  return `<section class="meld reveal" id="melden" aria-labelledby="melden-h">
+    <div class="meld-head">
+      <span class="meld-ic">${ico('megaphone')}</span>
+      <div>
+        <h2 class="meld-title" id="melden-h">Waar meld je discriminatie?</h2>
+        <p>Niet de discriminatiegrond bepaalt waar je terechtkan, wel wie bevoegd is voor de situatie. Zorg voor personen met een beperking is in Vlaanderen een Vlaamse bevoegdheid: discriminatie in een voorziening meld je dus bij het VMRI.</p>
+      </div>
+    </div>
+    <ul class="meld-grid" role="list">${MELDPUNTEN.map(m => `
+      <li class="meld-card tone-${m.tone}">
+        <p class="meld-naam"><span class="meld-card-ic">${ico(m.icon)}</span><span><b>${m.kort}</b><small>${m.naam}</small></span></p>
+        <p class="meld-wanneer">${m.wanneer}</p>
+        <p class="meld-extra">${m.extra}</p>
+        <div class="meld-foot">
+          ${m.tel ? `<a class="phone-btn" href="tel:${m.tel.replace(/\s/g, '')}" aria-label="Bel ${m.kort} op ${m.tel}">${ico('phone')}${m.tel}</a>` : '<span></span>'}
+          <a class="item-link" href="${m.url}" target="_blank" rel="noopener noreferrer">Doe een melding${ico('arrow-up-right')}${ext}</a>
+        </div>
+      </li>`).join('')}
+    </ul>
+    <p class="meld-note">${ico('info')}<span>Twijfel je? Begin bij een van de drie: ze helpen je verder of verwijzen door. Een melding is gratis en vertrouwelijk. Gaat het om een misdrijf, zoals geweld of bedreiging? Doe dan ook aangifte bij de politie.</span></p>
+  </section>`;
 }
 function termKaart(t) {
   let tip = '';
@@ -709,7 +740,7 @@ function initLijsten() {
     const uniek = (k, volgorde) => volgorde.filter(v => TOOLS.some(t => t[k] === v)).concat([...new Set(TOOLS.map(t => t[k]))].filter(v => !volgorde.includes(v)));
     Filters.tools = maakFilter({
       naam: 'tool', items: TOOLS, lijst: tl, teller: $('#tool-count'), input: $('#tool-q'), reset: $('#tool-reset'),
-      woord: ['tool', 'tools'], kaart: toolKaart, tekst: t => `${t.title} ${t.org} ${t.beschrijving}`,
+      woord: ['tool', 'tools'], kaart: toolKaart, tekst: t => `${t.title} ${t.org} ${t.beschrijving}${t.land === 'NL' ? ' Nederland' : ''}`,
       groepen: [
         { key: 'thema', label: 'Thema', el: $('#tool-thema'), alle: 'Alle', waarden: uniek('thema', Object.values(TH)), test: (t, v) => t.thema === v, tone: v => THEMA_TONE[v] || 'teal', vanParam: p => TH[p] || p, naarParam: v => omgekeerd(TH)[v] || v },
         { key: 'doelgroep', label: 'Doelgroep', el: $('#tool-dg'), alle: 'Alle', waarden: uniek('doelgroep', ['Begeleiders', 'Cliënten', 'Cliënten & Begeleiders', 'Organisaties']), test: (t, v) => t.doelgroep === v, vanParam: p => DG[p] || p, naarParam: v => omgekeerd(DG)[v] || v },
@@ -728,6 +759,15 @@ function initLijsten() {
       ],
     });
   }
+  const inactief = $('#orgs-inactief');
+  if (inactief && typeof ORGS_INACTIEF !== 'undefined' && ORGS_INACTIEF.length) {
+    inactief.innerHTML = `<details class="inactief">
+      <summary>${ico('alert')}<span><b>Mogelijk niet meer actief (${ORGS_INACTIEF.length})</b><small>Staan niet meer als actieve vereniging op De Roze Pagina. Ze tellen niet mee in het overzicht.</small></span>${ico('chevron-down', 'inactief-chev')}</summary>
+      <ul role="list">${ORGS_INACTIEF.map(o => `<li><b>${o.naam}</b> <span class="inactief-regio">${ico('pin')}${REGIO_KORT(o.regio)}</span><p>${o.beschrijving} Gecontroleerd in ${o.gecheckt}.</p></li>`).join('')}</ul>
+      <p class="inactief-tip">Weet je of een van deze groepen nog samenkomt? Vraag het na bij <a href="https://www.lumi.be" target="_blank" rel="noopener noreferrer">Lumi${ext}</a> of laat het weten via <a href="/over/#contact">contact</a>.</p>
+    </details>`;
+    inactief.hidden = false;
+  }
   const pl = $('#policy-list');
   if (pl) {
     pl.innerHTML = BELEID_GROEPEN.map(g => {
@@ -741,14 +781,15 @@ function initLijsten() {
           <p class="policy-intro">${g.intro}</p>
         </div>
         <div class="cards" data-stagger>${items.map(b => beleidKaart(b).replace('class="item ', 'class="item reveal ')).join('')}</div>
-      </section>`;
+      </section>` + (g.naam === 'Rechten & wetgeving' && typeof MELDPUNTEN !== 'undefined' ? meldBlok() : '');
     }).join('');
     const jn = $('#jump-nav');
     if (jn) {
       jn.innerHTML = BELEID_GROEPEN.filter(g => BELEID.some(b => b.groep === g.naam)).map(g => {
         const [tone] = GROEP_STIJL[g.naam] || ['amber'];
         return `<a class="tone-${tone}" href="#groep-${slug(g.naam)}"><span class="chip-dot" aria-hidden="true"></span>${g.naam}</a>`;
-      }).join('') + `<a class="tone-blue" href="#tijdlijn"><span class="chip-dot" aria-hidden="true"></span>Mijlpalen-tijdlijn</a>`;
+      }).join('') + (document.getElementById('melden') ? `<a class="tone-teal" href="#melden"><span class="chip-dot" aria-hidden="true"></span>Discriminatie melden</a>` : '')
+        + `<a class="tone-blue" href="#tijdlijn"><span class="chip-dot" aria-hidden="true"></span>Mijlpalen-tijdlijn</a>`;
     }
   }
 }
@@ -965,6 +1006,7 @@ function renderCasusView(anim) {
       <li class="cv-step" style="--k:${k}"><span class="cv-step-ic">${ico(CASUS_ICO[k] || 'spark')}</span>
         <div><h3><small>${k + 1}</small>${b.kop}</h3><p>${b.tekst}</p></div></li>`).join('')}
     </ol>
+    ${c.extra ? `<aside class="cv-extra"><span class="cv-extra-ic">${ico('scale')}</span><div><h3>${c.extra.kop}</h3><p>${c.extra.tekst}</p></div></aside>` : ''}
     ${chips}
     <div class="cv-werkblad">
       <h3>Bespreek in je team</h3>
@@ -1204,7 +1246,7 @@ function kiesVlag(key) {
   void r.offsetWidth;
   r.classList.add('is-sel');
   const stappen = VLAG_STAPPEN.filter(s => s.vlaggen.includes(key)).map(s => s.naam.toLowerCase());
-  r.innerHTML = `${ico('flag')}<span><b>${v.naam}: ${v.wat.toLowerCase()}.</b> Bij deze vlag horen deze stappen: ${zinLijst(stappen)}.</span>`;
+  r.innerHTML = `${ico('flag')}<span><b>${v.naam}: ${v.wat.toLowerCase()}.</b> ${v.zin || 'Bij deze vlag horen deze stappen: '}${zinLijst(stappen)}.${v.noot ? ' ' + v.noot : ''}</span>`;
 }
 
 // ── Team-zelfscan ──
@@ -1608,6 +1650,7 @@ function casusGa(go) {
   }
   if (go === 'orgs') location.href = '/organisaties/';
   else if (go === 'beleid') location.href = '/beleid/';
+  else if (go.startsWith('beleid#')) location.href = '/beleid/' + go.slice(6);
   else if (go === 'hulp') Dlg.open('dlg-help');
   else if (go === 'tools-sek') location.href = '/tools/?thema=sek';
   else if (go === 'tools-gen') location.href = '/tools/?thema=gen';
@@ -1845,7 +1888,7 @@ function wwVraagHTML(tel) {
   const v = wwVorig || tel;
   const SG = ['prak', 'tool', 'org'];
   return `<div class="ww-app">
-    <aside class="ww-rail" aria-label="Jouw route">
+    <nav class="ww-rail" aria-label="Jouw route">
       <p class="ww-rail-k">Jouw route</p>
       <ol class="ww-route" style="--p:${v.p == null ? 0 : v.p}" data-p="${f.length > 1 ? idx / (f.length - 1) : 0}">${route}</ol>
       <div class="ww-live">
@@ -1853,7 +1896,7 @@ function wwVraagHTML(tel) {
         <span class="ww-live-bar" aria-hidden="true">${SG.map(g => `<i class="tone-${WW_SOORT[g].tone}" style="--g:${v[g]}" data-g="${tel[g]}"></i>`).join('')}</span>
         <ul class="ww-live-leg">${SG.map(g => `<li class="tone-${WW_SOORT[g].tone}"><span class="chip-dot" aria-hidden="true"></span>${WW_SOORT[g].kort}<b>${tel[g]}</b></li>`).join('')}</ul>
       </div>
-    </aside>
+    </nav>
     <div class="ww-stage ${wwRich < 0 ? 'is-terug' : 'is-verder'}">
       <p class="ww-steplabel">Stap ${idx + 1} van ${f.length}${stap.optioneel ? ' · optioneel' : ''}</p>
       <h2 class="ww-question" id="ww-q" tabindex="-1">${stap.vraag}</h2>
@@ -1896,7 +1939,7 @@ function wwToolKaart(it, a, i, extra) {
     <span class="ww-row-ic">${ico('tool')}</span>
     <div class="ww-row-body">
       <h4 class="ww-row-t"><a href="${t.url}" target="_blank" rel="noopener noreferrer">${t.title}${ext}</a></h4>
-      <p class="ww-row-sub">${t.org} <span aria-hidden="true">·</span> ${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}${t.doelgroep}</p>
+      <p class="ww-row-sub">${t.org} <span aria-hidden="true">·</span> ${ico(DOELGROEP_ICO[t.doelgroep] || 'users')}${t.doelgroep}${t.land === 'NL' ? ' <span aria-hidden="true">·</span> uit Nederland' : ''}</p>
       <p class="ww-row-d">${kort(t.beschrijving, 125)}</p>
       ${wwWaarom(it.waarom)}
     </div>
@@ -1964,7 +2007,7 @@ function wwTop(it, a) {
     const c = it.c, ic = ['eye', 'hand', 'alert'];
     tone = 'violet'; kop = `Casus ${nn(it.n)} · ${c.tag}`; titel = c.titel; tekst = c.blokken[0].tekst;
     knoppen = `<a class="btn btn-sm ww-btn" href="/praktijk/?tab=casus#casus-${it.n}">Lees de handvatten${ico('arrow-right')}</a>`;
-    const verder = (c.chips || []).filter(ch => ch.go !== 'beleid').map(ch => (ch.url
+    const verder = (c.chips || []).filter(ch => !String(ch.go || '').startsWith('beleid')).map(ch => (ch.url
       ? `<a class="casus-chip" href="${ch.url}" target="_blank" rel="noopener noreferrer">${ch.l}${ico('arrow-up-right')}${ext}</a>`
       : `<button class="casus-chip" type="button" data-go="${ch.go}">${ch.l}${ico('arrow-right')}</button>`)).join('');
     zij = `<ol class="ww-steps">${c.blokken.slice(1).map((b, k) => `<li${k ? ' class="ww-vp-extra"' : ''}><span class="ww-steps-ic">${ico(ic[k + 1])}</span><div><b>${b.kop}</b><p>${wwKern(kort(b.tekst, 150))}</p></div></li>`).join('')}</ol>

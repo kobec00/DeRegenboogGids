@@ -275,6 +275,7 @@
     <nav class="footer-col" aria-label="Project">
       <p class="footer-h">Project</p>
       <a href="/over/">Over dit project</a>
+      <a href="/bronnen/">Bronnen</a>
       <a href="/over/#contact">Contact &amp; aanvullingen</a>
       <button type="button" class="footer-link" data-action="help">Hulp nodig?</button>
       <button type="button" class="footer-link" data-action="a11y" role="switch" aria-checked="false">Toegankelijke modus</button>
@@ -282,7 +283,7 @@
   </div>
   <div class="wrap footer-meta">
     <p>DeRegenbooggids.be <span aria-hidden="true">·</span> Graduaatsproef UCLL Sociale School Heverlee <span aria-hidden="true">·</span> Kobe Cornelis, 2025–2026 <span aria-hidden="true">·</span> Niet commercieel</p>
-    <p>Laatst bijgewerkt: oktober 2026 <span aria-hidden="true">·</span> Controleer steeds de actuele info bij de bron.</p>
+    <p>Laatst bijgewerkt: {{ site.laatst_bijgewerkt }} <span aria-hidden="true">·</span> Controleer steeds de actuele info bij de bron.</p>
     <p>Anonieme bezoekersstatistieken via Umami <span aria-hidden="true">·</span> geen cookies, geen persoonsgegevens <span aria-hidden="true">·</span> <a href="/over/#privacy">Meer info</a></p>
   </div>
   <div class="footer-arc" aria-hidden="true">
@@ -292,7 +293,7 @@
 
 <!-- ── HULP NODIG? (altijd bereikbaar) ── -->
 <button class="help-fab" id="help-fab" type="button" data-action="help" aria-haspopup="dialog">
-  <svg class="i"><use href="#i-heart"/></svg><span>Hulp nodig?</span><span class="help-fab-pulse" aria-hidden="true"></span>
+  <svg class="i" aria-hidden="true"><use href="#i-heart"/></svg><span class="help-fab-txt">Hulp nodig?</span><span class="help-fab-pulse" aria-hidden="true"></span>
 </button>
 
 <!-- ── DIALOGEN ── -->
@@ -332,7 +333,7 @@
         <span class="doneer-naam">çavaria <span class="doneer-tag">LGBTI+</span></span>
         <span class="doneer-desc">Vlaamse belangenverdediger van holebi-, trans- en intersekse personen. Fiscaal attest vanaf 40 euro.</span>
       </span>
-      <svg class="i doneer-arrow"><use href="#i-arrow-up-right"/></svg>
+      <svg class="i doneer-arrow" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only"> (opent in nieuw tabblad)</span>
     </a>
     <a class="doneer-line" href="https://www.weljong.be/donate" target="_blank" rel="noopener noreferrer" style="--tone: var(--violet); --tone-bg: var(--violet-bg)">
       <span class="doneer-ic"><svg class="i"><use href="#i-user"/></svg></span>
@@ -340,15 +341,7 @@
         <span class="doneer-naam">Wel Jong <span class="doneer-tag">LGBTQ+ jongeren</span></span>
         <span class="doneer-desc">De grootste organisatie voor LGBTQ+ jongeren in Vlaanderen en Brussel. Fiscaal attest vanaf 40 euro.</span>
       </span>
-      <svg class="i doneer-arrow"><use href="#i-arrow-up-right"/></svg>
-    </a>
-    <a class="doneer-line" href="https://hivontrafelen.be/doe-een-gift/" target="_blank" rel="noopener noreferrer" style="--tone: var(--amber); --tone-bg: var(--amber-bg)">
-      <span class="doneer-ic"><svg class="i"><use href="#i-flask"/></svg></span>
-      <span class="doneer-body">
-        <span class="doneer-naam">Fonds HIV Ontrafelen <span class="doneer-tag">hiv-onderzoek</span></span>
-        <span class="doneer-desc">Onderzoeksfonds dat wetenschappelijk onderzoek naar de genezing van hiv aan UGent en UZ Gent financiert. Giften lopen via het Universiteitsfonds UGent. Fiscaal attest vanaf 40 euro.</span>
-      </span>
-      <svg class="i doneer-arrow"><use href="#i-arrow-up-right"/></svg>
+      <svg class="i doneer-arrow" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only"> (opent in nieuw tabblad)</span>
     </a>
     <a class="doneer-line" href="https://www.lumi.be/ik-wil-helpen/geef-een-gift" target="_blank" rel="noopener noreferrer" style="--tone: var(--blue); --tone-bg: var(--blue-bg)">
       <span class="doneer-ic"><svg class="i"><use href="#i-chat"/></svg></span>
@@ -356,7 +349,7 @@
         <span class="doneer-naam">Lumi <span class="doneer-tag">infolijn</span></span>
         <span class="doneer-desc">De gratis en anonieme onthaal- en infolijn van çavaria voor vragen over gender, geslacht en seksuele oriëntatie. Ook voor begeleiders en naasten.</span>
       </span>
-      <svg class="i doneer-arrow"><use href="#i-arrow-up-right"/></svg>
+      <svg class="i doneer-arrow" aria-hidden="true"><use href="#i-arrow-up-right"/></svg><span class="sr-only"> (opent in nieuw tabblad)</span>
     </a>
   </div>
   <div class="dlg-foot">Tip: giften van 40 euro of meer per jaar leveren bij deze Vlaamse organisaties een fiscaal attest op. Controleer de voorwaarden steeds op hun eigen pagina.</div>

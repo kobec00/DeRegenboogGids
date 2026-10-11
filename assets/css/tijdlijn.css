@@ -276,6 +276,7 @@
     .tl-cat[data-cat="move"]    { --cat: var(--rose); }
     .tl-cat[data-cat="law"]     { --cat: var(--violet); }
     .tl-cat[data-cat="weetje"]  { --cat: #b45309; }
+    .tl-cat[data-cat="beperking"] { --cat: var(--blue); }
     .tl-desc-t { max-width: 64ch; font-size: 14px; line-height: 1.7; color: var(--tl-text); }
     .tl-desc a { color: var(--tl-link); font-weight: 600; text-decoration: none; }
     .tl-desc a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -532,6 +533,7 @@ html.dark .tl-cat[data-cat="science"] { --cat: #5ADDC2; }
 html.dark .tl-cat[data-cat="move"]    { --cat: #ff8fa3; }
 html.dark .tl-cat[data-cat="law"]     { --cat: #b69bff; }
 html.dark .tl-cat[data-cat="weetje"]  { --cat: #f5cd72; }
+html.dark .tl-cat[data-cat="beperking"] { --cat: #7cc4f0; }
 
 /* ── Toegankelijke modus: geen glas en geen beweging, zwarte randen, hoog contrast ── */
     html.a11y .tl {
