@@ -70,6 +70,7 @@ const Weergave = {
     h.classList.toggle('dark', mode === 'dark' || (mode === 'auto' && this.toestelDonker()));
     this.bewaar(mode === 'auto' ? null : mode);
     this.sync();
+    pasKaartenAan();
   },
   kies(mode, e) {
     if (mode === this.huidig()) return;
@@ -488,8 +489,8 @@ let stapel = [];
 // Lange woorden mogen op de kaart enkel op een natuurlijke plek afbreken (Hetero-norma-tiviteit);
 // | wordt een zacht afbreekstreepje, dat pas zichtbaar wordt als het woord niet op één regel past
 const KAART_AFBREEK = ['Hetero|norma|tiviteit', 'Homo|sek|sueel', 'Bi|sek|sueel', 'Pan|sek|sueel', 'Demi|sek|sueel', 'Asek|sueel',
-  'Gender|iden|titeit', 'Gender|ex|pressie', 'Gender|fluïde', 'Voornaam|woorden', 'Regen|boog|vlag', 'Dead|naming', 'Mis|genderen',
-  'Trans|gender', 'Cis|gender', 'Inter|sekse', 'Geslachts|veran|dering', 'Levens|stijl', 'mede|stander', 'Aro|man|tisch',
+  'Gender|iden|titeit', 'Gender|ex|pressie', 'Gender|fluïde', 'Voor|naam|woorden', 'Regen|boog|vlag', 'Dead|naming', 'Mis|genderen',
+  'Trans|gender', 'Cis|gender', 'Inter|sekse', 'Ge|slachts|veran|dering', 'Levens|stijl', 'mede|stander', 'Aro|man|tisch',
   'Herma|frodiet', 'Affir|matief', 'Homo|fiel'];
 const kaartWoord = w => KAART_AFBREEK.reduce((s, p) => s.replace(p.replace(/\|/g, ''), p.replace(/\|/g, '\u00AD')), w);
 function deelKaarten() {
@@ -508,12 +509,24 @@ function deelKaarten() {
       </span>
       <span class="flip-face flip-back">
         <span class="flip-word" aria-hidden="true">${kaartWoord(t.woord)}</span>
-        <span class="flip-def">${kort(t.def, 175)}</span>
+        <span class="flip-def" data-def="${esc(t.def)}">${kort(t.def, 175)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Terug</span>
       </span>
     </button>`;
   }).join('');
   $$('.flip.is-dealt', el).forEach(f => f.addEventListener('animationend', () => f.classList.remove('is-dealt'), { once: true }));
+  pasKaartenAan();
+}
+// De uitleg op de achterkant wordt ingekort tot ze op de kaart past, zodat 'Terug' altijd zichtbaar blijft
+// (op smalle gsm's is een kaart maar ~170px breed). In de a11y-modus groeit de kaart mee en is dit niet nodig.
+function pasKaartenAan() {
+  $$('#deck .flip-back').forEach(face => {
+    const def = $('.flip-def', face), vol = def.dataset.def;
+    for (let n = 175; n >= 45; n -= 10) {
+      def.textContent = kort(vol, n);
+      if (face.scrollHeight <= face.clientHeight) break;
+    }
+  });
 }
 
 function initStrook() {
@@ -2323,7 +2336,13 @@ function start() {
   stap('hero', initHero);
   stap('marquee', initMarquee);
   stap('bento', initBento);
-  stap('kaarten', deelKaarten);
+  stap('kaarten', () => {
+    deelKaarten();
+    if (!$('#deck')) return;
+    // opnieuw passen zodra de webfonts geladen zijn en bij een andere schermbreedte
+    document.fonts?.ready.then(pasKaartenAan);
+    let r; addEventListener('resize', () => { cancelAnimationFrame(r); r = requestAnimationFrame(pasKaartenAan); });
+  });
   stap('strook', initStrook);
   stap('lijsten', initLijsten);
   stap('praktijk', initPraktijk);

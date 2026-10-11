@@ -746,7 +746,7 @@ html.dark .btn-rose { color: #3B0716; }
 /* Taalgids-kaarten */
 .deck { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; perspective: 1600px; }
 @media (max-width: 900px) { .deck { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .deck { gap: 10px; } .flip { height: 250px; } .flip-face { padding: 16px; border-radius: 22px; } .flip-def { font-size: .875rem; } }
+@media (max-width: 480px) { .deck { gap: 10px; } }
 .flip {
   position: relative; display: block; width: 100%; height: 290px; padding: 0; border: 0; background: none;
   text-align: left; cursor: pointer; transform-style: preserve-3d; transition: transform .9s var(--ease);
@@ -774,9 +774,15 @@ html.dark .btn-rose { color: #3B0716; }
 .flip:hover .flip-hint .i { transform: rotate(-180deg); }
 .flip-back { transform: rotateY(180deg); background: linear-gradient(160deg, var(--tone-bg), var(--surface) 75%); border-color: color-mix(in srgb, var(--tone) 30%, var(--line)); gap: 10px; }
 .flip-back .flip-word { font-size: 1.25rem; }
-@media (max-width: 480px) { .flip-front .flip-word { font-size: 1.3rem; } }
 .flip-def { font-size: .9375rem; line-height: 1.55; color: var(--text); }
 .flip-back .flip-hint { margin-top: auto; }
+/* Smalle gsm's: kaarten van ~170px breed. Na de basisregels, anders winnen die door de bronvolgorde. */
+@media (max-width: 480px) {
+  .flip-face { padding: 16px; border-radius: 22px; }
+  .flip-front .flip-word { font-size: 1.3rem; }
+  .flip-back .flip-word { font-size: 1.1rem; }
+  .flip-def { font-size: .875rem; line-height: 1.5; }
+}
 
 /* Mijlpalen-strook */
 .strip {
@@ -1974,18 +1980,21 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .oproep-mail-ic { width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--violet); box-shadow: var(--shadow-sm); }
 .oproep-mail-ic .i { width: 30px; height: 30px; }
 .oproep-adres { font-family: 'Atkinson Hyperlegible', var(--font-sans); font-size: 1.0625rem; line-height: 1.6; color: var(--ink); }
-.oproep-adres a { color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: .15em; overflow-wrap: anywhere; }
+.oproep-adres a { color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: .15em; overflow-wrap: break-word; }
 .oproep-zij { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 16px; padding: clamp(22px, 3vw, 30px) clamp(28px, 4vw, 48px); background: var(--teal-bg); border-top: 1px solid color-mix(in srgb, var(--teal) 16%, transparent); }
 .oproep-zij-ic { flex-shrink: 0; width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--surface); color: var(--teal); box-shadow: var(--shadow-sm); }
 .oproep-zij-ic .i { width: 20px; height: 20px; }
 .oproep-zij h3 { font-size: 1.0313rem; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
 .oproep-zij p { max-width: 62em; font-size: .9688rem; line-height: 1.65; color: var(--ink); opacity: .88; }
-@media (max-width: 860px) {
-  .oproep { grid-template-columns: 1fr; }
+@media (max-width: 1000px) {
+  .oproep { grid-template-columns: minmax(0, 1fr); }
   .oproep-main { padding-bottom: 8px; }
   .oproep-mail { margin: 20px clamp(16px, 4vw, 28px) clamp(20px, 4vw, 28px); }
 }
-@media (max-width: 480px) { .oproep-mail .btn { width: 100%; } .oproep-zij { flex-direction: column; gap: 12px; } }
+@media (max-width: 480px) {
+  .oproep-mail .btn { width: 100%; height: auto; min-height: 56px; padding-block: 12px; white-space: normal; line-height: 1.25; }
+  .oproep-zij { flex-direction: column; gap: 12px; }
+}
 
 /* Over: selectiecriteria */
 .criteria { margin-top: 16px; padding: clamp(22px, 3vw, 36px); border-radius: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--stick, 80px) + 16px); }
@@ -2160,6 +2169,8 @@ html.a11y .stat dd, html.a11y .strip-year, html.a11y .casus-pick-n { color: #000
 html.a11y .tag, html.a11y .ww-top-star { border: 1.5px solid currentColor; }
 html.a11y .footer-arc { opacity: 1; }
 html.a11y .flip { height: auto; min-height: 290px; transform: none !important; }
+/* Atkinson is breder: op smalle gsm's iets kleiner, zodat ook LGBTQIA+ en IDAHOBIT op één regel passen */
+@media (max-width: 480px) { html.a11y .flip-front .flip-word { font-size: 1.2rem; } }
 html.a11y .flip-face { position: relative; inset: auto; -webkit-backface-visibility: visible; backface-visibility: visible; }
 html.a11y .flip-back { transform: none; display: none; }
 html.a11y .flip.is-flipped .flip-front { display: none; }
