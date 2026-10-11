@@ -746,7 +746,7 @@ html.dark .btn-rose { color: #3B0716; }
 /* Taalgids-kaarten */
 .deck { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; perspective: 1600px; }
 @media (max-width: 900px) { .deck { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .deck { gap: 10px; } .flip { height: 250px; } .flip-face { padding: 16px; border-radius: 22px; } .flip-front .flip-word { font-size: max(1.05rem, min(1.3rem, calc(165cqi / var(--len, 10)))); } .flip-def { font-size: .875rem; } }
+@media (max-width: 480px) { .deck { gap: 10px; } .flip { height: 250px; } .flip-face { padding: 16px; border-radius: 22px; } .flip-def { font-size: .875rem; } }
 .flip {
   position: relative; display: block; width: 100%; height: 290px; padding: 0; border: 0; background: none;
   text-align: left; cursor: pointer; transform-style: preserve-3d; transition: transform .9s var(--ease);
@@ -756,7 +756,6 @@ html.dark .btn-rose { color: #3B0716; }
 .flip.is-dealt { animation: deal .8s var(--ease) both; animation-delay: var(--dd, 0ms); }
 @keyframes deal { from { opacity: 0; transform: translateY(30px) rotate(-3deg); } }
 .flip-face {
-  container-type: inline-size;
   position: absolute; inset: 0; display: flex; flex-direction: column; padding: 22px; border-radius: 26px; overflow: hidden;
   -webkit-backface-visibility: hidden; backface-visibility: hidden;
   background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
@@ -775,10 +774,7 @@ html.dark .btn-rose { color: #3B0716; }
 .flip:hover .flip-hint .i { transform: rotate(-180deg); }
 .flip-back { transform: rotateY(180deg); background: linear-gradient(160deg, var(--tone-bg), var(--surface) 75%); border-color: color-mix(in srgb, var(--tone) 30%, var(--line)); gap: 10px; }
 .flip-back .flip-word { font-size: 1.25rem; }
-/* Lange woorden (bvb. Heteronormativiteit) krimpen tot ze op één regel passen; --len = aantal tekens */
-.flip-front .flip-word { font-size: max(1.2rem, min(clamp(1.5rem, 1.2rem + .7vw, 1.85rem), calc(165cqi / var(--len, 10)))); }
-.flip-back .flip-word { font-size: max(1rem, min(1.25rem, calc(150cqi / var(--len, 10)))); }
-@media (max-width: 480px) { .flip-front .flip-word { font-size: max(1.05rem, min(1.3rem, calc(165cqi / var(--len, 10)))); } }
+@media (max-width: 480px) { .flip-front .flip-word { font-size: 1.3rem; } }
 .flip-def { font-size: .9375rem; line-height: 1.55; color: var(--text); }
 .flip-back .flip-hint { margin-top: auto; }
 
@@ -1946,36 +1942,50 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .about-logo-tile svg path { stroke-dasharray: 100 100; animation: arcDraw 1.6s var(--ease) both; animation-delay: calc(var(--i) * 100ms + 300ms); }
 .about-logo-glow { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 180deg, var(--r1), var(--r2), var(--r3), var(--r4), var(--r5), var(--r6), var(--r1)); filter: blur(60px); opacity: .32; animation: spin 18s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.quote-block { position: relative; margin: clamp(36px, 5vw, 56px) 0; padding: clamp(28px, 4vw, 48px); border-radius: 30px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
-.quote-block .i { width: 40px; height: 40px; color: var(--r6); fill: color-mix(in srgb, var(--r6) 20%, transparent); stroke-width: 1.5; }
-.quote-block p { margin-top: 14px; font-family: var(--font-display); font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.3rem); font-weight: 500; font-style: italic; line-height: 1.25; letter-spacing: -.02em; color: var(--ink); font-variation-settings: "SOFT" 100; }
-.quote-block cite { display: block; margin-top: 16px; font-style: normal; font-size: .9375rem; font-weight: 700; color: var(--muted); }
-.about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: clamp(36px, 5vw, 56px); }
 .about-card { padding: clamp(22px, 3vw, 32px); border-radius: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
 .about-card-ic { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 18px; background: var(--tone-bg); color: var(--tone); }
 .about-card h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; margin-bottom: 10px; font-variation-settings: var(--soft); }
 .about-card p + p { margin-top: 12px; }
+/* Lange pijllinks lopen als gewone tekst door; de pijl blijft bij het laatste woord */
+.about-card .link-arrow { display: inline; }
+.about-card .link-arrow .i { margin-left: 8px; vertical-align: -.2em; }
+.nowrap { white-space: nowrap; }
 
 /* Over: oproep aan ervaringsdeskundigen. Het hoofddeel is eenvoudige taal: groter,
-   in Atkinson Hyperlegible (ontworpen voor leesbaarheid), links uitgelijnd, links onderstreept. */
-.oproep { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); margin-top: 16px; border-radius: 26px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--stick, 80px) + 16px); }
-.oproep-main { padding: clamp(22px, 3.4vw, 40px); }
+   in Atkinson Hyperlegible (ontworpen voor leesbaarheid), links uitgelijnd, links onderstreept.
+   Opbouw: tekst | mailpaneel, met daaronder een band voor begeleiders. */
+.oproep {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(270px, 1fr); margin-top: 16px; border-radius: 32px; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--stick, 80px) + 16px);
+}
+.oproep::before { content: ''; position: absolute; inset: 0 0 auto; height: 6px; background: var(--rainbow); }
+.oproep-main { padding: clamp(28px, 4vw, 48px); }
 .oproep-ic { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 18px; background: var(--violet-bg); color: var(--violet); }
 .oproep-ic .i { width: 22px; height: 22px; }
 .oproep-title { font-family: var(--font-display); font-size: clamp(1.6rem, 1.3rem + 1vw, 2.15rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); font-variation-settings: var(--soft); }
 .oproep-tekst { margin-top: 16px; max-width: 34em; font-family: 'Atkinson Hyperlegible', var(--font-sans); font-size: 1.1563rem; line-height: 1.7; color: var(--ink); text-align: left; }
 .oproep-tekst p + p { margin-top: 14px; }
-.oproep-actie { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 26px; }
-.oproep-adres { font-family: 'Atkinson Hyperlegible', var(--font-sans); font-size: 1.0625rem; color: var(--text); }
-.oproep-adres a { color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: .15em; white-space: nowrap; }
-.oproep-zij { padding: clamp(22px, 3.4vw, 40px); background: var(--violet-bg); border-left: 1px solid color-mix(in srgb, var(--violet) 18%, transparent); }
-.oproep-zij h3 { font-size: 1.0313rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
-.oproep-zij p { font-size: .9688rem; line-height: 1.65; color: var(--ink); opacity: .88; }
+.oproep-mail {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center;
+  margin: clamp(28px, 4vw, 48px) clamp(28px, 4vw, 48px) clamp(28px, 4vw, 48px) 0; padding: clamp(26px, 3vw, 36px);
+  border-radius: 26px; background: var(--violet-bg); border: 1px solid color-mix(in srgb, var(--violet) 18%, transparent);
+}
+.oproep-mail-ic { width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--violet); box-shadow: var(--shadow-sm); }
+.oproep-mail-ic .i { width: 30px; height: 30px; }
+.oproep-adres { font-family: 'Atkinson Hyperlegible', var(--font-sans); font-size: 1.0625rem; line-height: 1.6; color: var(--ink); }
+.oproep-adres a { color: var(--brand); font-weight: 700; text-decoration: underline; text-underline-offset: .15em; overflow-wrap: anywhere; }
+.oproep-zij { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 16px; padding: clamp(22px, 3vw, 30px) clamp(28px, 4vw, 48px); background: var(--teal-bg); border-top: 1px solid color-mix(in srgb, var(--teal) 16%, transparent); }
+.oproep-zij-ic { flex-shrink: 0; width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--surface); color: var(--teal); box-shadow: var(--shadow-sm); }
+.oproep-zij-ic .i { width: 20px; height: 20px; }
+.oproep-zij h3 { font-size: 1.0313rem; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.oproep-zij p { max-width: 62em; font-size: .9688rem; line-height: 1.65; color: var(--ink); opacity: .88; }
 @media (max-width: 860px) {
   .oproep { grid-template-columns: 1fr; }
-  .oproep-zij { border-left: 0; border-top: 1px solid color-mix(in srgb, var(--violet) 18%, transparent); }
+  .oproep-main { padding-bottom: 8px; }
+  .oproep-mail { margin: 20px clamp(16px, 4vw, 28px) clamp(20px, 4vw, 28px); }
 }
-@media (max-width: 480px) { .oproep-actie .btn { flex: 1 1 100%; } }
+@media (max-width: 480px) { .oproep-mail .btn { width: 100%; } .oproep-zij { flex-direction: column; gap: 12px; } }
 
 /* Over: selectiecriteria */
 .criteria { margin-top: 16px; padding: clamp(22px, 3vw, 36px); border-radius: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--stick, 80px) + 16px); }
@@ -2105,7 +2115,7 @@ html.a11y .reveal { opacity: 1 !important; translate: none !important; }
 html.a11y .arc .band { transform: none !important; }
 html.a11y .hero-chip { transform: none !important; translate: none !important; }
 html.a11y :is(.item, .bento-card, .casus-view, .casus-pick, .term, .vlag, .vstep, .vc, .oefen-face, .oefen-end, .scan-dom, .scan-q, .ptab, .filters, .nav-bar, .hulp-line, .strip-card, .flip-face, .dlg,
-  .pop, .cta-final, .callout, .about-card, .quote-block, .result-block, .quiz-card, .help-line, .doneer-line,
+  .pop, .cta-final, .callout, .about-card, .result-block, .quiz-card, .help-line, .doneer-line,
   .advice-item, .fan-card, .prak-list a, .region-chip, .note-card, .hero-search, .hero-chip, .theme-seg, .a11y-switch,
   .scan-opts, .seg, .hulp-band, .pill, .nav-search, .nav-icon, .btn-ghost, .icon-btn, .chip, .jump-nav a,
   .ww-app, .ww-opt, .ww-live, .ww-res-head, .ww-tabs-in, .ww-tok, .ww-act, .ww-top, .ww-pk, .ww-row,

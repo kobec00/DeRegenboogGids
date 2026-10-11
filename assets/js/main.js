@@ -485,9 +485,13 @@ function initBento() {
 
 // Taalgids-kaarten om te draaien
 let stapel = [];
-// Lange samenstellingen mogen op de kaart enkel op een natuurlijke plek afbreken (Hetero-normativiteit)
-const KAART_AFBREEK = /^("?)(Hetero|Gender|Regenboog|Pan|Demi|Voornaam|Dead|Mis|Trans|Inter|Geslachts)(?=[a-zë]{4,})/;
-const kaartWoord = w => w.replace(KAART_AFBREEK, '$1$2\u00AD').replace('normativiteit', 'norma\u00ADtiviteit');
+// Lange woorden mogen op de kaart enkel op een natuurlijke plek afbreken (Hetero-norma-tiviteit);
+// | wordt een zacht afbreekstreepje, dat pas zichtbaar wordt als het woord niet op één regel past
+const KAART_AFBREEK = ['Hetero|norma|tiviteit', 'Homo|sek|sueel', 'Bi|sek|sueel', 'Pan|sek|sueel', 'Demi|sek|sueel', 'Asek|sueel',
+  'Gender|iden|titeit', 'Gender|ex|pressie', 'Gender|fluïde', 'Voornaam|woorden', 'Regen|boog|vlag', 'Dead|naming', 'Mis|genderen',
+  'Trans|gender', 'Cis|gender', 'Inter|sekse', 'Geslachts|veran|dering', 'Levens|stijl', 'mede|stander', 'Aro|man|tisch',
+  'Herma|frodiet', 'Affir|matief', 'Homo|fiel'];
+const kaartWoord = w => KAART_AFBREEK.reduce((s, p) => s.replace(p.replace(/\|/g, ''), p.replace(/\|/g, '\u00AD')), w);
 function deelKaarten() {
   const el = $('#deck');
   if (!el) return;
@@ -499,11 +503,11 @@ function deelKaarten() {
     <button class="flip tone-${TERM_CAT_COLOR[t.cat] || 'teal'}${calm() ? '' : ' is-dealt'}" type="button" aria-pressed="false" style="--dd:${i * 85}ms">
       <span class="flip-face flip-front">
         <span class="tag">${vermijd ? ico('alert') : ''}${t.cat}</span>
-        <span class="flip-word" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
+        <span class="flip-word">${kaartWoord(t.woord)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Draai om</span>
       </span>
       <span class="flip-face flip-back">
-        <span class="flip-word" aria-hidden="true" style="--len:${t.woord.length}">${kaartWoord(t.woord)}</span>
+        <span class="flip-word" aria-hidden="true">${kaartWoord(t.woord)}</span>
         <span class="flip-def">${kort(t.def, 175)}</span>
         <span class="flip-hint" aria-hidden="true">${ico('rotate')}Terug</span>
       </span>
