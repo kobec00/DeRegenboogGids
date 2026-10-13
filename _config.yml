@@ -8,3 +8,15 @@ laatst_bijgewerkt: "oktober 2026"
 # sitemap.xml en robots.txt voor zoekmachines (standaard beschikbaar op GitHub Pages)
 plugins:
   - jekyll-sitemap
+# De README is voor GitHub, niet voor de website. Een eigen 'exclude' vervangt de
+# standaardlijst van Jekyll en GitHub Pages, dus die staat hier volledig bij.
+exclude:
+  - README.md
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
