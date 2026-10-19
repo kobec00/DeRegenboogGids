@@ -532,7 +532,7 @@ function pasKaartenAan() {
 function initStrook() {
   const el = $('#strip');
   if (!el) return;
-  const CAT = { science: 'Wetenschap & zorg', move: 'Samenleving & beweging', law: 'Wetgeving & beleid', beperking: 'Beperking & rechten' };
+  const CAT = { science: 'Wetenschap & zorg', move: 'Samenleving & beweging', law: 'Wetgeving & beleid' };
   // Enkel afgeronde kantelpunten. De toekomstfase (open dossiers) krijgt één afsluitende kaart.
   const open = TL_FASES.find(f => f.toekomst);
   const items = TIJDLIJN.filter(m => m.type !== 'weetje' && m.fase !== open?.nr);
