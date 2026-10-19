@@ -50,7 +50,7 @@ De site is het praktijkproduct bij een graduaatsproef (Graduaat Orthopedagogisch
 
 **Voor wie?** Begeleiders, teams en organisaties in de Vlaamse zorg, en (via toegankelijke tools in eenvoudige taal) ook cliënten zelf.
 
-<sub>📊 Stand oktober 2026: 15 tools · 21 organisaties · 34 begrippen · 10 casussen · 16 beleidskaders · 30 items op de tijdlijn. De site telt zelf live mee uit <code>data.js</code>.</sub>
+<sub>📊 Stand oktober 2026: 15 tools · 21 organisaties · 34 begrippen · 10 casussen · 16 beleidskaders · 27 items op de tijdlijn. De site telt zelf live mee uit <code>data.js</code>.</sub>
 
 ---
 
@@ -265,7 +265,7 @@ sitemap: false                                      # optioneel: niet in sitemap
   desc:"Wat er gebeurde en waarom het ertoe doet.", bron:TL_BRON.vrt23 },
 ```
 
-- **`cat`**: `science` · `move` · `law` · `beperking` · `weetje` (een weetje is geen mijlpaal)
+- **`cat`**: `science` · `move` · `law` · `weetje` (een weetje is geen mijlpaal)
 - **`jaar2`**: optioneel tweede jaartal · **`id`**: eigen deeplink (`#tijdlijn-<id>`)
 - **`type:"dossier"`**: een open dossier in fase 3, met `sinds` en `kort` in plaats van `jaar`
 - Een nieuwe bron? Voeg ze toe aan `TL_BRON` én aan [`/bronnen/`](bronnen/index.html).
