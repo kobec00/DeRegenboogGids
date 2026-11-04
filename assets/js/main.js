@@ -1345,7 +1345,7 @@ function scanDomeinen() {
   return volg.map(d => ({ d, haal: haal[d], max: max[d], pct: Math.round((haal[d] / max[d]) * 100) }));
 }
 function scanBand(pct) {
-  if (pct <= 40) return { band: 'start', label: 'Aan de start', desc: 'Er is een mooie basis om op te bouwen. Door inclusie expliciet te maken — in visie, taal en vorming — zet je grote stappen. Begin klein en concreet.' };
+  if (pct <= 40) return { band: 'start', label: 'Aan de start', desc: 'Er is een mooie basis om op te bouwen. Door inclusie expliciet te maken in visie, taal en vorming, zet je grote stappen. Begin klein en concreet.' };
   if (pct <= 72) return { band: 'mid', label: 'Op weg', desc: 'Er gebeurt al heel wat, maar de aanpak is nog niet overal verankerd. Focus op de punten die nog "deels" scoorden om van goodwill naar structureel beleid te gaan.' };
   return { band: 'strong', label: 'Stevig verankerd', desc: 'Inclusie zit stevig in jullie werking. Mooi. Blijf het levend houden via vorming, evaluatie en aandacht voor nieuwe cliënten en medewerkers.' };
 }
@@ -1463,7 +1463,7 @@ function berekenScan() {
         <button class="btn btn-ghost" type="button" data-go="taal">${ico('book')}Naar de taalgids</button>
         <button class="btn btn-ghost" type="button" data-action="scan-reset">${ico('refresh')}Nieuwe scan</button>
       </div>
-      <p class="print-only">Team-zelfscan via De Regenbooggids (deregenbooggids.be) — afgedrukt op ${datum}. Dit is een reflectie-instrument, geen audit.</p>
+      <p class="print-only">Team-zelfscan via De Regenbooggids (deregenbooggids.be), afgedrukt op ${datum}. Dit is een reflectie-instrument, geen audit.</p>
     </div>`;
   hint.textContent = '';
   $('#panel-scan').classList.add('has-result');
@@ -1506,7 +1506,7 @@ function scanRapport() {
   const dom = scanDomeinen();
   const lijn = '═'.repeat(58), streep = '-'.repeat(58);
   let r = `${lijn}\nTEAM-ZELFSCAN · DE REGENBOOGGIDS\nLGBTQ+-inclusie in de begeleiding\n${lijn}\n\n`;
-  r += `Datum: ${datum}\nTotaalscore: ${pct}% — ${label}\n\nSCORE PER DOMEIN\n${streep}\n`;
+  r += `Datum: ${datum}\nTotaalscore: ${pct}% (${label})\n\nSCORE PER DOMEIN\n${streep}\n`;
   dom.forEach(x => { r += `  ${(x.d + ':').padEnd(16)}${String(x.pct).padStart(3)}%   (${x.haal}/${x.max})\n`; });
   r += `\nANTWOORDEN PER VRAAG\n${streep}\n`;
   SCAN_VRAGEN.forEach((q, i) => {

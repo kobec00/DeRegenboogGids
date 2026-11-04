@@ -65,7 +65,7 @@ De site is het praktijkproduct bij een graduaatsproef (Graduaat Orthopedagogisch
 | 💡 | **Praktijk** | [`/praktijk/`](https://deregenbooggids.be/praktijk/) | Vijf instrumenten in tabbladen: **Casuïstiek** · **Taalgids** (naslaan of oefenen met leerkaarten) · **Vlaggensysteem in het kort** · **Team-zelfscan** (met radardiagram) · **Test jezelf**. |
 | ⚖️ | **Beleid** | [`/beleid/`](https://deregenbooggids.be/beleid/) | Wetgeving, Vlaams zorgbeleid, wetenschappelijke onderbouwing en vorming. Waar meld je discriminatie (VMRI, Unia, IGVM)? Plus de **mijlpalen-tijdlijn** in drie fases, van 1897 tot de open dossiers van vandaag. |
 | 📚 | **Bronnen** | [`/bronnen/`](https://deregenbooggids.be/bronnen/) | Alle bronnen in APA 7: de graduaatsproef, vakliteratuur, wetgeving en webbronnen. |
-| ℹ️ | **Over** | [`/over/`](https://deregenbooggids.be/over/) | Achtergrond, selectiecriteria (wat staat erin en wat niet), privacy, contact en een oproep aan ervaringsdeskundigen in eenvoudige taal. |
+| ℹ️ | **Over** | [`/over/`](https://deregenbooggids.be/over/) | Achtergrond, privacy, contact en een oproep aan ervaringsdeskundigen in eenvoudige taal. |
 
 **Overal beschikbaar:** zoeken over de hele site met <kbd>Ctrl</kbd> <kbd>K</kbd> / <kbd>⌘</kbd> <kbd>K</kbd> · de knop *Hulp nodig?* met crisis- en hulplijnen · weergave licht / donker / automatisch · een toegankelijke modus · een doneer-overzicht · printvriendelijke opmaak.
 
@@ -276,7 +276,7 @@ sitemap: false                                      # optioneel: niet in sitemap
 
 - [ ] Datum aanpassen in `_config.yml` → `laatst_bijgewerkt`. Die ene waarde verschijnt in de footer, op `/over/` en op `/bronnen/`.
 - [ ] Een bron met auteur en jaartal? Zet ze ook in APA 7 op `/bronnen/`.
-- [ ] Werkt de link nog, en is de organisatie nog actief? (zie de [selectiecriteria](https://deregenbooggids.be/over/#selectie))
+- [ ] Werkt de link nog, en is de organisatie nog actief?
 - [ ] Optioneel: de terugvalgetallen in `index.html` (`data-count`) gelijkzetten voor wie zonder JavaScript surft.
 
 ---
@@ -364,7 +364,7 @@ Het overzicht is bewust nooit af: het werkveld verandert snel. Ken je een tool, 
 - 🐛 Open een [issue](https://github.com/kobec00/DeRegenboogGids/issues), of
 - ✉️ mail naar [kobe.cornelis4@gmail.com](mailto:kobe.cornelis4@gmail.com).
 
-Wat wel en niet in de gids komt, staat in de [selectiecriteria](https://deregenbooggids.be/over/#selectie): materiaal op het kruispunt van LGBTQ+ en beperking, Vlaams waar het kan, met een betrouwbare afzender, bruikbaar in de praktijk en actueel. Geen commercieel aanbod.
+Wat in de gids komt: materiaal op het kruispunt van LGBTQ+ en beperking, Vlaams waar het kan, met een betrouwbare afzender, bruikbaar in de praktijk en actueel. Geen commercieel aanbod.
 
 **Code:** werk op een aparte branch, test lokaal met `jekyll serve` (ook in donkere en toegankelijke modus, en op gsm-breedte) en open een pull request naar `main`.
 
