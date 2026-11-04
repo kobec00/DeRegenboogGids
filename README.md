@@ -50,7 +50,7 @@ De site is het praktijkproduct bij een graduaatsproef (Graduaat Orthopedagogisch
 
 **Voor wie?** Begeleiders, teams en organisaties in de Vlaamse zorg, en (via toegankelijke tools in eenvoudige taal) ook cliënten zelf.
 
-<sub>📊 Stand oktober 2026: 15 tools · 21 organisaties · 34 begrippen · 10 casussen · 16 beleidskaders · 27 items op de tijdlijn. De site telt zelf live mee uit <code>data.js</code>.</sub>
+<sub>📊 Stand oktober 2026: 15 tools · 22 organisaties · 34 begrippen · 10 casussen · 16 beleidskaders · 27 items op de tijdlijn. De site telt zelf live mee uit <code>data.js</code>.</sub>
 
 ---
 
