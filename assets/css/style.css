@@ -2057,6 +2057,8 @@ input:disabled + .chip { opacity: .45; cursor: default; }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .contact-actions .btn-primary { background: #fff; color: #053D35; box-shadow: none; }
 .contact-actions .btn-primary:hover { background: #E3F7F1; }
+@media (max-width: 480px) { .contact-actions { gap: 8px; } .contact-actions .btn { padding: 0 16px; font-size: .9375rem; } }
+@media (max-width: 374px) { .contact-long { display: none; } }
 .round-btn { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: #fff; transition: background-color .2s, transform .25s var(--ease); }
 .round-btn:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
 @media (max-width: 860px) { .about-hero { grid-template-columns: 1fr; } .about-logo { order: -1; width: min(70%, 280px); } .contact-card { grid-template-columns: 1fr; } }
